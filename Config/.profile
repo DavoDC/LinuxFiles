@@ -1,4 +1,6 @@
 
+# DAVID .PROFILE
+
 # My personal stuff
 # Fix permissions of bashrc
 chmod 600 ~/.bashrc

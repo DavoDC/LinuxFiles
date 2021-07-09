@@ -30,3 +30,4 @@ sudo apt install man-db coreutils -y
 echo ""
 sudo apt-get install manpages-dev manpages-posix-dev -y
 echo ""
+

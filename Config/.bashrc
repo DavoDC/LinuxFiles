@@ -1,6 +1,9 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # Loaded on startup of shell
 
+
+# DAVID .BASHRC
+
 # From system:
 
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -80,16 +83,16 @@ esac
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
 
-    #alias grep='grep --color=auto'
-    #alias fgrep='fgrep --color=auto'
-    #alias egrep='egrep --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 #alias ll='ls -l'
@@ -179,7 +182,8 @@ alias whereami="pwd"
 
 # Listing all files with details
 # Can put folders as arguments to show their contents
-alias ls="ls -al"
+# Ensure colours are on
+alias ls="ls --color=auto -al"
 
 
 
@@ -193,6 +197,10 @@ alias newfile="touch newfile.txt"
 
 # Make new folder in PWD
 alias newfolder="mkdir newfolder"
+
+
+# Show detailed file information
+alias fileinfo="stat"
 
 
 # Edit text file with shell editor
@@ -211,7 +219,7 @@ alias printfile="cat"
 #alias less="less"
 
 
-# Show wordcount and other file stats
+# Show wordcount and other text stats
 # alias wc="wc"
 
 
@@ -333,7 +341,6 @@ alias make_exe="chmod 755"
 
 # Append a file name to get its permission number
 alias get_perm="stat --format '%a' "
-
 
 # Elevate permissions by switching to superuser temporarily (only for rest of session)
 alias elevate="sudo su"
