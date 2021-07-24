@@ -1,0 +1,18 @@
+
+# Unconfigure - undo configuration script
+
+# Remove symlinks
+# Add echo and check if they are symlinks
+# rm ~/.bashrc
+# rm ~/.bashrc
+
+# Move originals back
+#mv
+
+
+# Remove originals folder
+#
+#
+#rmdir
+
+
