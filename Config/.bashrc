@@ -133,7 +133,7 @@ fi
 # Welcome message
 echo ""
 echo -e "#### Welcome $USER, my wonderful user \U0001F642 ####"
-custdate=$(date +"%A %-m %b %Y")
+custdate=$(date +"%A %-d %b %Y")
 echo "#### Today's date is: "$custdate "####"
 
 # Make space 

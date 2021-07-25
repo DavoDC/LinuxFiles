@@ -57,24 +57,22 @@ fi
 
 # Helper function to move file and check
 # Arg 1: File name (e.g. log.txt)
-# Arg 1: File path (e.g. ~/log.txt)
-# Arg 2: Destination folder path (e.g. ~/things)
-# So new filepath will be ~/things/log.txt
+# Arg 2: Destination folder name (e.g. things)
+# So new filepath will be things/log.txt
 function move_file_and_check() {
 
 	# Get signature
-	sig="${FUNCNAME[0]}'('$1', '$2', '$3')"
+	sig="${FUNCNAME[0]}'('$1', '$2')"
 	
 	# Get parameters
 	filename=$1
-	filepath=$2
-	destpath=$3
+	destname=$2
 	
 	# Final path
-	finalpath=$destpath/$filename
+	finalpath=$destname/$filename
 	
 	# Move file into destination folder
-	if mv $filepath $finalpath; then
+	if mv $filename $finalpath; then
 	
 		# If commanded succeeded 
 	
@@ -100,8 +98,8 @@ function move_file_and_check() {
 # Move original .bashrc and .profile in there
 echo ""
 echo "# Moving original '$brc' and '$prof' files into the folder..."
-move_file_and_check "$brc"  "~/.bashrc" "~/$origname"
-move_file_and_check "$prof" "~/.profile"  "~/$origname"
+move_file_and_check "$brc" "$origname"
+move_file_and_check "$prof" "$origname"
 
 
 
