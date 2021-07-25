@@ -133,8 +133,8 @@ fi
 # Make symlinks to repo versions
 echo ""
 echo "# Making symlinks to repo config files!"
-ln --symbolic "/home/david/LinuxFiles/Config/$brc" "$brc"
-ln --symbolic "/home/david/LinuxFiles/Config/$prof" "$prof"
+ln --symbolic "/home/$USER/LinuxFiles/Config/$brc" "$brc"
+ln --symbolic "/home/$USER/LinuxFiles/Config/$prof" "$prof"
 
 
 # Finalize
