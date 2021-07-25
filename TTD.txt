@@ -1,0 +1,11 @@
+Add more commands to bashrc 
+§ Write functions
+§ ADD ALL COMMANDS YOU KNOW!
+§ Check CITS3004 lab 1 pdf for inspiration too
+
+Add more languages!
+§ FIRST, ADD INSTALLING OF COMPILERS TO GEN_SETUP 
+§ Python and Java compiling and template generating 
+§ C++ as well
+§ Template generator that covers all as well, separate python 
+	
