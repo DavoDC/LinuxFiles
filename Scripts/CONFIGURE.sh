@@ -144,6 +144,9 @@ echo "You should see the symlinks and backup folder '$origname'"
 ls -al --color=auto ~
 echo ""
 
+# Notify
+echo "Close and reopen the terminal and it should look different"
+echo "Use “showbrc” to see what commands are available"
 
 
 

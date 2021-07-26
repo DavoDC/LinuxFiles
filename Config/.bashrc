@@ -126,6 +126,10 @@ fi
 
 # My personal additions start here
 
+
+
+
+
 # Stop "System Error detected" popups (silent if nothing)
 # sudo rm /var/crash/* 2> /dev/null
 
@@ -144,6 +148,25 @@ export PS1='\[\033[01;32m\]\u\[\033[00m\] ../\W: '
 
 
 
+# Helper function to get confirmation
+# Takes one argument, a string describing some action
+# e.g. "remove this file"
+confirm () {
+	read -p "Are you sure you want to $1 (y/n)? This may be permanent" choice
+	case "$choice" in 
+	  y|Y ) return 0;; # true
+	  n|N ) return 1;;
+	  * ) return 1;;
+	esac
+}
+
+
+
+
+
+
+
+
 
 
 ############################################################
@@ -151,10 +174,15 @@ export PS1='\[\033[01;32m\]\u\[\033[00m\] ../\W: '
 ############################################################
 
 
-### The most important command
+### The most important commands
 
 # Reveal all possible commands by showing part of this file
 alias showbrc="tail --lines=+144 ~/.bashrc"
+
+# Reveal all possible commands by opening the file 
+# Opens in default program, hopefully a good one
+# Will show syntax highlighting
+alias showbrc2="xdg-open ~/.bashrc"
 
 
 
@@ -229,6 +257,8 @@ alias rename="mv"
 alias move="mv"
 
 
+
+
 # Remove files/folders (permanently!)
 # Usage: remove <name of file/folder in PWD>
 remove () {
@@ -237,7 +267,7 @@ remove () {
 	if ! [[ -e $1 ]]; then
 	
 	    # Notify
-		echo "'$1' is not a valid file/folder in the PWD"
+		echo "'$1' is not a valid file/folder"
 		echo ""
 	else
 		# Else if path is valid
@@ -267,17 +297,7 @@ remove () {
 }
 
 
-# Helper function to get confirmation
-# Takes one argument, a string describing some action
-# e.g. "remove this file"
-confirm () {
-	read -p "Are you sure you want to $1 (y/n)? " choice
-	case "$choice" in 
-	  y|Y ) return 0;; # true
-	  n|N ) return 1;;
-	  * ) return 1;;
-	esac
-}
+
 
 
 # Copy files/folders 
@@ -289,7 +309,7 @@ copy () {
 	if ! [[ -e $1 ]]; then
 	
 	    # Notify
-		echo "'$1' is not a valid file/folder in the PWD"
+		echo "'$1' is not a valid file/folder"
 		echo ""
 	else
 		# Else if path is valid
@@ -348,6 +368,8 @@ alias elevate="sudo su"
 
 
 
+
+
 ### Terminal commands 
 
 # Exiting terminal 
@@ -388,7 +410,7 @@ alias pstable="top"
 
 
 
-### Other commands
+### Other commands/functions
 
 # Install a package
 # Usage example: install_pkg firefox
@@ -448,12 +470,15 @@ alias diskfree="df"
 ### Programming
 
 
+
 # C99 compiler
 # Usage: mycc temp temp.c 
 alias mycc="cc -std=c99 -Wall -pedantic -Werror -o"
 
 
+
 # C99 program template generator
+# Credit: Chris McDonald
 function gen_temp {
 if [ ! -r temp.c ]
 then
@@ -470,6 +495,8 @@ int main(int argcount, char *argvalue[])
 END_OF_PROGRAM
 fi
 }
+
+
 
 
 # Add Java 
