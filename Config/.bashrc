@@ -152,7 +152,8 @@ export PS1='\[\033[01;32m\]\u\[\033[00m\] ../\W: '
 # Takes one argument, a string describing some action
 # e.g. "remove this file"
 confirm () {
-	read -p "Are you sure you want to $1 (y/n)? This may be permanent" choice
+    # Note: Make sure there is some space after question string
+	read -p "Are you sure you want to $1 (This may be permanent) (y/n)?  " choice
 	case "$choice" in 
 	  y|Y ) return 0;; # true
 	  n|N ) return 1;;
@@ -183,6 +184,10 @@ alias showbrc="tail --lines=+144 ~/.bashrc"
 # Opens in default program, hopefully a good one
 # Will show syntax highlighting
 alias showbrc2="xdg-open ~/.bashrc"
+
+# Search these commands
+# Usage: searchbrc <substring>
+alias searchbrc="showbrc | grep"
 
 
 
@@ -223,6 +228,10 @@ alias ls="ls --color=auto -al"
 alias newfile="touch newfile.txt"
 
 
+# Make new script in PWD
+alias newscript="touch newscript.sh && chmod 777 newscript.sh"
+
+
 # Make new folder in PWD
 alias newfolder="mkdir newfolder"
 
@@ -234,6 +243,11 @@ alias fileinfo="stat"
 # Edit text file with shell editor
 # Usage: nano newfile.txt
 alias edit="nano"
+
+
+# Open a given file with the default program
+# Usage: open <filepath>
+alias open="xdg-open"
 
 
 # Print out a file's contents to the terminal
@@ -461,6 +475,28 @@ alias whereis="whereis"
 
 # Show disk space free in partitions
 alias diskfree="df"
+
+
+# Print IP address 
+function printIP()
+{
+	echo ""
+	echo "Method 1: (usually first one is correct)"
+	hostname -I 
+	
+	echo ""
+    echo "Method 2:"
+	ifconfig -a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 2p
+	# grep filters lines, sed removes leading whitespace, sed 2 shows line 2
+	
+	echo ""
+    echo "Method 3:"
+	ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
+}
+
+
+
+
 
 
 
