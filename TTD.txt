@@ -47,3 +47,65 @@ Add ability to give message if using old version of linux files
 https://stackoverflow.com/questions/5143795/how-can-i-check-in-a-bash-script-if-my-local-git-repository-has-changes
 - call it
 
+
+BOTH BELOW briefly describes a command or C function
+Add "describe" = and do both below!
+"type" command 
+"whatis" command
+
+
+
+systeminfo function:
+lsb_release -a
+hostnamectl
+cat /etc/*-release | uniq -u
+
+
+
+MORE LINUX QUIRKS
+
+Add Ctrl-C is breake
+
+output direction operators
+| to pipe command input in another
+
+“>“: Overwrites the existing file, or creates a file if the file of the mentioned name is not present in the directory.
+
+“>>“: Appends the existing file, or creates a file if the file of the mentioned name is not present in the directory.
+
+
+
+Ls takes both files and directories 
+
+Wild cards
+
+Start WildCard
+The star wildcard (*) has the broadest meaning of any of the wildcards, as it can represent zero characters, all single characters or any string.
+
+The question mark wildcard (?) is used as a wildcard character in shell commands to represent exactly one character, which can be any single character. Thus, two question marks in succession would represent any two characters in succession, and three question marks in succession would represent any string consisting of three characters.
+
+
+Square Brackets Wildcard
+
+The third type of wildcard in shell commands is a pair of square brackets, which can represent any of the characters enclosed in the brackets. Thus, for example, the following would provide information about all objects in the current directory that have an x, y and/or z in them:
+
+file *[xyz]*
+
+And the following would list all files that had an extension that begins with x, y or z:
+
+ls *.[xyz]*
+
+The same results can be achieved by merely using the star and question mark wildcards. However, it is clearly more efficient to use the bracket wildcard.
+
+When a hyphen is used between two characters in the square brackets wildcard, it indicates a range inclusive of those two characters. For example, the following would provide information about all of the objects in the current directory that begin with any letter from a through f:
+
+file [a-f]*
+
+And the following would provide information about every object in the current directory whose name includes at least one numeral:
+
+file *[0-9]*
+
+
+
+Show path dirs line by line
+sed 's/:/\n/g' <<< "$PATH"
