@@ -60,6 +60,8 @@ lsb_release -a
 hostnamectl
 cat /etc/*-release | uniq -u
 
+ADD NEOFETCH SYS INFO
+
 
 
 MORE LINUX QUIRKS
