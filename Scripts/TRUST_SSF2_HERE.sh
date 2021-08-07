@@ -5,9 +5,10 @@
 ### 1. In your file explorer, open the folder where you have extracted the Linux version of SSF2 
 ### 2. In this folder you should see the SSF2 executable and the 'data' folder
 ### 3. Put this script in that folder, next to the executable
-### 4. Right click and do "Open Terminal Here", to open your terminal to the folder
-### 5. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
-### 6. Restart SSF2 and it will load beyond 5%!!!
+### 4. Right click and do "Open Terminal Here", to open your terminal to the right folder
+### 5. Enable the script to be executed using: "chmod u+x TRUST_SSF2_HERE.sh"
+### 6. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
+### 7. Restart SSF2 and it will load beyond 5%!!!
 ###
 ### Author: davo#1776
 ### First Created: 07/08/21
