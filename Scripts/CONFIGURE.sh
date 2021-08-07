@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Sets up config files (bashrc and profile)
 # Very fast

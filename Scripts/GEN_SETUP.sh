@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # General setup for all distros
 # Should be quite fast

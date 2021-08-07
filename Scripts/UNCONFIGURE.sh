@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Undoes the actions of the configuration script
 # Restores original configuration files (bashrc and profile)

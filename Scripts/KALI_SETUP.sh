@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Setup for Kali Linux
 # Will take a while!

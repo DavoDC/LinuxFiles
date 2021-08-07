@@ -1,3 +1,4 @@
+#!/bin/bash
 
 ### SCRIPT THAT LETS SSF2 RUN ON LINUX
 ### Sets the SSF2 data folder as a Trusted Location for Flash Player
