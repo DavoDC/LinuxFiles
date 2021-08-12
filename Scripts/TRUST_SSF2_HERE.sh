@@ -38,7 +38,7 @@
 ### - So this script is a workaround/alternative to using Adobe's Global Settings Manager
 
 # Store the Adobe Flash Player setting file directory path
-SETTINGS_DIR=~/.macromedia/Flash_Player/#Security/FlashPlayerTrust
+SETTINGS_DIR=~/.macromedia/Flash_Player/'#Security'/FlashPlayerTrust
 
 # Make settings file directory folders (or do nothing if it exists already)
 mkdir -p $SETTINGS_DIR
@@ -54,11 +54,13 @@ echo $DATA_DIR >> $SETTINGS_DIR/SSF2.cfg
 
 # Notify
 echo "RUNNING LINUX SSF2 FIX - by davo#1776"
+echo ""
 echo "Settings file created/updated:"
 echo "'$SETTINGS_DIR/SSF2.cfg'"
+echo ""
 echo "This directory has been added as a Trusted Location for Adobe Flash Player:"
 echo "'$DATA_DIR'"
-echo "This copy of SSF2 has been fixed successfully!"
-echo "Enjoy playing SSF2 on Linux!"
+echo ""
+echo "This copy of SSF2 has been fixed successfully! Enjoy playing SSF2 on Linux!"
 echo ""
 
