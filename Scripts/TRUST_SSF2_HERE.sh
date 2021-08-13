@@ -8,10 +8,15 @@
 ###
 ### First Created: 07/08/21
 ###
+### Tested On: Ubuntu 20.04.2.0 LTS (Focal Fossa), Manjaro 
+###
 ### Usage:
-### 1. In your file explorer, open the folder where you have extracted the Linux version of SSF2 
-### 2. In this folder you should see the SSF2 executable and the 'data' folder
-### 3. Put this script in that folder, next to the executable
+### 1. Download this script
+### - a) Open this link: https://github.com/DavoDC/LinuxFiles/raw/main/Scripts/TRUST_SSF2_HERE.sh
+### - b) Save the file as a '.sh' (right click and select 'Save as' or use Ctrl+S)
+### 2. In your file explorer, open the folder where you have extracted the Linux version of SSF2 
+### - In this folder you should see the SSF2 executable and the 'data' folder
+### 3. Put the script in that folder, next to the executable 
 ### 4. Right click and select "Open Terminal Here", to open your terminal to the right folder
 ### 5. Enable the script to be executed using: "chmod u+x TRUST_SSF2_HERE.sh"
 ### 6. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
