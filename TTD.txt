@@ -1,6 +1,19 @@
 
 
 
+
+ADD BATCH SCRIPT FOR GIT MINTTY CUSTOMIZATION
+Copy .bashrc to C:\Users\%username%\
+Rename to .bash_profile
+Add to beginning (“COPY OF .BASHRC FOR GIT MINTTY”)
+•	this will come at the begining of file >>log.txt
+•	type log1.txt >> log.txt
+•	del log1.txt
+•	ren log.txt log1.txt
+
+
+
+
 ADD LINUX PROGRAMMING FOR 4 MAIN LANGS:
 - Add folder to repo: "Program_Templates"
 
