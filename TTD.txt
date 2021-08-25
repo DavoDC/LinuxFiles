@@ -111,3 +111,9 @@ file *[0-9]*
 
 Show path dirs line by line
 sed 's/:/\n/g' <<< "$PATH"
+
+
+Add top commands
+, run this command to see a list of the top 10 commands you run most.
+
+$ history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem] " " elem}}' | sort -n -r | head -10
