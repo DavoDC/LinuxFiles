@@ -112,11 +112,11 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
+	elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
-  fi
+	fi
 fi
 
 
@@ -155,8 +155,8 @@ confirm () {
     # Note: Make sure there is some space after question string
 	read -p "Are you sure you want to $1 (This may be permanent) (y/n)?  " choice
 	case "$choice" in 
-	  y|Y ) return 0;; # true
-	  n|N ) return 1;;
+		y|Y ) return 0;; # true
+		n|N ) return 1;;
 	  * ) return 1;;
 	esac
 }
@@ -280,7 +280,7 @@ remove () {
     # If path is invalid
 	if ! [[ -e $1 ]]; then
 	
-	    # Notify
+		# Notify
 		echo "'$1' is not a valid file/folder"
 		echo ""
 	else
@@ -322,7 +322,7 @@ copy () {
     # If source path is invalid 
 	if ! [[ -e $1 ]]; then
 	
-	    # Notify
+		# Notify
 		echo "'$1' is not a valid file/folder"
 		echo ""
 	else
@@ -356,7 +356,6 @@ copy () {
 
 
 
- 
 
 
 
@@ -422,9 +421,11 @@ alias pstable="top"
 
 
 
+##### Package Management
 
 
-### Other commands/functions
+alias update="sudo apt-get update"
+
 
 # Install a package
 # Usage example: install_pkg firefox
@@ -440,6 +441,12 @@ function install_pkg()
 	echo ""
 }
 
+
+
+
+
+
+### Other commands/functions
 
 # Show docs/manual for Linux commands and C99 functions
 alias manual="man"
