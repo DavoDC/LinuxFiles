@@ -17,8 +17,8 @@
 ### 2. In your file explorer, open the folder where you have extracted the Linux version of SSF2 
 ### - In this folder you should see the SSF2 executable and the 'data' folder
 ### 3. Put the script in that folder, next to the executable 
-### 4. Right click and select "Open Terminal Here", to open your terminal to the right folder
-### 5. Enable the script to be executed using: "chmod u+x TRUST_SSF2_HERE.sh"
+### 4. Right click and select "Open in Terminal", to open your terminal to the right folder
+### 5. Enable the script using: "chmod u+x TRUST_SSF2_HERE.sh"
 ### 6. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
 ### 7. Restart SSF2 and it will load beyond 5%!!!
 ###
@@ -39,7 +39,7 @@
 ### - You cannot run it as Flash has been removed from everywhere as it has reached its end of life
 ### - Thus you cannot access the settings manager, which leads to SSF2 not loading
 ### - What this script does is create the same setting file that the settings manager would've created
-### - It sets the data folder next to where it is run as "Trusted", letting SSF2 load
+### - It sets the data folder next to where it is ran as "Trusted", letting SSF2 load
 ### - So this script is a workaround/alternative to using Adobe's Global Settings Manager
 
 # Store the Adobe Flash Player setting file directory path
@@ -57,7 +57,7 @@ DATA_DIR=$SCRIPT_DIR/data
 # Create settings file (or append to it)
 echo $DATA_DIR >> $SETTINGS_DIR/SSF2.cfg
 
-# Notify
+# Notify user
 echo "RUNNING LINUX SSF2 FIX - by davo#1776"
 echo ""
 echo "Settings file created/updated:"
