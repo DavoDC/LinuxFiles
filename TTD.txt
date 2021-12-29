@@ -1,4 +1,9 @@
 
+Made setup google doc
+add other setup to it
+
+
+Make it so script can be run anywhere as long as Actual with dot files is next to it!
 
 
 

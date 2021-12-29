@@ -7,6 +7,8 @@
 # Variables
 brc=".bashrc"
 prof=".profile"
+repopath="/home/$USER/LinuxFiles/Dotfiles/Actual"
+
 
 
 # Helper Function
@@ -14,8 +16,8 @@ function ask_continue () {
 
 	read -p "Would you like to continue (y/n)? " choice
 	case "$choice" in 
-	  y|Y ) echo "Continuing...";; # true
-	  n|N ) echo "Exiting! " && exit;;
+		y|Y ) echo "Continuing...";; # true
+		n|N ) echo "Exiting! " && exit;;
 	  * ) exit;;
 	esac
 }
@@ -134,9 +136,8 @@ fi
 # Make symlinks to repo versions
 echo ""
 echo "# Making symlinks to repo config files!"
-ln --symbolic "/home/$USER/LinuxFiles/Config/$brc" "$brc"
-ln --symbolic "/home/$USER/LinuxFiles/Config/$prof" "$prof"
-
+ln --symbolic "$repopath/$brc" "$brc"
+ln --symbolic "$repopath/$prof" "$prof"
 
 # Finalize
 echo ""
