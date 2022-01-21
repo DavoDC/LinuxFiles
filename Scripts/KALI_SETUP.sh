@@ -23,3 +23,11 @@ echo ""
 sudo apt install -y python-is-python3
 echo ""
 
+
+# Message
+echo "Now run general setup script!"
+echo ""
+
+
+
+

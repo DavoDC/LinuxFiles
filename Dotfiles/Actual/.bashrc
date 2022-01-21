@@ -271,6 +271,10 @@ alias rename="mv"
 alias move="mv"
 
 
+# Show directory structure as a tree
+# Note: must be installed first
+#alias tree="tree"
+
 
 
 # Remove files/folders (permanently!)
@@ -484,6 +488,11 @@ alias whereis="whereis"
 alias diskfree="df"
 
 
+# Open Ubuntu Software very fast
+alias open-sw="gnome-software"
+
+
+
 # Print IP address 
 function printIP()
 {
@@ -493,8 +502,8 @@ function printIP()
 	
 	echo ""
     echo "Method 2:"
-	ifconfig -a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 2p
-	# grep filters lines, sed removes leading whitespace, sed 2 shows line 2
+	ifconfig -a | grep -w "inet" | sed 's/^[[:space:]]\+//' 
+	# Note: ifconfig needs to be installed, sed removes leading whitespace
 	
 	echo ""
     echo "Method 3:"
