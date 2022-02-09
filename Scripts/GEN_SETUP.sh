@@ -60,6 +60,7 @@ sudo apt install default-jre -y
 
 ### Python
 # Ubuntu 20 or newer comes with python3 pre-installed
+sudo apt install python -y
 # Get python package manager
 sudo apt install python3-pip -y
 
@@ -84,6 +85,16 @@ wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
 mkdir -p $HOME/.local/share/gedit/styles/
 mv dracula.xml $HOME/.local/share/gedit/styles/
 rm dracula.xml
+
+
+### Install Consolas font
+wget -O /tmp/YaHei.Consolas.1.12.zip https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/uigroupcode/YaHei.Consolas.1.12.zip
+unzip /tmp/YaHei.Consolas.1.12.zip
+sudo mkdir -p /usr/share/fonts/consolas
+sudo mv YaHei.Consolas.1.12.ttf /usr/share/fonts/consolas/
+sudo chmod 644 /usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf
+cd /usr/share/fonts/consolas
+sudo mkfontscale && sudo mkfontdir && sudo fc-cache -fv
 
 
 # Message
