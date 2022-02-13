@@ -40,18 +40,25 @@ echo "################### PACKAGES"
 
 # Install curl
 sudo apt install curl -y
+echo ""
 
 # Install neofetch
 sudo apt install neofetch -y
+echo ""
 
 # Install net tools, needed for 'ifconfig'
 sudo apt install net-tools -y
+echo ""
 
 # Install tree
 sudo apt install tree -y
+echo ""
 
 # Install trash CLI
 sudo apt install trash-cli -y
+echo ""
+
+
 
 
 
@@ -62,15 +69,15 @@ sudo apt install trash-cli -y
 # Newest must be done manually
 # See this guide: https://www.javahelps.com/2019/04/install-latest-oracle-jdk-on-linux.html
 # But get defaults for now
-sudo apt install default-jdk -y
-sudo apt install default-jre -y
+sudo apt install default-jdk default-jre -y
+echo ""
 
 
 ### Python
-# Ubuntu 20 or newer comes with python3 pre-installed
-sudo apt install python -y
-# Get python package manager
-sudo apt install python3-pip -y
+# Note: Ubuntu 20 or newer comes with python3 pre-installed
+# Get python and python package manager
+sudo apt install python python3-pip -y
+echo ""
 
 
 
@@ -80,10 +87,14 @@ sudo apt-get install gcc g++ build-essential -y
 echo ""
 
 # Install manual pages for C and other commands
-sudo apt install man-db coreutils -y
+sudo apt install man-db coreutils manpages-dev manpages-posix-dev -y
 echo ""
-sudo apt-get install manpages-dev manpages-posix-dev -y
+
+# Install OpenGL libraries
+sudo apt install freeglut3-dev libxmu-dev -y
 echo ""
+
+
 
 
 
@@ -100,7 +111,7 @@ echo "################### MANUAL INSTALLS/DOWNLOADS"
 draculaFolder="$HOME/.local/share/gedit/styles"
 draculaLoc="$draculaFolder/dracula.xml"
 
-# Always download because: 1) super small  2) may update
+# Always download because: 1) super small/fast 2) may update
 #if ! [[ -e $draculaLoc ]]; then
 
 # Make folder 
@@ -136,6 +147,21 @@ if ! [[ -e "/usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf" ]]; then
 	# Remove installer file
 	rm $consolasFile
 fi
+
+
+
+
+
+############## Removals
+echo ""
+echo ""
+echo "################### Removals"
+
+# Remove Firefox
+sudo apt-get purge firefox -y
+
+# Remove Thunderbird (quietly coz massive output)
+sudo apt-get -qq purge thunderbird* -y
 
 
 
