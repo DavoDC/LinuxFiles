@@ -177,13 +177,11 @@ confirm () {
 
 ### The most important commands
 
-# Reveal all possible commands by showing part of this file
+# Reveal all possible commands by printing out part of this file
 alias showbrc="tail --lines=+144 ~/.bashrc"
 
-# Reveal all possible commands by opening the file 
-# Opens in default program, hopefully a good one
-# Will show syntax highlighting
-alias showbrc2="xdg-open ~/.bashrc"
+# Open up bashrc in a text editor for viewing/editing
+alias openbrc="xdg-open ~/.bashrc"
 
 # Search these commands
 # Usage: searchbrc <substring>
@@ -238,6 +236,10 @@ alias newfolder="mkdir newfolder"
 
 # Show detailed file information
 alias fileinfo="stat"
+
+# Show full path of a file
+# Usage: getpath file.txt
+alias getpath="readlink -f"
 
 
 # Edit text file with shell editor

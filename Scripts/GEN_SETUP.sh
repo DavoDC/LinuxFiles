@@ -4,9 +4,14 @@
 # Should be quite fast
 
 # Show all commands
-set -x
+# set -x
 
-# Make sure packages are good
+
+############### Update Packages
+echo ""
+echo ""
+echo "################### UPDATES"
+
 sudo apt update 
 echo ""
 sudo apt upgrade
@@ -27,6 +32,9 @@ echo ""
 
 ############## Install Packages
 
+echo ""
+echo ""
+echo "################### PACKAGES"
 
 ###### General Tools
 
@@ -48,7 +56,7 @@ sudo apt install trash-cli -y
 
 
 
-##### Programming 
+###### Programming
 
 ### Java
 # Newest must be done manually
@@ -79,22 +87,58 @@ echo ""
 
 
 
-
-### Get Darcula theme for Text Editor
-wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
-mkdir -p $HOME/.local/share/gedit/styles/
-mv dracula.xml $HOME/.local/share/gedit/styles/
-rm dracula.xml
+############## Manual Installs/Downloads
+echo ""
+echo ""
+echo "################### MANUAL INSTALLS/DOWNLOADS"
 
 
-### Install Consolas font
-wget -O /tmp/YaHei.Consolas.1.12.zip https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/uigroupcode/YaHei.Consolas.1.12.zip
-unzip /tmp/YaHei.Consolas.1.12.zip
-sudo mkdir -p /usr/share/fonts/consolas
-sudo mv YaHei.Consolas.1.12.ttf /usr/share/fonts/consolas/
-sudo chmod 644 /usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf
-cd /usr/share/fonts/consolas
-sudo mkfontscale && sudo mkfontdir && sudo fc-cache -fv
+
+
+### Get Dracula theme for (Ubuntu) Text Editor
+# Paths
+draculaFolder="$HOME/.local/share/gedit/styles"
+draculaLoc="$draculaFolder/dracula.xml"
+
+# Always download because: 1) super small  2) may update
+#if ! [[ -e $draculaLoc ]]; then
+
+# Make folder 
+mkdir -p $draculaFolder
+
+# Download to folder
+wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+#fi
+
+
+
+
+
+
+### Install Consolas font (if not installed already)
+# Paths
+consolasURL="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/uigroupcode/YaHei.Consolas.1.12.zip"
+consolasFile="/tmp/YaHei.Consolas.1.12.zip"
+# If font is not installed
+if ! [[ -e "/usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf" ]]; then
+
+	# Download file to path
+	wget -O $consolasFile $consolasURL
+	
+	# Install file
+	unzip /tmp/YaHei.Consolas.1.12.zip
+	sudo mkdir -p /usr/share/fonts/consolas
+	sudo mv YaHei.Consolas.1.12.ttf /usr/share/fonts/consolas/
+	sudo chmod 644 /usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf
+	cd /usr/share/fonts/consolas
+	sudo mkfontscale && sudo mkfontdir && sudo fc-cache -fv
+
+	# Remove installer file
+	rm $consolasFile
+fi
+
+
+
 
 
 # Message
