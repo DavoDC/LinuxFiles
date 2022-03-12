@@ -94,6 +94,11 @@ echo ""
 sudo apt install freeglut3-dev libxmu-dev -y
 echo ""
 
+# Install NetBeans C/C++ info servers
+sudo apt install ccls clangd -y
+echo ""
+
+
 
 
 
