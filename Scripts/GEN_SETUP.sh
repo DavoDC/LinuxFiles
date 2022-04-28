@@ -3,8 +3,52 @@
 # General setup for all distros
 # Should be quite fast
 
-# Show all commands
-# set -x
+
+### Helper Function: isNotInstalled()
+# Given a package name, return true if NOT installed and false otherwise.
+# Argument: Package Name
+function isNotInstalled() {
+
+	# Check if installed
+	check=$(dpkg-query -W --showformat='${Status}\n' $1|grep "install ok installed")
+
+	## Convert check to numerical value
+	# If check came back as not installed
+	if [ "" = "$check" ]; then
+
+		# Return true (not installed)
+		return 0;
+	else
+
+		# Return false (installed)
+		return 1;
+	fi
+}
+
+
+
+### Helper Function: install()
+# Given a package name, install if it isn't installed
+# Argument: Package Name
+function install() {
+
+	# Notify
+	echo "Package: $1"
+	
+	# If not installed
+	if isNotInstalled $1; then
+
+		# Notify
+		echo "Not installed"
+
+		# Install it unattended
+		sudo apt install $1 -y
+	else 
+		# Else if it is installed, notify
+		echo "Already installed"
+	fi
+}
+
 
 
 ############### Update Packages
@@ -36,27 +80,52 @@ echo ""
 echo ""
 echo "################### PACKAGES"
 
-###### General Tools
+###### General
+
+# Install wget
+install "wget"
+echo ""
 
 # Install curl
-sudo apt install curl -y
+install "curl"
 echo ""
 
 # Install neofetch
-sudo apt install neofetch -y
+install "neofetch"
 echo ""
 
 # Install net tools, needed for 'ifconfig'
-sudo apt install net-tools -y
+install "net-tools"
 echo ""
 
 # Install tree
-sudo apt install tree -y
+install "tree"
 echo ""
 
 # Install trash CLI
-sudo apt install trash-cli -y
+install "trash-cli"
 echo ""
+
+## Install SSF2 packages
+# Enable 32 bit packages and update package list
+sudo dpkg --add-architecture i386
+echo ""
+sudo apt update -y
+echo ""
+
+# Install wine
+install "wine"
+echo ""
+install "wine32"
+echo ""
+install "winbind"
+echo ""
+
+# Install canberra GTK module 
+# Solves GTK error for various programs
+install "libcanberra-gtk-module"
+echo ""
+
 
 
 
@@ -65,37 +134,40 @@ echo ""
 
 ###### Programming
 
-### Java
-# Newest must be done manually
-# See this guide: https://www.javahelps.com/2019/04/install-latest-oracle-jdk-on-linux.html
-# But get defaults for now
-sudo apt install default-jdk default-jre -y
+### Java (Default versions)
+install "default-jdk"
+install "default-jre"
 echo ""
 
 
 ### Python
-# Note: Ubuntu 20 or newer comes with python3 pre-installed
 # Get python and python package manager
-sudo apt install python python3-pip -y
+install "python3"
+install "python3-pip"
 echo ""
 
 
 
 ### C/C++
 # Install C and C++ compilers, and other tools like 'make'
-sudo apt-get install gcc g++ build-essential -y
+install "gcc g++ build-essential"
 echo ""
 
 # Install manual pages for C and other commands
-sudo apt install man-db coreutils manpages-dev manpages-posix-dev -y
+install "man-db coreutils manpages-dev manpages-posix-dev"
 echo ""
 
-# Install OpenGL libraries
-sudo apt install freeglut3-dev libxmu-dev -y
+## Install OpenGL libraries
+# Labs
+install "freeglut3-dev libxmu-dev"
+echo ""
+# Project
+install "cmake xorg-dev"
+install "libxmu-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libxi-dev"
 echo ""
 
 # Install NetBeans C/C++ info servers
-sudo apt install ccls clangd -y
+install "ccls clangd"
 echo ""
 
 
@@ -111,20 +183,49 @@ echo "################### MANUAL INSTALLS/DOWNLOADS"
 
 
 
+### Install GitHub Desktop
+
+# Save name
+gdS="github-desktop"
+
+# Notify
+echo "Package: $gdS"
+
+# If not installed
+if isNotInstalled "$gdS"; then
+	
+	# Notify
+	echo "$gdS has not been installed. Installing $gdS."
+	  
+	# Download latest release
+	curl -s https://api.github.com/repos/shiftkey/desktop/releases/latest \
+	| grep "browser_download_url.*deb" \
+	| cut -d : -f 2,3 \
+	| tr -d \" \
+	| wget -i -
+
+	# Install package
+	sudo dpkg -i GitHubDesktop*.deb
+
+	# Remove file
+	rm GitHubDesktop*.deb
+fi
+
+
+
+
+
 ### Get Dracula theme for (Ubuntu) Text Editor
 # Paths
 draculaFolder="$HOME/.local/share/gedit/styles"
 draculaLoc="$draculaFolder/dracula.xml"
-
-# Always download because: 1) super small/fast 2) may update
-#if ! [[ -e $draculaLoc ]]; then
-
-# Make folder 
-mkdir -p $draculaFolder
-
-# Download to folder
-wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
-#fi
+# If doesn't exist
+if ! [[ -e $draculaLoc ]]; then
+	# Make folder 
+	mkdir -p $draculaFolder
+	# Download to folder
+	wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+fi
 
 
 
@@ -162,11 +263,19 @@ echo ""
 echo ""
 echo "################### Removals"
 
-# Remove Firefox
-sudo apt-get purge firefox -y
+## Remove Firefox
+# Package version (Ubuntu 20)
+sudo apt purge firefox -y
+# Snap version (Ubuntu 22)
+sudo snap remove --purge firefox
 
-# Remove Thunderbird (quietly coz massive output)
+## Remove Thunderbird
+# Do quietly coz massive output
+# (MUST BE APT-GET otherwise noisy!)
 sudo apt-get -qq purge thunderbird* -y
+# Remove extra package it leaves behind
+sudo apt autoremove -y
+
 
 
 

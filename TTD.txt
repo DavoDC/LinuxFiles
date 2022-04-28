@@ -1,6 +1,14 @@
 
-Made setup google doc
-add other setup to it
+
+
+Scriptify getting ssf2 on linux 
+- FOR ALL VERSIONS - let user choose
+- Make Games directory and install? (native and portable)
+- Scrape HTML for URL is hardest part
+- Use functions 
+- Add to guide
+- Tell PSN
+
 
 
 Make it so script can be run anywhere as long as Actual with dot files is next to it!
