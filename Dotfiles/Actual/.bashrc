@@ -562,3 +562,20 @@ fi
 
 
 
+
+### SSF2
+
+# Native shortcut
+function ssf2 {
+	cd /home/david/Documents/LINUX_SSF2/1_NATIVE/SSF2BetaLinux.v1.3.1.2
+	./SSF2
+}
+
+# Wine shortcut
+function ssf2_wine {
+	cd /home/david/Documents/LINUX_SSF2/2_WINE_PORTABLE/SSF2BetaWindows.32bit.v.1.3.1.2.portable
+	wine SSF2.exe
+}
+
+
+
