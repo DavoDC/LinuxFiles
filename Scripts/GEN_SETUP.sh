@@ -4,6 +4,8 @@
 # Should be quite fast
 
 
+########################## HELPER FUNCTIONS
+
 ### Helper Function: isNotInstalled()
 # Given a package name, return true if NOT installed and false otherwise.
 # Argument: Package Name
@@ -48,6 +50,23 @@ function install() {
 		echo "Already installed"
 	fi
 }
+
+
+
+### Helper Function: installSnap()
+# Given a Snap package name, install it
+# Argument: Snap Package Name
+function installSnap() {
+
+	# Notify
+	echo "Snap Package: $1"
+	
+	# Install unattended
+	sudo snap install $1 --classic
+}
+
+
+
 
 
 
@@ -105,6 +124,17 @@ echo ""
 # Install trash CLI
 install "trash-cli"
 echo ""
+
+# Install GNOME Tweaks
+install "gnome-tweaks"
+echo ""
+
+
+# DISABLED AS NO LONGER AVAILABLE FOR UBUNTU 22
+# Install GRUB Customizer
+# install grub-customizer
+# echo ""
+
 
 ## Install SSF2 packages
 # Enable 32 bit packages and update package list
@@ -175,11 +205,31 @@ echo ""
 
 
 
+############## Install Snaps
+echo ""
+echo ""
+echo "################### SNAPS"
+
+# Install NetBeans
+installSnap "netbeans --classic"
+
+# Install VS Code
+installSnap "code --classic"
+echo ""
+
+# Install Pinta (its like paint)
+installSnap "pinta"
+echo ""
+
+# Install Discord
+sudo snap install discord
+
+
+
 ############## Manual Installs/Downloads
 echo ""
 echo ""
 echo "################### MANUAL INSTALLS/DOWNLOADS"
-
 
 
 
@@ -213,20 +263,29 @@ fi
 
 
 
+### Install Google Chrome
 
+# Save name
+gChromeS="google-chrome-stable"
 
-### Get Dracula theme for (Ubuntu) Text Editor
-# Paths
-draculaFolder="$HOME/.local/share/gedit/styles"
-draculaLoc="$draculaFolder/dracula.xml"
-# If doesn't exist
-if ! [[ -e $draculaLoc ]]; then
-	# Make folder 
-	mkdir -p $draculaFolder
-	# Download to folder
-	wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+# Notify
+echo "Package: $gChromeS"
+
+# If not installed
+if isNotInstalled "$gChromeS"; then
+	
+	# Notify
+	echo "$gChromeS has not been installed. Installing $gChromeS."
+	  
+	# Download latest release
+	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+	# Install package
+	sudo dpkg -i google-chrome-stable*.deb
+
+	# Remove file
+	rm google-chrome-stable*.deb
 fi
-
 
 
 
@@ -253,6 +312,54 @@ if ! [[ -e "/usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf" ]]; then
 	# Remove installer file
 	rm $consolasFile
 fi
+
+
+### Get Dracula theme for (Ubuntu) Text Editor
+# Paths
+draculaFolder="$HOME/.local/share/gedit/styles"
+draculaLoc="$draculaFolder/dracula.xml"
+# If doesn't exist
+if ! [[ -e $draculaLoc ]]; then
+	# Make folder 
+	mkdir -p $draculaFolder
+	# Download to folder
+	wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+fi
+
+
+
+
+
+## Install Fallout 4 GRUB Theme
+
+# If theme folder does not exist
+if [ ! -d  "/boot/grub/themes/fallout-grub-theme/" ]; then 
+
+	# Set name
+	falloutName="fallout-grub-theme-install.sh"
+
+	# Download with name
+	wget https://github.com/shvchk/fallout-grub-theme/raw/master/install.sh \
+	--output-document=$falloutName
+
+	# Enable execution
+	chmod u+x $falloutName
+
+	# Execute with argument, quietly
+	./$falloutName
+
+	# Remove script
+	rm $falloutName
+else
+	echo "Fallout Grub Theme already installed"
+fi
+
+
+
+
+
+
+
 
 
 

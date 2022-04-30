@@ -1,17 +1,63 @@
 
 
+ANY DESK INSTALL -> ADD TO GEN SETUP
+check if package installed:
+https://stackoverflow.com/a/10439058/17869538
+
+Use official repo commands here: AnyDesk DEB repository
+Install:
+FIX sudo update Error
+W: http://deb.anydesk.com/dists/all/InRelease:
+ Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+
+
+
+https://askubuntu.com/questions/1286545/what-commands-exactly-should-replace-the-deprecated-apt-key
+sudo bash
+wget -qO - https://keys.anydesk.com/repos/DEB-GPG-KEY 
+echo "deb http://deb.anydesk.com/ all main" > /etc/apt/sources.list.d/anydesk-stable.list
+apt update
+apt install anydesk
+
+Solve libpango error:
+anydesk: error while loading shared libraries: libpangox-1.0.so.0: cannot open shared object file: No such file or directory
+Do:
+wget http://ftp.us.debian.org/debian/pool/main/p/pangox-compat/libpangox-1.0-0_0.0.2-5.1_amd64.deb
+sudo dpkg -i libpangox-1.0-0_0.0.2-5.1_amd64.deb
+
+Solve display_server_not_supported error, disable Wayland:
+sudo open /etc/gdm3/custom.conf
+Replace Wayland line with:
+# Disable Wayland to enable AnyDesk!
+WaylandEnable=false
+Save and restart
+
+
+
+
+
 
 Scriptify getting ssf2 on linux 
-- FOR ALL VERSIONS - let user choose
+- Get dependencies first - use gensetup
+- FOR ALL VERSIONS - let user choose - Take user input
 - Make Games directory and install? (native and portable)
 - Scrape HTML for URL is hardest part
 - Use functions 
 - Add to guide
 - Tell PSN
+- /home/david/.wine/drive_c/users/david/SSF2Replays
+- ADD TEXT DOCUMENT SAYING WHERE REPLAYS ARE!!!!!
 
 
 
-Make it so script can be run anywhere as long as Actual with dot files is next to it!
+
+Try game mode Linux 
+https://linuxhint.com/gamemode-improve-gaming-performance-in-linux/
+
+
+
+
+Make it so Config script can be run anywhere as long as Actual with dot files is next to it!
 
 
 
@@ -31,6 +77,9 @@ ADD LINUX PROGRAMMING FOR 4 MAIN LANGS:
 - Add folder to repo: "Program_Templates"
 
 - Add files: ctemp.c , cpptemp.cpp, javatemp.java, pytemp.py
+make coding templates linux files
+
+see updatereadme.py
 
 - Add content to each 
 	- Uses bashrc func for C99 one
