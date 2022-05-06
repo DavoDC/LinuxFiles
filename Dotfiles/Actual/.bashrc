@@ -162,9 +162,51 @@ confirm () {
 }
 
 
+#### I have centralized my Linux knowledge in this file.
+## So there are aliases of commands that are the same.
 
+## When the terminal is hanging, you can sometimes use Ctrl+C to break out.
 
+### Output direction operators
+# | to pipe command input in another.
+# “>“: Overwrites the existing file, 
+# or creates a file if the file of the mentioned name is not present in the directory.
+# “>>“: Appends the existing file, 
+# or creates a file if the file of the mentioned name is not present in the directory.
+#### Wild cards
 
+## Star WildCard
+# The star wildcard (*) has the broadest meaning of any of the wildcards, 
+# as it can represent zero characters, all single characters or any string.
+
+## Question Mark Wildcard
+# The question mark wildcard (?) is used as a wildcard character 
+# in shell commands to represent exactly one character, 
+# which can be any single character. 
+# Thus, two question marks in succession would represent any two characters in succession
+
+## Square Brackets Wildcard
+# The third type of wildcard in shell commands is a pair of square brackets, 
+# which can represent any of the characters enclosed in the brackets. 
+# Thus, for example, the following would provide information about 
+# all objects in the current directory that have an x, y and/or z in them:
+# >>> file *[xyz]*
+#
+# And the following would list all files that had an extension that begins with x, y or z:
+# >>> ls *.[xyz]*
+
+# The same results can be achieved by merely using the star and question mark wildcards. 
+# However, it is clearly more efficient to use the bracket wildcard.
+
+# When a hyphen is used between two characters in the square brackets wildcard, 
+# it indicates a range inclusive of those two characters. 
+# For example, the following would provide information about all of the objects 
+# in the current directory that begin with any letter from a through f:
+# >>> file [a-f]*
+
+# And the following would provide information about every object in the 
+# current directory whose name includes at least one numeral:
+# >>> file *[0-9]*
 
 
 
@@ -408,6 +450,15 @@ alias printstr="echo"
 # Print name of terminal
 alias termname="tty"
 
+# Show PATH dirs line by line
+# TEST
+alias printPath="sed 's/:/\n/g' <<< "$PATH""
+
+
+# Get top ten commands used
+alias topTen="history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem] " " elem}}' | sort -n -r | head -10"
+
+
 
 
 
@@ -424,6 +475,8 @@ alias pstree="pstree"
 
 # Enter detailed process table
 alias pstable="top"
+
+
 
 
 
@@ -457,6 +510,13 @@ function install_pkg()
 # Show docs/manual for Linux commands and C99 functions
 alias manual="man"
 
+# Describe Linux commands and C99 functions
+# TEST
+function describe()
+{
+	type $1
+	whatis $1
+}
 
 # Enter calculation mode
 alias calculate="bc" 
@@ -513,53 +573,76 @@ function printIP()
 }
 
 
-
-
-
-
-
-
-
-
-### Programming
-
-
-
-# C99 compiler
-# Usage: mycc temp temp.c 
-alias mycc="cc -std=c99 -Wall -pedantic -Werror -o"
-
-
-
-# C99 program template generator
-# Credit: Chris McDonald
-function gen_temp {
-if [ ! -r temp.c ]
-then
-cat << END_OF_PROGRAM > temp.c
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
-int main(int argcount, char *argvalue[])
+# Print system information
+# TEST
+function sysInfo()
 {
-    printf("\nHi there! \n");
-    return 0;
+	echo ""
+	neofetch
+
+	echo ""
+	lsb_release -a
+
+	echo ""
+	hostnamectl
+
+	echo ""
+	cat /etc/*-release | uniq -u
 }
-END_OF_PROGRAM
-fi
+
+
+
+
+
+
+
+######### Programming
+# TEST ALL
+
+
+### Copy Template
+# Argument 1: Template name
+function copyTemplate()
+{
+	copy "~/LinuxFiles/Coding_Templates/$1" "."
 }
 
 
+### C Programming
+## Get template
+alias tempC=copyTemplate "ctemp.c"
+## Compile
+# Usage: compC ctemp ctemp.c 
+alias compC="cc -std=c99 -Wall -pedantic -Werror -o"
+## Run = Use dot slash notation (./ctemp)
 
 
-# Add Java 
+### CPP Programming
+## Get template
+alias tempCPP=copyTemplate "cpptemp.cpp"
+## Compile
+# Usage: compCpp cpptemp cpptemp.cpp
+alias compCpp="g++ -o"
+## Run = Use dot slash notation (./cpptemp)
 
-# Add Python
 
-# Add CPP
+### Java Programming
+# Get template
+alias tempJava=copyTemplate "JavaTemp.java"
+## Compile
+# Usage: compJava JavaTemp.java
+alias compJava="javac"
+## Run
+# Usage: runJava JavaTemp
+alias runJava="java"
 
 
+### Python Programming
+## Get template
+alias tempPy=copyTemplate "pytemp.py"
+## Compile and Run
+# Usage: compPy pytemp.py
+alias compPy="python3"
 
 
 

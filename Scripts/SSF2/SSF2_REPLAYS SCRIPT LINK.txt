@@ -1,0 +1,3 @@
+
+
+https://github.com/DavoDC/SSF2Replays/blob/main/runUpdater.sh
