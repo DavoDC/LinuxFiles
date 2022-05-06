@@ -6,9 +6,10 @@
 
 ########################## HELPER FUNCTIONS
 
+
 ### Helper Function: isNotInstalled()
 # Given a package name, return true if NOT installed and false otherwise.
-# Argument: Package Name
+# Argument 1: Package Name
 function isNotInstalled() {
 
 	# Check if installed
@@ -28,10 +29,27 @@ function isNotInstalled() {
 }
 
 
+### Helper Function: isInstalled()
+# Given a package name, return true if IT IS installed and false otherwise.
+# Argument 1: Package Name
+function isInstalled() {
+
+	# Return opposite of previous function
+	if isNotInstalled $1; then
+
+		# Return false
+		return 1;
+	else
+
+		# Return true
+		return 0;
+	fi
+}
+
 
 ### Helper Function: install()
 # Given a package name, install if it isn't installed
-# Argument: Package Name
+# Argument 1: Package Name
 function install() {
 
 	# Notify
@@ -55,18 +73,70 @@ function install() {
 
 ### Helper Function: installSnap()
 # Given a Snap package name, install it
-# Argument: Snap Package Name
+# Argument 1: Snap Package Name
+# Argument 2: Extra Argument
 function installSnap() {
 
 	# Notify
 	echo "Snap Package: $1"
 	
 	# Install unattended
-	sudo snap install $1 --classic
+	sudo snap install $1 $2
 }
 
 
 
+### Helper Function: installDeb()
+# Given a Deb package name and URL, install it
+# Argument 1: Snap Package Name
+function installSnap() {
+
+	# Notify
+	echo "Snap Package: $1"
+	
+	# Install unattended
+	sudo snap install $1 $2
+}
+
+
+### Helper Function: installDeb()
+# Given a Deb package name and URL, install it
+# Argument 1: Deb Package Name
+# Argument 2: URL
+function installDeb() {
+
+	# Notify
+	echo "Deb Package: $1"
+
+	# If not installed
+	if isNotInstalled "$1"; then
+		
+		# Notify
+		echo "$1 has not been installed. Installing $1."
+		
+		# Download from URL
+		wget $2
+
+		# Install package
+		sudo dpkg -i $1*.deb
+
+		# Remove file
+		rm $1*.deb
+	else
+
+		# Notify
+		echo "$1 already installed"
+	fi
+
+	# Space
+	echo ""
+}
+
+
+
+
+
+############### ACTUAL SCRIPT STARTS HERE
 
 
 
@@ -75,21 +145,20 @@ echo ""
 echo ""
 echo "################### UPDATES"
 
-sudo apt update 
+sudo apt update -y
 echo ""
-sudo apt upgrade
+sudo apt upgrade -y
 echo ""
-sudo apt full-upgrade
+sudo apt full-upgrade -y
 echo ""
-sudo apt-get update 
+sudo apt-get update -y 
 echo ""
-sudo apt-get upgrade
+sudo apt-get upgrade -y
 echo ""
-sudo apt-get dist-upgrade
+sudo apt-get dist-upgrade -y
 echo ""
-sudo apt-get check
+sudo apt-get check -y
 echo ""
-
 
 
 
@@ -162,6 +231,8 @@ echo ""
 
 
 
+
+
 ###### Programming
 
 ### Java (Default versions)
@@ -210,20 +281,35 @@ echo ""
 echo ""
 echo "################### SNAPS"
 
-# Install NetBeans
-installSnap "netbeans --classic"
+# If snap pre-installed
+if isInstalled "snapd"; then
 
-# Install VS Code
-installSnap "code --classic"
+	# Notify
+	echo "Snap is pre-installed..."
+	echo ""
+
+	## Install snaps
+
+	# Install NetBeans
+	installSnap "netbeans" "--classic"
+	echo ""
+
+	# Install VS Code
+	installSnap "code" "--classic"
+	echo ""
+
+	# Install Pinta (its like paint)
+	installSnap "pinta"
+	echo ""
+
+	# Install Discord
+	installSnap "discord"
+	echo ""
+
+else
+	echo "Snap was not pre-installed...skipping snap installs..."
+fi
 echo ""
-
-# Install Pinta (its like paint)
-installSnap "pinta"
-echo ""
-
-# Install Discord
-sudo snap install discord
-
 
 
 ############## Manual Installs/Downloads
@@ -231,6 +317,16 @@ echo ""
 echo ""
 echo "################### MANUAL INSTALLS/DOWNLOADS"
 
+
+### Install Google Chrome
+installDeb "google-chrome-stable" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+
+
+### Install libpango
+# Solves AnyDesk error =
+# error while loading shared libraries: libpangox-1.0.so.0: 
+# cannot open shared object file: No such file or directory
+installDeb "libpangox-1.0-0" "http://ftp.us.debian.org/debian/pool/main/p/pangox-compat/libpangox-1.0-0_0.0.2-5.1_amd64.deb"
 
 
 ### Install GitHub Desktop
@@ -259,33 +355,10 @@ if isNotInstalled "$gdS"; then
 
 	# Remove file
 	rm GitHubDesktop*.deb
+else
+	echo "GitHub Desktop already installed"
 fi
-
-
-
-### Install Google Chrome
-
-# Save name
-gChromeS="google-chrome-stable"
-
-# Notify
-echo "Package: $gChromeS"
-
-# If not installed
-if isNotInstalled "$gChromeS"; then
-	
-	# Notify
-	echo "$gChromeS has not been installed. Installing $gChromeS."
-	  
-	# Download latest release
-	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
-	# Install package
-	sudo dpkg -i google-chrome-stable*.deb
-
-	# Remove file
-	rm google-chrome-stable*.deb
-fi
+echo ""
 
 
 
@@ -311,7 +384,10 @@ if ! [[ -e "/usr/share/fonts/consolas/YaHei.Consolas.1.12.ttf" ]]; then
 
 	# Remove installer file
 	rm $consolasFile
+else
+	echo "YaHei Consolas font already installed"
 fi
+echo ""
 
 
 ### Get Dracula theme for (Ubuntu) Text Editor
@@ -324,9 +400,10 @@ if ! [[ -e $draculaLoc ]]; then
 	mkdir -p $draculaFolder
 	# Download to folder
 	wget -O $draculaLoc https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+else
+	echo "Dracula Theme already installed"
 fi
-
-
+echo ""
 
 
 
@@ -353,7 +430,7 @@ if [ ! -d  "/boot/grub/themes/fallout-grub-theme/" ]; then
 else
 	echo "Fallout Grub Theme already installed"
 fi
-
+echo ""
 
 
 
