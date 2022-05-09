@@ -451,12 +451,14 @@ alias printstr="echo"
 alias termname="tty"
 
 # Show PATH dirs line by line
-# TEST
 alias printPath="sed 's/:/\n/g' <<< "$PATH""
 
 
 # Get top ten commands used
-alias topTen="history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem] " " elem}}' | sort -n -r | head -10"
+function topTen() {
+	echo ">>> Top ten commands used:"
+	history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem] elem}}' | sort -n -r | head -10
+}
 
 
 
@@ -511,7 +513,6 @@ function install_pkg()
 alias manual="man"
 
 # Describe Linux commands and C99 functions
-# TEST
 function describe()
 {
 	type $1
@@ -574,7 +575,6 @@ function printIP()
 
 
 # Print system information
-# TEST
 function sysInfo()
 {
 	echo ""
@@ -597,20 +597,22 @@ function sysInfo()
 
 
 ######### Programming
-# TEST ALL
+## Patterns
+# Get template = temp<lang>
+# Compile = comp<lang>
 
 
-### Copy Template
+### Helper: Copy Template
 # Argument 1: Template name
 function copyTemplate()
 {
-	copy "~/LinuxFiles/Coding_Templates/$1" "."
+	copy "/home/david/LinuxFiles/Coding_Templates/$1" "."
 }
 
 
 ### C Programming
 ## Get template
-alias tempC=copyTemplate "ctemp.c"
+alias tempC="copyTemplate ctemp.c"
 ## Compile
 # Usage: compC ctemp ctemp.c 
 alias compC="cc -std=c99 -Wall -pedantic -Werror -o"
@@ -619,27 +621,27 @@ alias compC="cc -std=c99 -Wall -pedantic -Werror -o"
 
 ### CPP Programming
 ## Get template
-alias tempCPP=copyTemplate "cpptemp.cpp"
+alias tempCPP="copyTemplate cpptemp.cpp"
 ## Compile
 # Usage: compCpp cpptemp cpptemp.cpp
-alias compCpp="g++ -o"
+alias compCpp="g++ -Wall -pedantic -Werror -o"
 ## Run = Use dot slash notation (./cpptemp)
 
 
 ### Java Programming
 # Get template
-alias tempJava=copyTemplate "JavaTemp.java"
-## Compile
+alias tempJava="copyTemplate JavaTemp.java"
+## Compile (generates *.class files)
 # Usage: compJava JavaTemp.java
 alias compJava="javac"
-## Run
+## Run (runs *.class files)
 # Usage: runJava JavaTemp
 alias runJava="java"
 
 
 ### Python Programming
 ## Get template
-alias tempPy=copyTemplate "pytemp.py"
+alias tempPy="copyTemplate pytemp.py"
 ## Compile and Run
 # Usage: compPy pytemp.py
 alias compPy="python3"

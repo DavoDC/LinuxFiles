@@ -1,9 +1,5 @@
 
 
-TEST BASHRC ADDITIONS ON LINUX
-(search for Test! , remove after)
-
-
 Scriptify getting ssf2 on linux 
 - Work on files in SSF2 folder
 - Use python to get URL

@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
     // }
 
     // Print message
-    std::cout << "::::::::: CPP Template by David";
+    std::cout << "::::::::: CPP Template by David \n";
 }
 
 
