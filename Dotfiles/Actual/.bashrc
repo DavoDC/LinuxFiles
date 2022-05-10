@@ -648,19 +648,34 @@ alias compPy="python3"
 
 
 
-### SSF2
+
+
+### SSF2 
+
+# Open Australian ruleset quietly
+function openRules {
+	bash -c "xdg-open https://docs.google.com/document/d/1_vNg5tm6mc7BI8ExLqHLIWvrt89tkr9BH4ooPQh2F1E" 2> /dev/null > /dev/null
+}
+
+# Print a copy of Australian ruleset
+function printRules {
+	cat "/home/david/LinuxFiles/Scripts/SSF2/Aussie_SSF2_Ruleset.txt"
+}
+
 
 # Native shortcut
-function ssf2 {
-	cd /home/david/Documents/LINUX_SSF2/1_NATIVE/SSF2BetaLinux.v1.3.1.2
-	./SSF2
-}
+# DISABLED, NOT IN USE
+# function ssf2 {
+# 	cd /home/david/Documents/LINUX_SSF2/1_NATIVE/SSF2BetaLinux.v1.3.1.2
+# 	./SSF2
+# }
 
 # Wine shortcut
-function ssf2_wine {
-	cd /home/david/Documents/LINUX_SSF2/2_WINE_PORTABLE/SSF2BetaWindows.32bit.v.1.3.1.2.portable
-	wine SSF2.exe
-}
+# DISABLED, NOT IN USE
+# function ssf2_wine {
+# 	cd /home/david/Documents/LINUX_SSF2/2_WINE_PORTABLE/SSF2BetaWindows.32bit.v.1.3.1.2.portable
+# 	wine SSF2.exe
+# }
 
 
 
