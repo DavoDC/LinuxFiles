@@ -12,13 +12,25 @@ Yoshi’s Story
 
 ###Stage Striking
 # Neutral Stages
-At the start of a set, one person calls either "heads" or "tails". The Dyno bot command “>flip” is then used, and the winner of the coin flip bans the first stage from the neutral stages. The other person will then strike 2 stages, followed by the first person striking one last stage. The remaining stage is then played on.
+At the start of a set, one person calls either "heads" or "tails". 
+The Dyno bot command “>flip” is then used, 
+and the winner of the coin flip bans the first stage from the neutral stages. 
+The other person will then strike 2 stages, 
+followed by the first person striking one last stage. 
+The remaining stage is then played on.
 
 # Counter Picking
-The winner of the previous round bans 2 stages, the loser of the previous round picks the stage to be played on. You cannot pick the last stage you have won on. 
+The winner of the previous round bans 2 stages, 
+the loser of the previous round picks the stage to be played on. 
+You cannot pick the last stage you have won on. 
 
 # Gentlemen’s Rule
 If both players agree, you're able to play on any stage.
 
 ### Character Announcement
-After stage striking has occurred, character announcements may be required, which can allow for character counter picking. In the first match of a given set, both players do not need to do any character announcing. In match 2 onwards of a set, both players must announce their characters, with the winner going first.
+After stage striking has occurred, character announcements may be required, 
+which can allow for character counter picking. 
+In the first match of a given set, 
+both players do not need to do any character announcing. 
+In match 2 onwards of a set, both players must announce their characters, 
+with the winner going first.

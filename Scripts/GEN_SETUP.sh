@@ -251,20 +251,31 @@ echo ""
 
 ### C/C++
 # Install C and C++ compilers, and other tools like 'make'
-install "gcc g++ build-essential"
+install "build-essential"
+install "gcc" 
+install "g++"
 echo ""
 
 # Install manual pages for C and other commands
-install "man-db coreutils manpages-dev manpages-posix-dev"
+install "man-db"
+install "coreutils"
+install "manpages-dev"
+install "manpages-posix-dev"
 echo ""
 
 ## Install OpenGL libraries
 # Labs
-install "freeglut3-dev libxmu-dev"
+install "freeglut3-dev"
+install "libxmu-dev"
 echo ""
 # Project
-install "cmake xorg-dev"
-install "libxmu-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libxi-dev"
+install "cmake"
+install "xorg-dev"
+install "libxi-dev"
+install "libxmu-dev"
+install "libx11-dev"
+install "libgl1-mesa-dev"
+install "libglu1-mesa-dev"
 echo ""
 
 # Install NetBeans C/C++ info servers

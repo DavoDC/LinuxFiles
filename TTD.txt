@@ -1,6 +1,8 @@
 
 
 Scriptify getting ssf2 on linux 
+- DO WINE INSTALLER VERSION ONLY - for yourself only first!
+
 - Work on files in SSF2 folder
 - Use python to get URL
 - Get dependencies first - use gensetup
