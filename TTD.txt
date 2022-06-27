@@ -1,19 +1,5 @@
 
 
-############### Scriptify getting ssf2 on linux ###############
-
-
-
-
-
-#### When script finished:
-- Add to video desc!!
-- Add to guide
-- Send in Linux server and pin
-- Send in McLeod Gaming
-- Tell PSN
-
-
 
 
 
