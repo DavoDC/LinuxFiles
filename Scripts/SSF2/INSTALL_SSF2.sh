@@ -27,7 +27,7 @@
 
 
 
-##### HELPER FUNCTIONS
+########## HELPER FUNCTIONS
 
 ### Helper Function: isNotInstalled()
 # Given a package name, return true if NOT installed and false otherwise.
@@ -72,6 +72,29 @@ function install() {
 	fi
 }
 
+### Helper Function: download()
+# Downloads a given Linux SSF2 version
+# Argument 1: "native", "wine_inst" or "wine_port"
+function download() {
+
+	# Notify
+	echo "This may take some time, please keep the terminal open..."
+	
+	# Install wget if needed
+	install "wget"
+
+	# TEST
+	echo "Download function"
+
+	# Get 
+	#wget https://www.supersmashflash.com/play/ssf2/downloads/
+	#cat dwl.html | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | grep "https://cdn.supersmashflash.com/ssf2/downloads"
+	#grep by chosen version? 
+	# Make games folder and let user know
+	# put in variable.  hardcode for now
+	#cd ~/Games/SSF2
+	## download URL/file to folder
+}
 
 
 
@@ -79,53 +102,106 @@ function install() {
 
 
 
-##### ACTUAL SCRIPT
-# Notify user
-echo "#### INSTALL SSF2 ON LINUX ### - by davo#1776"
+########## ACTUAL SCRIPT
+
+
+### Starting message
+echo "#### INSTALL SSF2 ON LINUX #### - by davo#1776"
 echo ""
 
 
-# Ask user which type is wanted
-# If you are not sure, choose WIne Installer
-# Can check guide to help you decide
-# https://docs.google.com/document/d/1l5VrAaWmLozu9qnwdjz6MGA9GyurlkgNF8t72eZ4-54/edit#heading=h.cmlrz1iib8bd
+### Get desired version
+echo "# Which version would you like to install?"
+echo " A) Native"
+echo " B) Wine Installer"
+echo " C) Wine Portable"
+echo "To help you decide, check the guide: https://docs.google.com/document/d/1l5VrAaWmLozu9qnwdjz6MGA9GyurlkgNF8t72eZ4-54/edit#heading=h.cmlrz1iib8bd ."
+echo "If you are not sure, choose B (Wine Installer)."
+echo "Type the letter of your desired version and press enter."
+echo "Choice (A or B or C):"
+read chosen_version
+
+
+### Check choice
+
+# Version booleans
+native=false
+wine_inst=false
+wine_port=false
+
+# Process user input
+if [ "$chosen_version" = "A" ]; then
+	native=true
+	
+elif [ "$chosen_version" = "B" ]; then
+	wine_inst=true
+	
+elif [ "$chosen_version" = "C" ]; then
+	wine_port=true
+else
+	echo "Invalid choice!"
+	echo "Please run the script again"
+	exit
+fi
 
 
 
-# Make games folder and let user know
-# put in variable.  hardcode for now
-#cd ~/Games/SSF2
+
+# Space
+echo ""
 
 
-## DOWNLOAD FILE
-#use gensetup function
-#install "wget"
-#echo ""
-#wget https://www.supersmashflash.com/play/ssf2/downloads/
-#cat dwl.html | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | grep "https://cdn.supersmashflash.com/ssf2/downloads"
-#grep by chosen version? 
-## download URL/file
+# Set install path
+installPath="~/Games/SSF2"
+
+# Make folder (or do nothing if it exists already)
+mkdir -p $installPath
 
 
-##### Native 
-## 1. extract
-#install "tar"
-#
-#tar -xf SSF2BetaLinux.*.tar --one-top-level
-## 2. enter folder created 
-# cd SSF2BetaLinux.*/
-## 3. run fix script
-#chmod u+x trust-ssf2.sh && ./trust-ssf2.sh
-## 4. you can add this to your bashrc so you can start ssf2 from anywhere
-# function ssf2 {
+
+
+##### Install Native Version
+if [ "$native" = true ]; then
+
+	# Notify
+	echo "Installing Native Version..."
+	read -p "Press any key to continue..."
+
+	# Download
+	echo "Downloading native version..."
+	download $installPath "native"
+
+	# Extract
+	echo "Extracting..."
+	install "tar"
+	# cd LOCATION
+	#tar -xf SSF2BetaLinux.*.tar --one-top-level
+
+	# Run fix script
+	#cd SSF2BetaLinux.*/
+	#chmod u+x trust-ssf2.sh && ./trust-ssf2.sh
+
+	# you can add this to your bashrc so you can start ssf2 from anywhere
+	# function ssf2 {
         # cd ~/Downloads/SSF2_Folder
         # ./SSF2
-# }
-#For the Native Linux version, there is no replay autosave option in the Data menu.
+	# }
+
+	# Notify
+	#For the Native Linux version, there is no replay autosave option in the Data menu.
+fi
+
+
+
 
 
 
 ##### Wine 
+if [ "$wine_inst" = true  ] || [ "$wine_port" = true  ]; then
+    echo "Getting wine pre-reqs"
+	echo ""
+fi
+
 # 1. pre reqs
 ## Enable 32-bit packages with the command: 
 #sudo dpkg --add-architecture i386
@@ -151,7 +227,12 @@ echo ""
 
 
 
-##### Wine Installer
+##### Install Wine Installer Version
+if [ "$wine_inst" = true ]; then
+
+	echo "Installing wine installer version"
+
+fi
 # Notify: An installer window will appear. Follow the prompts.
 # 2. open with wine
 # wine SSF2BetaSetup.32bit.*.exe
@@ -166,6 +247,11 @@ echo ""
 
 
 ##### Wine Portable
+if [ "$wine_port" = true ]; then
+
+	echo "Installing wine portable version"
+
+fi
 
 ## Extract
 #sudo apt-get install unzip -y
@@ -183,6 +269,15 @@ echo ""
 #For the Wine Linux version (Installer and Portable), the replay folder path will be something like:
 #/home/david/.wine/drive_c/users/david/SSF2Replays
 
+
+
+
+# Finish up
+echo ""
+echo "FINISHED!"
+echo ""
+echo "Enjoy playing SSF2 on Linux!"
+exit
 
 
 
