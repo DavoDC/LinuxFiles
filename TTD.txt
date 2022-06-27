@@ -1,22 +1,22 @@
 
 
-Scriptify getting ssf2 on linux 
-- DO WINE INSTALLER VERSION ONLY - for yourself only first!
+############### Scriptify getting ssf2 on linux ###############
 
+
+##### General
+- Convert raw notes to actual script
 - Work on files in SSF2 folder
-- Use python to get URL
-- Get dependencies first - use gensetup
-- FOR ALL VERSIONS - let user choose - Take user input
-- Make Games directory and install? (native and portable)
-- Scrape HTML for URL is hardest part
-downloadURLs = curl -s https://www.supersmashflash.com/play/ssf2/downloads/ | grep cdn.supersmashflash.com
-OUTPUT=$(python ./scripts/temp.py  INPUT  DESIRED_ONE)
-wget  $OUTPUT
-- Use functions 
+- Use lots of helper functions
+
+
+
+#### When script finished:
 - Add to guide
+- Send in Linux server and pin
+- Send in McLeod Gaming
 - Tell PSN
-- /home/david/.wine/drive_c/users/david/SSF2Replays
-- ADD TEXT DOCUMENT SAYING WHERE REPLAYS ARE!!!!!
+
+
 
 
 
