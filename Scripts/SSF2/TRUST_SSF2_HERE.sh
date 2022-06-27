@@ -11,16 +11,13 @@
 ### Tested On: Ubuntu 20.04.2.0 LTS (Focal Fossa), Manjaro 
 ###
 ### Usage:
-### 1. Download this script
-### - a) Open this link: https://github.com/DavoDC/LinuxFiles/raw/main/Scripts/TRUST_SSF2_HERE.sh
-### - b) Save the file as a '.sh' (right click and select 'Save as' or use Ctrl+S)
-### 2. In your file explorer, open the folder where you have extracted the Linux version of SSF2 
-### - In this folder you should see the SSF2 executable and the 'data' folder
-### 3. Put the script in that folder, next to the executable 
-### 4. Right click and select "Open in Terminal", to open your terminal to the right folder
-### 5. Enable the script using: "chmod u+x TRUST_SSF2_HERE.sh"
-### 6. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
-### 7. Restart SSF2 and it will load beyond 5%!!!
+### 1. Open the folder where your Native Linux SSF2 has been installed.
+### 2. Right click in it and select "Open in Terminal".
+### 3. Paste in this command to get the script: "wget https://raw.githubusercontent.com/DavoDC/LinuxFiles/main/Scripts/SSF2/TRUST_SSF2_HERE.sh"
+### 4. Enable the script using: "chmod u+x TRUST_SSF2_HERE.sh"
+### 5. Run the script using the command: "./TRUST_SSF2_HERE.sh", and close the terminal
+### 6. Restart SSF2 and it will load beyond 5%!!!
+###
 ###
 ### Usage Notes:
 ### - If you move your SSF2 installation to a new directory, you will need to re-run the script there
