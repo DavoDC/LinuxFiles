@@ -25,6 +25,36 @@
 
 
 
+
+########## GLOBAL VARIABLES
+
+# Version booleans - True if that version has been chosen
+native=false     
+wine_inst=false
+wine_port=false
+
+# Version string/description
+version_desc=""
+
+# Official download URL
+offURL="https://www.supersmashflash.com/play/ssf2/downloads/"
+
+# Download page file name
+offURLfile="dwl.html"
+
+# Regex patterns for version downloads
+patt_native="SSF2BetaLinux.*.tar"
+patt_wine_inst="SSF2BetaSetup.32bit.*.exe" 
+patt_wine_port="SSF2BetaWindows.32bit.*.portable.zip"
+
+# For coloured printing
+yellow='\033[0;33m'
+nc='\033[0m'
+
+
+
+
+
 ########## HELPER FUNCTIONS
 
 ### Helper Function: isNotInstalled()
@@ -63,11 +93,22 @@ function install() {
 }
 
 
+### Helper Function: extractDwlUrl()
+# Extract the download URL of the chosen version
+# Argument 1: Regex Pattern for Version
+function extractDwlUrl() {
+	
+	url="$(cat $offURLfile | grep -Eo '(http|https)://[a-zA-Z0-9./?=_%:-]*' | \
+	sort -u | grep 'https://cdn.supersmashflash.com/ssf2/downloads' | grep $1 )"
+
+	echo "$url"
+}
+
+
+
 ### Helper Function: printYellow()
 # Prints a string in yellow
 # Argument 1: String
-yellow='\033[0;33m'
-nc='\033[0m'
 function printYellow() {
 	printf "${yellow}$1${nc}"
 }
@@ -79,7 +120,7 @@ function printYellow() {
 # Argument 2: Function Name
 function giveBashrcAdvice() {
 	echo ""
-	echo "Advice on running the game ($version_desc Version):"
+	echo "Advice on running the game ($version_desc):"
 	echo "You have to open a terminal in the"
 	echo "'$(pwd)' folder/directory,"
 	echo "and type '$1'."
@@ -91,9 +132,23 @@ function giveBashrcAdvice() {
     printYellow "\n    $1"
 	printYellow "\n }"
 	echo ""
+	echo "To open your '~/.bashrc' file in your default editor, use the command:"
+	printYellow "xdg-open ~/.bashrc"
+	echo ""
 	echo "Once this is set up, type '$2' to start the game from any terminal."
 	echo ""
 }
+
+
+### Helper Function: giveRemoveAdvice()
+# Print advice regarding removing downloaded files
+# Argument 1: Regex Pattern for Version
+function giveRemoveAdvice() {
+	printYellow "rm $1 && echo 'Removed $version_desc archive'"
+}
+
+	
+
 
 
 
@@ -125,28 +180,18 @@ echo "Choice (A or B or C):"
 read chosen_version
 
 
-### Check choice
-
-# Version booleans
-native=false
-wine_inst=false
-wine_port=false
-
-# Version string/description
-version_desc=""
-
-# Process user input
+### Check choice and process user input
 if [ "$chosen_version" = "A" ]; then
 	native=true
-	version_desc="Native"
+	version_desc="Native Version"
 	
 elif [ "$chosen_version" = "B" ]; then
 	wine_inst=true
-	version_desc="Wine Installer"
+	version_desc="Wine Installer Version"
 	
 elif [ "$chosen_version" = "C" ]; then
 	wine_port=true
-	version_desc="Wine Portable"
+	version_desc="Wine Portable Version"
 
 else
 	echo "Invalid choice!"
@@ -168,7 +213,7 @@ echo ""
 
 
 # Notify/confirm
-echo "Installing $version_desc Version..."
+echo "Installing $version_desc..."
 read -p "Press any key to continue......"
 echo ""
 
@@ -191,7 +236,7 @@ mkdir -p $installPath
 
 
 # Notify
-echo "Downloading $version_desc Version..."
+echo "Downloading $version_desc..."
 echo "This may take some time, please keep the terminal open..."
 echo ""
 	
@@ -206,28 +251,30 @@ echo "Extracting download URLs from official site.."
 echo ""
 
 # Download official download page as HTML
-wget -q https://www.supersmashflash.com/play/ssf2/downloads/ -O dwl.html 
+wget -q $offURL -O $offURLfile
 
 # Holder
 dwlURL=""
 
+
 # Extract from HTML
 if [ "$native" = true ]; then
-	dwlURL="$( cat 'dwl.html' | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | grep "https://cdn.supersmashflash.com/ssf2/downloads" | grep "SSF2BetaLinux" )"
-
+	dwlURL="$(extractDwlUrl $patt_native)"
 elif [ "$wine_inst" = true ]; then
-	dwlURL="$( cat 'dwl.html' | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | grep "https://cdn.supersmashflash.com/ssf2/downloads" | grep "SSF2BetaSetup.32bit.*.exe"  )"
-
+	dwlURL="$(extractDwlUrl $patt_wine_inst)"
 elif [ "$wine_port" = true ]; then
-	dwlURL="$( cat 'dwl.html' | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | grep "https://cdn.supersmashflash.com/ssf2/downloads" | grep "SSF2BetaWindows.32bit.*.portable.zip" )"
-
+	dwlURL="$(extractDwlUrl $patt_wine_port)"	
 fi
 
 # Remove HTML download
-rm 'dwl.html'
+rm $offURLfile
+
 
 # Download chosen SSF2 version file
+# Normal
 wget $dwlURL
+# Testing Mode (Never commit this!)
+#wget --spider -S $dwlURL
 
 # Space
 echo ""
@@ -245,7 +292,7 @@ if [ "$native" = true ]; then
 	echo "Extracting downloaded archive..."
 	echo ""
 	install "tar"
-	tar -xf SSF2BetaLinux.*.tar --one-top-level
+	tar -xf $patt_native --one-top-level
 
 	# Go into created folder
 	cd SSF2BetaLinux.*/
@@ -300,7 +347,7 @@ if [ "$wine_inst" = true ]; then
 	read -p "Press any key when you're ready....."
 
 	# Open Windows installer with Wine
-	wine SSF2BetaSetup.32bit.*.exe
+	wine $patt_wine_inst
 
 	# Give advice
 	echo ""
@@ -328,7 +375,7 @@ if [ "$wine_port" = true ]; then
 	echo "Extracting downloaded archive..."
 	echo ""
 	install "unzip"
-	unzip -qq SSF2BetaWindows.32bit.*.portable.zip
+	unzip -qq $patt_wine_port
 
 	# Go into created folder
 	cd SSF2BetaWindows.32bit.*.portable
@@ -366,6 +413,18 @@ echo ""
 echo ""
 echo ""
 echo "FINISHED!"
+echo ""
+echo "You can now remove the downloaded archive/installer if you wish,"
+echo "to free up space, now that installation has finished,"
+echo "using the following command:"
+if [ "$native" = true ]; then
+	giveRemoveAdvice $patt_native
+elif [ "$wine_inst" = true ]; then
+	giveRemoveAdvice $patt_wine_inst
+elif [ "$wine_port" = true ]; then
+	giveRemoveAdvice $patt_wine_port
+fi
+echo ""
 echo ""
 echo "If you have any issues, check the Linux Troubleshooting section in the Player Guide:"
 printYellow "https://docs.google.com/document/d/1l5VrAaWmLozu9qnwdjz6MGA9GyurlkgNF8t72eZ4-54/edit#heading=h.3i7wifh0e5nc"

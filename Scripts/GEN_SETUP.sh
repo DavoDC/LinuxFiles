@@ -194,6 +194,10 @@ echo ""
 install "trash-cli"
 echo ""
 
+# Install Ookla Speedtest CLI
+install "speedtest-cli"
+echo ""
+
 # Install GNOME Tweaks
 install "gnome-tweaks"
 echo ""
