@@ -202,11 +202,18 @@ echo ""
 install "gnome-tweaks"
 echo ""
 
+# Install Stacer (Like CCleaner for Linux)
+# (Use to disable AnyDesk autostart!)
+install "stacer"
+echo ""
 
 # DISABLED AS NO LONGER AVAILABLE FOR UBUNTU 22
 # Install GRUB Customizer
 # install grub-customizer
 # echo ""
+
+
+
 
 
 ## Install SSF2 packages
@@ -477,6 +484,15 @@ sudo apt autoremove -y
 
 
 
+### Disable Bluetooth on Startup
+# Source: 
+# https://askubuntu.com/questions/67758/how-can-i-deactivate-bluetooth-on-system-startup
+sudo install -b -m 755 /dev/stdin /etc/rc.local << EOF
+!/bin/sh
+rfkill block bluetooth
+echo disable > /proc/acpi/ibm/bluetooth
+exit 0
+EOF
 
 
 

@@ -20,6 +20,9 @@
 ###
 ### This is a 'scriptified' version of the steps from the Player Guide.
 ### https://docs.google.com/document/d/1l5VrAaWmLozu9qnwdjz6MGA9GyurlkgNF8t72eZ4-54/edit#heading=h.cmlrz1iib8bd
+### Also automates the video process
+### https://www.youtube.com/watch?v=vHMe8zDKM9A
+### 
 ###
 
 
@@ -218,8 +221,19 @@ read -p "Press any key to continue......"
 echo ""
 
 
+
+
+###### Install universal dependencies
+
 ### Install canberra library
 install "libcanberra-gtk-module"
+
+
+### Install libnss library 
+# Needed on Chromebooks
+install "libnss3"
+
+
 
 
 ### Setup install folder
