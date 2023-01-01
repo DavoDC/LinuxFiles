@@ -184,15 +184,15 @@ read chosen_version
 
 
 ### Check choice and process user input
-if [ "$chosen_version" = "A" ]; then
+if [ "$chosen_version" = "A"  ] || [ "$chosen_version" = "a"  ]; then
 	native=true
 	version_desc="Native Version"
 	
-elif [ "$chosen_version" = "B" ]; then
+elif [ "$chosen_version" = "B" ] || [ "$chosen_version" = "b"  ]; then
 	wine_inst=true
 	version_desc="Wine Installer Version"
 	
-elif [ "$chosen_version" = "C" ]; then
+elif [ "$chosen_version" = "C" ] || [ "$chosen_version" = "c"  ]; then
 	wine_port=true
 	version_desc="Wine Portable Version"
 
