@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Undoes the actions of the configuration script
 # Restores original configuration files (bashrc and profile)

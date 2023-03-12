@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### SCRIPT FOR INSTALLING SSF2 ON LINUX ###
 ###

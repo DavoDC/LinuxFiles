@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### SCRIPT THAT LETS SSF2 RUN ON LINUX ###
 ###
