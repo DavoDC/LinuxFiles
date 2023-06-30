@@ -1,10 +1,9 @@
 
 
 
+USE CG to improve
 
+Improve Linux files scripts too 
 
-
-
-
-
+add more error cases to ssf2 script 
 

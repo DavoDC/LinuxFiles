@@ -27,7 +27,3 @@ echo ""
 # Message
 echo "Now run general setup script!"
 echo ""
-
-
-
-
