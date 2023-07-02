@@ -139,6 +139,14 @@ function installDeb() {
 ############### ACTUAL SCRIPT STARTS HERE
 
 
+############### Configuration Changes
+
+### Set Ubuntu Text Editor as default Git Editor
+git config --global core.editor "gedit -s"
+
+### Disable Ubuntu Pro messages when this script is running
+sudo dpkg-divert --divert /etc/apt/apt.conf.d/20apt-esm-hook.conf.bak --rename --local /etc/apt/apt.conf.d/20apt-esm-hook.conf > /dev/null 2>&1
+
 
 ############### Update Packages
 echo ""
@@ -493,7 +501,6 @@ rfkill block bluetooth
 echo disable > /proc/acpi/ibm/bluetooth
 exit 0
 EOF
-
 
 
 # Message

@@ -1,9 +1,17 @@
 
 
+Improve Linux files scripts too 
+
+
+Improve general setup script output -> 
+make less verbose, centralize header printing to a function!
+- put helper functions in a separate file!
+
 
 USE CG to improve
 
-Improve Linux files scripts too 
 
 add more error cases to ssf2 script 
+
+
 
