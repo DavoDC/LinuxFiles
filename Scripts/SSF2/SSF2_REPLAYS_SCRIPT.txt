@@ -1,0 +1,5 @@
+
+
+I have more bash scripts stored in this repo:
+
+https://github.com/DavoDC/SSF2Replays

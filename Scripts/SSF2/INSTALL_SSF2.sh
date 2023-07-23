@@ -447,7 +447,3 @@ echo ""
 echo "Enjoy playing SSF2 on Linux!"
 echo ""
 exit
-
-
-
-
