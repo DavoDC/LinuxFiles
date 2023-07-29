@@ -1,5 +1,9 @@
 
 
+Centralise configure scripts , detect status . Give options to redo ? Undo , exit
+
+Make work on windows too , auto detect
+
 Improve Linux files scripts too 
 
 
