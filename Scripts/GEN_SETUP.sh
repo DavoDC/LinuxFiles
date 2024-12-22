@@ -321,8 +321,8 @@ if isInstalled "snapd"; then
 	## Install snaps
 
 	# Install NetBeans
-	installSnap "netbeans" "--classic"
-	echo ""
+	# installSnap "netbeans" "--classic"
+	# echo ""
 
 	# Install VS Code
 	installSnap "code" "--classic"
