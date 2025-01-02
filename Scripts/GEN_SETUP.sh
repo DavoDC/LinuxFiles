@@ -199,8 +199,8 @@ install "tree"
 echo ""
 
 # Install trash CLI
-install "trash-cli"
-echo ""
+# install "trash-cli"
+# echo ""
 
 # Install Ookla Speedtest CLI
 install "speedtest-cli"
@@ -212,8 +212,8 @@ echo ""
 
 # Install Stacer (Like CCleaner for Linux)
 # (Use to disable AnyDesk autostart!)
-install "stacer"
-echo ""
+# install "stacer"
+# echo ""
 
 # DISABLED AS NO LONGER AVAILABLE FOR UBUNTU 22
 # Install GRUB Customizer
@@ -255,9 +255,9 @@ echo ""
 ###### Programming
 
 ### Java (Default versions)
-install "default-jdk"
-install "default-jre"
-echo ""
+# install "default-jdk"
+# install "default-jre"
+# echo ""
 
 
 ### Python
@@ -270,36 +270,36 @@ echo ""
 
 ### C/C++
 # Install C and C++ compilers, and other tools like 'make'
-install "build-essential"
-install "gcc" 
-install "g++"
-echo ""
+# install "build-essential"
+# install "gcc" 
+# install "g++"
+# echo ""
 
 # Install manual pages for C and other commands
-install "man-db"
-install "coreutils"
-install "manpages-dev"
-install "manpages-posix-dev"
-echo ""
+# install "man-db"
+# install "coreutils"
+# install "manpages-dev"
+# install "manpages-posix-dev"
+# echo ""
 
 ## Install OpenGL libraries
-# Labs
-install "freeglut3-dev"
-install "libxmu-dev"
-echo ""
-# Project
-install "cmake"
-install "xorg-dev"
-install "libxi-dev"
-install "libxmu-dev"
-install "libx11-dev"
-install "libgl1-mesa-dev"
-install "libglu1-mesa-dev"
-echo ""
+# # Labs
+# install "freeglut3-dev"
+# install "libxmu-dev"
+# echo ""
+# # Project
+# install "cmake"
+# install "xorg-dev"
+# install "libxi-dev"
+# install "libxmu-dev"
+# install "libx11-dev"
+# install "libgl1-mesa-dev"
+# install "libglu1-mesa-dev"
+# echo ""
 
-# Install NetBeans C/C++ info servers
-install "ccls clangd"
-echo ""
+# # Install NetBeans C/C++ info servers
+# install "ccls clangd"
+# echo ""
 
 
 
@@ -325,12 +325,12 @@ if isInstalled "snapd"; then
 	# echo ""
 
 	# Install VS Code
-	installSnap "code" "--classic"
-	echo ""
+	# installSnap "code" "--classic"
+	# echo ""
 
-	# Install Pinta (its like paint)
-	installSnap "pinta"
-	echo ""
+	# # Install Pinta (its like paint)
+	# installSnap "pinta"
+	# echo ""
 
 	# Install Discord
 	installSnap "discord"
@@ -372,7 +372,7 @@ if isNotInstalled "$gdS"; then
 	
 	# Notify
 	echo "$gdS has not been installed. Installing $gdS."
-	  
+	
 	# Download latest release
 	curl -s https://api.github.com/repos/shiftkey/desktop/releases/latest \
 	| grep "browser_download_url.*deb" \
