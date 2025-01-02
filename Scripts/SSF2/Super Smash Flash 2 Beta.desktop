@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Super Smash Flash 2 Beta
+Exec=env WINEPREFIX="/home/david/.wine" wine-stable C:\\\\windows\\\\command\\\\start.exe /Unix /home/david/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\\ Menu/Programs/Super\\ Smash\\ Flash\\ 2\\ Beta/Super\\ Smash\\ Flash\\ 2\\ Beta.lnk
+Type=Application
+StartupNotify=true
+Path=/home/david/.wine/dosdevices/c:/Program Files/Super Smash Flash 2 Beta
+Icon=2C41_SSF2.0
+StartupWMClass=ssf2.exe
