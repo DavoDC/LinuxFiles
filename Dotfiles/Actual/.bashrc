@@ -162,7 +162,7 @@ confirm () {
 }
 
 
-#### I have centralized my Linux knowledge in this file.
+#### I have centralised my Linux knowledge in this file.
 ## So there are aliases of commands that are the same.
 
 ## When the terminal is hanging, you can sometimes use Ctrl+C to break out.
@@ -508,6 +508,9 @@ function install_pkg()
 
 
 ### Other commands/functions
+
+# Quick access to git status
+alias status="git status"
 
 # Show docs/manual for Linux commands and C99 functions
 alias manual="man"
