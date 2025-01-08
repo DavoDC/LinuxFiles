@@ -1,13 +1,10 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # Loaded on startup of shell
 
+################ DAVID'S .BASHRC ################
 
-# DAVID .BASHRC
-
-# From system:
-
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+######## DEFAULT ENTRIES ########
+# See /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -15,51 +12,53 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
+# Don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
+# Append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# For setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
+# Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
+# DISABLED
 #shopt -s globstar
 
-# make less more friendly for non-text input files, see lesspipe(1)
+# Make less more friendly for non-text input files, see lesspipe(1)
+# DISABLED
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
+# Set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
+# Set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
+# Uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+		# We have color support; assume it's compliant with Ecma-48
+		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+		# a case would tend to support setf rather than setaf.)
+		color_prompt=yes
     else
-	color_prompt=
+		color_prompt=
     fi
 fi
 
@@ -71,30 +70,25 @@ fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+case "$TERM" in xterm*|rxvt*)
+	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1";; *);;
 esac
 
-# enable color support of ls and also add handy aliases
+# Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
+# Colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
+# Some more ls aliases
 #alias ll='ls -l'
 #alias la='ls -A'
 #alias l='ls -CF'
@@ -103,12 +97,11 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
+# Enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
@@ -119,34 +112,165 @@ if ! shopt -oq posix; then
 	fi
 fi
 
+######## PERSONAL ADDITIONS ########
+# Note: I have centralised my Linux knowledge in this file.
+# Some aliases are just reminders of commands (e.g. alias pstree="pstree")
 
+# When the terminal is hanging, you can usually use Ctrl+C or Ctrl+Shift+C to 'break out' of it.
 
+### Output direction operators
+# |: Pipes command input into another command.
+# ">": Overwrites the existing file, or creates a file if the file of the given name is not present.
+# ">>"": Appends the existing file, or creates a file if the file of the given name is not present.
 
+#### Wildcards
+#
+## Star Wildcard
+# The star wildcard (*) has the broadest meaning of any of the wildcards, 
+# as it can represent zero characters, all single characters or any string.
+#
+## Question Mark Wildcard
+# The question mark wildcard (?) is used as a wildcard character 
+# in shell commands to represent exactly one character, which can be any single character. 
+# Thus, two question marks in succession would represent any two characters in succession.
 
+## Square Brackets Wildcard
+# The third type of wildcard in shell commands is a pair of square brackets, 
+# which can represent any of the characters enclosed in the brackets. 
+# Thus, for example, the following would provide information about 
+# all objects in the current directory that have an x, y and/or z in them:
+# >>> file *[xyz]*
+#
+# And the following would list all files that had an extension that begins with x, y or z:
+# >>> ls *.[xyz]*
+#
+# The same results can be achieved by merely using the star and question mark wildcards. 
+# However, it is clearly more efficient to use the bracket wildcard.
+#
+# When a hyphen is used between two characters in the square brackets wildcard, 
+# it indicates a range inclusive of those two characters. 
+# For example, the following would provide information about all of the objects 
+# in the current directory that begin with any letter from a through f:
+# >>> file [a-f]*
+#
+# And the following would provide information about every object in the 
+# current directory whose name includes at least one numeral:
+# >>> file *[0-9]*
 
-# My personal additions start here
-
-
-
-
-
-# Stop "System Error detected" popups (silent if nothing)
-# sudo rm /var/crash/* 2> /dev/null
 
 
 # Welcome message
 echo ""
-echo -e "#### Welcome $USER, my wonderful user \U0001F642 ####"
+echo -e "#### Welcome $USER \U0001F642 ####"
 custdate=$(date +"%A %-d %b %Y")
 echo "#### Today's date is: "$custdate "####"
-
-# Make space 
 echo ""
 
 # Change left part of shell commands
 export PS1='\[\033[01;32m\]\u\[\033[00m\] ../\W: '
 
 
+
+##########################################
+######## MY ALIASES AND FUNCTIONS ########
+##########################################
+
+
+
+### Bashrc file
+
+# Print out this part of the file onwards
+# NOTE: The number below should match the line number of the first line of the heading above.
+SHOWBRC_LINE=174
+alias showbrc="tail --lines=+\$SHOWBRC_LINE ~/.bashrc"
+
+# Open up bashrc in a text editor for viewing/editing
+alias openbrc="xdg-open ~/.bashrc"
+
+# Search this file
+# Usage: searchbrc <substring>
+alias searchbrc="showbrc | grep"
+
+
+
+### Directories
+
+# Change directory to home directory
+alias home="cd ~"
+
+# Change to a given directory 
+# Usage: cd <folder_name>
+alias goto="cd"
+
+# Show present working directory (PWD)
+alias here="pwd"
+alias whereami="pwd"
+
+# List all files with details
+# - Can put folders as arguments to show their contents
+# - Ensure colours are on
+alias ls="ls --color=auto -al"
+
+
+
+### Files
+
+# Make new text file in PWD
+alias newfile="touch newfile.txt"
+
+# Make new script in PWD
+alias newscript="touch newscript.sh && chmod 777 newscript.sh"
+
+# Make new folder in PWD
+alias newfolder="mkdir newfolder"
+
+# Show detailed file information
+alias fileinfo="stat"
+
+# Show full path of a file
+# Usage: getpath file.txt
+alias getpath="readlink -f"
+
+# Edit text file with shell editor
+# Usage: nano newfile.txt
+alias edit="nano"
+
+# Open a given file with the default program
+# Usage: open <filepath>
+alias open="xdg-open"
+
+# Find a string in a text file
+# Usage: searchfile "bmw" cars.txt
+alias searchfile="grep -n"
+
+# Print out a file's contents to the terminal
+# Usage: show info.txt
+alias show="cat"	
+alias printfile="cat"
+
+# Display text one screenful at a time
+alias more="more"
+alias less="less"
+
+# Show wordcount and other text stats
+alias wc="wc"
+
+# Show directory structure as a tree
+# Note: Must be installed first on Ubuntu!
+alias tree="tree"
+
+# Download a file from a given URL
+# Usage example: download http://www.orimi.com/pdf-test.pdf
+alias download="wget"
+
+
+
+### File/Folder Operations
+
+# Rename/move files/folders
+# Usage: rename/move <current_name> <new_name>
+alias rename="mv"
+alias move="mv"
 
 # Helper function to get confirmation
 # Takes one argument, a string describing some action
@@ -160,166 +284,6 @@ confirm () {
 	  * ) return 1;;
 	esac
 }
-
-
-#### I have centralised my Linux knowledge in this file.
-## So there are aliases of commands that are the same.
-
-## When the terminal is hanging, you can sometimes use Ctrl+C to break out.
-
-### Output direction operators
-# | to pipe command input in another.
-# “>“: Overwrites the existing file, 
-# or creates a file if the file of the mentioned name is not present in the directory.
-# “>>“: Appends the existing file, 
-# or creates a file if the file of the mentioned name is not present in the directory.
-#### Wild cards
-
-## Star WildCard
-# The star wildcard (*) has the broadest meaning of any of the wildcards, 
-# as it can represent zero characters, all single characters or any string.
-
-## Question Mark Wildcard
-# The question mark wildcard (?) is used as a wildcard character 
-# in shell commands to represent exactly one character, 
-# which can be any single character. 
-# Thus, two question marks in succession would represent any two characters in succession
-
-## Square Brackets Wildcard
-# The third type of wildcard in shell commands is a pair of square brackets, 
-# which can represent any of the characters enclosed in the brackets. 
-# Thus, for example, the following would provide information about 
-# all objects in the current directory that have an x, y and/or z in them:
-# >>> file *[xyz]*
-#
-# And the following would list all files that had an extension that begins with x, y or z:
-# >>> ls *.[xyz]*
-
-# The same results can be achieved by merely using the star and question mark wildcards. 
-# However, it is clearly more efficient to use the bracket wildcard.
-
-# When a hyphen is used between two characters in the square brackets wildcard, 
-# it indicates a range inclusive of those two characters. 
-# For example, the following would provide information about all of the objects 
-# in the current directory that begin with any letter from a through f:
-# >>> file [a-f]*
-
-# And the following would provide information about every object in the 
-# current directory whose name includes at least one numeral:
-# >>> file *[0-9]*
-
-
-
-
-
-############################################################
-######## My commands, functions and aliases #########
-############################################################
-
-
-### The most important commands
-
-# Reveal all possible commands by printing out part of this file
-alias showbrc="tail --lines=+144 ~/.bashrc"
-
-# Open up bashrc in a text editor for viewing/editing
-alias openbrc="xdg-open ~/.bashrc"
-
-# Search these commands
-# Usage: searchbrc <substring>
-alias searchbrc="showbrc | grep"
-
-
-
-
-
-### Directory commands
-
-# Change directory to home directory
-alias home="cd ~"
-
-
-# Change to a given directory 
-# Usage: cd <folder_name>
-alias goto="cd"
-
-
-# Show present working directory (PWD)
-alias here="pwd"
-alias whereami="pwd"
-
-
-# List files, simplified (i.e. hide special files)
-#alias dir="dir"
-
-
-# Listing all files with details
-# Can put folders as arguments to show their contents
-# Ensure colours are on
-alias ls="ls --color=auto -al"
-
-
-
-
-
-### File/Folder commands
-
-# Make new text file in PWD
-alias newfile="touch newfile.txt"
-
-
-# Make new script in PWD
-alias newscript="touch newscript.sh && chmod 777 newscript.sh"
-
-
-# Make new folder in PWD
-alias newfolder="mkdir newfolder"
-
-
-# Show detailed file information
-alias fileinfo="stat"
-
-# Show full path of a file
-# Usage: getpath file.txt
-alias getpath="readlink -f"
-
-
-# Edit text file with shell editor
-# Usage: nano newfile.txt
-alias edit="nano"
-
-
-# Open a given file with the default program
-# Usage: open <filepath>
-alias open="xdg-open"
-
-
-# Print out a file's contents to the terminal
-# Usage: show info.txt
-alias show="cat"	
-alias printfile="cat"
-
-
-# Display text one screenful at a time
-#alias more="more"
-#alias less="less"
-
-
-# Show wordcount and other text stats
-# alias wc="wc"
-
-
-# Rename/move files/folders
-# Usage: rename/move <current_name> <new_name>
-alias rename="mv"
-alias move="mv"
-
-
-# Show directory structure as a tree
-# Note: must be installed first
-#alias tree="tree"
-
-
 
 # Remove files/folders (permanently!)
 # Usage: remove <name of file/folder in PWD>
@@ -354,13 +318,8 @@ remove () {
 			# Remove directory, even if not empty, and show
 			rm -vrf $1	
 		fi
-		
 	fi	
 }
-
-
-
-
 
 # Copy files/folders 
 # Argument #1 = Source file/folder
@@ -387,40 +346,20 @@ copy () {
 			# copy whole directory
 			cp -ir $1 $2
 		fi
-		
 	fi	
 }
 
 
 
-# Trash files/folders (send to 'Trash' folder in home)
-# trash = make trash folder if needed + copy ($1, ~/home) + remove
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Permissions commands
+### Permissions
 
 # Apply magic 777 permissions
 alias permfix="chmod 777 *"
 
-
-# Append a program file name to make it a 'clickable' exe
+# Make a program executable
 alias make_exe="chmod 755"
 
-
-# Append a file name to get its permission number
+# Get a file's permission number
 alias get_perm="stat --format '%a' "
 
 # Elevate permissions by switching to superuser temporarily (only for rest of session)
@@ -428,31 +367,24 @@ alias elevate="sudo su"
 
 
 
-
-
-
-### Terminal commands 
+### Terminal
 
 # Exiting terminal 
 alias q="exit"
 alias qqq="exit"
 
-
 # Clearing terminal
 alias clear="clear && tput reset"
 alias cls="clear && tput reset"
 
-
 # Print string to terminal
 alias printstr="echo"
-
 
 # Print name of terminal
 alias termname="tty"
 
 # Show PATH dirs line by line
 alias printPath="sed 's/:/\n/g' <<< "$PATH""
-
 
 # Get top ten commands used
 function topTen() {
@@ -462,31 +394,22 @@ function topTen() {
 
 
 
-
-
-### Process commands
+### Processes
 
 # Show list of processes
 alias listproc="ps"
 alias pslist="ps"
 
-
 # Show process tree
 alias pstree="pstree"
-
 
 # Enter detailed process table
 alias pstable="top"
 
 
 
-
-
-##### Package Management
-
-
+### Package Management
 alias update="sudo apt-get update"
-
 
 # Install a package
 # Usage example: install_pkg firefox
@@ -504,102 +427,26 @@ function install_pkg()
 
 
 
+### Git
 
+# Show git config
+alias showgitcfg="git config --list"
 
-
-### Other commands/functions
-
-# Quick access to git status
+# Get repo status quickly
 alias status="git status"
 
-# Show docs/manual for Linux commands and C99 functions
-alias manual="man"
+# Show branch info
+alias branch="git branch"
 
-# Describe Linux commands and C99 functions
-function describe()
-{
-	type $1
-	whatis $1
-}
+# Show verbose branch info
+alias branchv="git branch -vv"
 
-# Enter calculation mode
-alias calculate="bc" 
-
-
-# Download a file from a given URL
-# Usage example: download http://www.orimi.com/pdf-test.pdf
-alias download="wget"
-
-
-# Find a string a text file
-# Usage: searchfile "bmw" cars.txt
-alias searchfile="grep -n"
-
-
-# Print user ID of current user
-alias whoami="whoami"
-alias showuser="whoami"
-
-
-# Change your password
-alias changepw="passwd"
-
-
-# Show where a binary/command is stored
-alias which="which"
-alias whereis="whereis"
-
-
-# Show disk space free in partitions
-alias diskfree="df"
-
-
-# Open Ubuntu Software very fast
-alias open-sw="gnome-software"
+# Amend last commit 
+alias amend="git commit --amend"
 
 
 
-# Print IP address 
-function printIP()
-{
-	echo ""
-	echo "Method 1: (usually first one is correct)"
-	hostname -I 
-	
-	echo ""
-    echo "Method 2:"
-	ifconfig -a | grep -w "inet" | sed 's/^[[:space:]]\+//' 
-	# Note: ifconfig needs to be installed, sed removes leading whitespace
-	
-	echo ""
-    echo "Method 3:"
-	ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
-}
-
-
-# Print system information
-function sysInfo()
-{
-	echo ""
-	neofetch
-
-	echo ""
-	lsb_release -a
-
-	echo ""
-	hostnamectl
-
-	echo ""
-	cat /etc/*-release | uniq -u
-}
-
-
-
-
-
-
-
-######### Programming
+### Programming
 ## Patterns
 # Get template = temp<lang>
 # Compile = comp<lang>
@@ -651,8 +498,6 @@ alias compPy="python3"
 
 
 
-
-
 ### SSF2 
 
 # Open Australian ruleset quietly
@@ -660,20 +505,19 @@ function openRules {
 	bash -c "xdg-open https://docs.google.com/document/d/1_vNg5tm6mc7BI8ExLqHLIWvrt89tkr9BH4ooPQh2F1E" 2> /dev/null > /dev/null
 }
 
-# Print a copy of Australian ruleset
+# Print a copy of the Australian tournament ruleset
 function printRules {
 	cat "/home/david/LinuxFiles/Scripts/SSF2/Aussie_SSF2_Ruleset.txt"
 }
 
-
-# Native shortcut
+# Run native SSF2
 # DISABLED, NOT IN USE
 # function ssf2 {
 # 	cd /home/david/Documents/LINUX_SSF2/1_NATIVE/SSF2BetaLinux.v1.3.1.2
 # 	./SSF2
 # }
 
-# Wine shortcut
+# Run wine portable SSF2
 # DISABLED, NOT IN USE
 # function ssf2_wine {
 # 	cd /home/david/Documents/LINUX_SSF2/2_WINE_PORTABLE/SSF2BetaWindows.32bit.v.1.3.1.2.portable
@@ -682,3 +526,107 @@ function printRules {
 
 
 
+### Immersive
+
+# Helper function to handle common itbuild calls
+function _std_build_common {
+    local ib_flag=$1    # "ib" or empty string
+    local cmd="itbuild $ib_flag parallel release nobuildnode nobuildtest" # Build base command
+
+    # Append any additional arguments
+    if [ $# -gt 1 ]; then
+        cmd="$cmd ${@:2}" # Use ${@:2} to include all arguments starting from the second one
+    fi
+
+    # Print and execute the command
+    echo ""
+    echo "Running '$cmd'..."
+    echo ""
+    eval $cmd
+}
+
+# Do standard itbuild call without IncrediBuild (for when it isn't working)
+function std_build_noIB {
+    _std_build_common "" "$@"
+}
+
+# Do standard itbuild call
+function std_build {
+    _std_build_common "ib" "$@"
+}
+
+# Do standard itbuild call and notify
+function std_build_notify {
+    std_build "notify:dcharkey"
+}
+
+
+
+### Miscellaneous
+
+# Show docs/manual for Linux commands and C99 functions
+alias manual="man"
+
+# Enter calculation mode
+alias calculate="bc" 
+
+# Print user ID of current user
+alias whoami="whoami"
+alias showuser="whoami"
+
+# Change your password
+alias changepw="passwd"
+
+# Show where a binary/command is stored
+alias which="which"
+alias whereis="whereis"
+
+# Show disk space free in partitions
+alias diskfree="df"
+
+# Open Ubuntu Software very fast
+alias open-sw="gnome-software"
+
+# Describe Linux commands and C99 functions
+function describe()
+{
+	type $1
+	whatis $1
+}
+
+# Print IP address 
+function printIP()
+{
+	echo ""
+	echo "Method 1: (usually first one is correct)"
+	hostname -I 
+	
+	echo ""
+    echo "Method 2:"
+	ifconfig -a | grep -w "inet" | sed 's/^[[:space:]]\+//' 
+	# Note: ifconfig needs to be installed, sed removes leading whitespace
+	
+	echo ""
+    echo "Method 3:"
+	ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
+}
+
+# Print system information
+function sysInfo()
+{
+	echo ""
+	neofetch
+
+	echo ""
+	lsb_release -a
+
+	echo ""
+	hostnamectl
+
+	echo ""
+	cat /etc/*-release | uniq -u
+}
+
+
+
+################ END ################
