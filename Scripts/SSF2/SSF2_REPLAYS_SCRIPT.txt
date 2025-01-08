@@ -1,5 +1,3 @@
 
-
-I have more bash scripts stored in this repo:
-
+I have more SSF2 bash scripts stored in this repo:
 https://github.com/DavoDC/SSF2Replays

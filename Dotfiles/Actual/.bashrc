@@ -506,9 +506,10 @@ function openRules {
 }
 
 # Print a copy of the Australian tournament ruleset
-function printRules {
-	cat "/home/david/LinuxFiles/Scripts/SSF2/Aussie_SSF2_Ruleset.txt"
-}
+# DISABLED, NOT IN USE
+# function printRules {
+# 	cat "/home/david/LinuxFiles/Scripts/SSF2/Aussie_SSF2_Ruleset.txt"
+# }
 
 # Run native SSF2
 # DISABLED, NOT IN USE

@@ -1,21 +1,14 @@
-
+### THINGS TO DO ###
 
 Centralise configure scripts , detect status . Give options to redo ? Undo , exit
-
 Make work on windows too , auto detect
 
 Improve Linux files scripts too 
-
 
 Improve general setup script output -> 
 make less verbose, centralize header printing to a function!
 - put helper functions in a separate file!
 
-
 USE CG to improve
 
-
 add more error cases to ssf2 script 
-
-
-
