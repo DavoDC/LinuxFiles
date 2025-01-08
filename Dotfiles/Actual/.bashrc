@@ -161,7 +161,7 @@ fi
 
 # Welcome message
 echo ""
-echo -e "#### Welcome $USER \U0001F642 ####"
+echo -e "#### Welcome $USERNAME \U0001F642 ####"
 custdate=$(date +"%A %-d %b %Y")
 echo "#### Today's date is: "$custdate "####"
 echo ""

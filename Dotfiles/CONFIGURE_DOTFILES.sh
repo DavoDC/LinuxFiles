@@ -1,29 +1,22 @@
 #!/usr/bin/env bash
 
-# Detect the operating system
-detected_os=""
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    detected_os="Linux"
-elif [[ "$OSTYPE" == "msys" ]]; then
-    detected_os="Windows"
-else
-    echo -e "\nOperating System Detection Error!"
-    exit 1
-fi
 
-# Notify the user about the detected OS
-echo "Detected Operating System: $detected_os"
-echo
 
-# Define Linux configuration details
-linux_brc=".bashrc"
-linux_prof=".profile"
-linux_repopath="/home/$USER/LinuxFiles/Dotfiles/Actual"
+########## VARIABLES
 
-# Define Windows configuration details
-windows_src="/c/Users/David/GitHubRepos/LinuxFiles/Dotfiles/Actual/.bashrc"
-windows_dest="/c/Users/$USERNAME/"
+# Dotfiles
+bashrc=".bashrc"
+prof=".profile"
 
+# What Windows Git Bash mintty needs '.bashrc' to be renamed to
+bashprof=".bash_profile" 
+
+# The directory in which this script is running
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+
+
+########## HELPER FUNCTIONS
 # Helper Function for Continue Prompt
 function ask_continue () {
     read -p "Would you like to continue (y/n)? " choice
@@ -142,55 +135,39 @@ function unconfigure_linux () {
     ls -al --color=auto ~
 }
 
+
 # Windows Configuration Functions
 function configure_windows () {
-    # Set source and destination folders
-    src="$windows_src"
-    dest="$windows_dest"
 
-    # Start message
-    echo "::::::::: Setting up .bashrc for Git Bash mintty terminal :::::::::"
+    # Provide info
+    echo "The Git Bash mintty terminal on Windows only needs the '$bashrc' file from here (renamed to '$bashprof')."
+    echo "(It doesn't need the '$prof' file that Linux needs.)"
 
-    # Check paths
-    echo "Checking paths..."
-
-    # Check source
-    if [ ! -f "$src" ]; then
-        echo "Source invalid"
+    # Check bashrc file
+    bashrc_path="$script_dir/Actual/.bashrc"
+    echo ""
+    echo "Looking for '$bashrc' file at '$bashrc_path'..."
+    if [ ! -f "$bashrc_path" ]; then
+        echo "Could not find it! Exiting..."
         exit 1
     fi
+    echo "Successfully found it!"
 
     # Check destination
-    if [ ! -d "$dest" ]; then
-        echo "Dest invalid"
-        exit 1
-    fi
+    bashrc_dest="/c/Users/$USERNAME/$bashprof"
+    echo ""
+    echo "The renamed file needs to be copied to the user folder: '$bashrc_dest'. Is this path correct?"
+    ask_continue
 
-    # Special file paths in User folder
-    brc="${dest}.bashrc"
-    bprof="${dest}.bash_profile"
+    # Copy file over and rename at same time
+    echo ""
+    echo "Copying '$bashrc' to '$bashrc_dest'..."
+    cp "$bashrc_path" "$bashrc_dest"
 
-    # Remove previous files (if they exist)
-    echo "Removing previous files..."
-    [ -f "$brc" ] && rm -f "$brc"
-    [ -f "$bprof" ] && rm -f "$bprof"
-
-    # Copy .bashrc
-    echo "Copying bashrc from LinuxFiles repo to User folder..."
-    cp "$src" "$dest"
-
-    # Rename to .bash_profile
-    echo "Renaming..."
-    mv "$brc" "$bprof"
-
-    # Edit step
-    echo "You can add this to the top of the file:"
-    echo "  # COPY OF .BASHRC FOR GIT MINTTY BASH"
-    echo "Opening the file for editing..."
-    nano "$bprof"
-
-    # Finish message
-    echo "Finished!"
+    # Add note to copied file 
+    echo "" 
+    echo "Adding message to top of copied file..."
+    echo "### THIS IS A COPY OF .BASHRC FOR GIT MINTTY BASH, DO NOT EDIT ###" | cat - "$bashrc_dest" > temp_file && mv temp_file "$bashrc_dest"
 }
 
 function unconfigure_windows () {
@@ -208,41 +185,58 @@ function unconfigure_windows () {
     echo "Unconfiguration for Windows complete!"
 }
 
-# Main script flow
-echo "### Welcome to the Configuration/Unconfiguration Script"
-echo "Do you want to configure or unconfigure your system?"
+
+
+############### ACTUAL SCRIPT STARTS HERE
+
+# Clear and show start message
+clear
+echo ""
+echo "###### DOTFILES CONFIGURATION SCRIPT ######"
+
+# Detect the operating system and notify
+detected_os=""
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    detected_os="Linux"
+elif [[ "$OSTYPE" == "msys" ]]; then
+    detected_os="Windows"
+else
+    echo -e "\nOperating System Detection Error!"
+    exit 1
+fi
+echo ""
+echo "Operating System detected: $detected_os"
+
+# Determine desired action
+echo ""
+echo "Do you want to configure or unconfigure your dotfiles?"
 echo "1) Configure"
 echo "2) Unconfigure"
 read -p "Choose an option (1/2): " action
 
-case "$detected_os" in
-    "Linux")
-        echo "You are on a Linux system."
-        ;;
-    "Windows")
-        echo "You are on a Windows system."
-        ;;
-    *)
-        echo "Operating System Error"
-        exit 1
-        ;;
-esac
-
+# Execute desired action
+echo ""
+action_msg="dotfiles on your $detected_os system..."
 case "$action" in
     1)
-        echo "You chose to configure your system."
+        echo "Configuring $action_msg"
+        echo ""
         if [ "$detected_os" == "Linux" ]; then
-            configure_linux
+            # configure_linux
+            echo "Untested..."
         elif [ "$detected_os" == "Windows" ]; then
             configure_windows
         fi
         ;;
     2)
-        echo "You chose to unconfigure your system."
+        echo "Unconfiguring $action_msg"
+        echo ""
         if [ "$detected_os" == "Linux" ]; then
-            unconfigure_linux
+            # unconfigure_linux
+            echo "Untested..."
         elif [ "$detected_os" == "Windows" ]; then
-            unconfigure_windows
+            # unconfigure_windows
+            echo "Untested..."
         fi
         ;;
     *)
@@ -250,3 +244,7 @@ case "$action" in
         exit 1
         ;;
 esac
+
+# Finished
+echo ""
+echo "###### FINISHED ######"
