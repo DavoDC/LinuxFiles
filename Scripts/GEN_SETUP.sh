@@ -142,7 +142,7 @@ function installDeb() {
 ############### Configuration Changes
 
 ### Set Ubuntu Text Editor as default Git Editor
-git config --global core.editor "gedit -s"
+git config --global core.editor "gnome-text-editor"
 
 ### Disable Ubuntu Pro messages when this script is running
 sudo dpkg-divert --divert /etc/apt/apt.conf.d/20apt-esm-hook.conf.bak --rename --local /etc/apt/apt.conf.d/20apt-esm-hook.conf > /dev/null 2>&1
