@@ -1,154 +1,153 @@
 #!/usr/bin/env bash
 
-# Sets up config files (bashrc and profile)
-# Very fast
-
+# Handles installing and uninstalling dotfiles
 
 # Variables
 brc=".bashrc"
 prof=".profile"
 repopath="/home/$USER/LinuxFiles/Dotfiles/Actual"
 
-
-
-# Helper Function
+# Helper Function for Continue Prompt
 function ask_continue () {
-
-	read -p "Would you like to continue (y/n)? " choice
-	case "$choice" in 
-		y|Y ) echo "Continuing...";; # true
-		n|N ) echo "Exiting! " && exit;;
-	  * ) exit;;
-	esac
+    read -p "Would you like to continue (y/n)? " choice
+    case "$choice" in 
+        y|Y ) echo "Continuing...";; # true
+        n|N ) echo "Exiting! " && exit;; 
+        * ) exit;;
+    esac
 }
 
-
-# Go to home
-echo "### Going to home directory..."
-cd ~
-
-
-# Notify
-echo ""
-echo "### Backing up original configuration files ($brc and $prof) into a folder..."
-
-
-# Check if originals folder exists
-origname="originals"
-echo ""
-echo "# Attempting to create backup folder"
-echo "Checking if '$origname' folder exists..."
-if [ ! -d  $origname ]; then 
-
-	# If originals folder does not exist 
-	echo "'$origname' hasn't been made, thats good"
-	echo "Making folder called '$origname'..."
-	
-	# Make originals folder
-	mkdir $origname
-else
-
-    # If originals folder does exist
-	echo "'$origname' has been made already!"
-	echo "Your system is probably already configured!"
-	echo "You may want to continue anyway... or not"
-	
-	# Ask if would like to continue
-	ask_continue
-fi
-
-
-# Helper function to move file and check
+# Helper Function to Move File and Check
 # Arg 1: File name (e.g. log.txt)
 # Arg 2: Destination folder name (e.g. things)
-# So new filepath will be things/log.txt
 function move_file_and_check() {
-
-	# Get signature
-	sig="${FUNCNAME[0]}'('$1', '$2')"
-	
-	# Get parameters
-	filename=$1
-	destname=$2
-	
-	# Final path
-	finalpath=$destname/$filename
-	
-	# Move file into destination folder
-	if mv $filename $finalpath; then
-	
-		# If commanded succeeded 
-	
-		# Do extra check:
-		# If file exists in new directory
-		if [ -f "$finalpath" ]; then
-			
-			# Notify
-			echo "$sig definitely successful!"
-		fi
-	else
-	
-		# Else if command failed,
-		# notify
-		echo "'$sig issue!!!"
-		
-		# Ask
-		ask_continue
-	fi
+    sig="${FUNCNAME[0]}'('$1', '$2')"
+    filename=$1
+    destname=$2
+    finalpath=$destname/$filename
+    
+    if mv $filename $finalpath; then
+        if [ -f "$finalpath" ]; then
+            echo "$sig definitely successful!"
+        fi
+    else
+        echo "'$sig issue!!!"
+        ask_continue
+    fi
 }
 
+# Helper Function for Removing Symlinks
+# Arg 1: Path to symlink
+function remove_if_symlink () {
+    echo ""
+    if [ -L "$1" ]; then
+        if rm "$1"; then
+            echo "'$1' symlink successfully removed!"
+        fi
+    else
+        echo "'$1' is not a symlink!!!"
+        if [ -f "$1" ]; then 
+            echo "'$1' is a regular file, likely the original"
+            echo "Danger!!! Exiting!!!"
+            exit
+        fi
+        if [ ! -e "$1" ]; then 
+            echo "'$1' does not exist as any type of file"
+            echo "Strange..."
+            ask_continue
+        fi
+    fi
+}
 
-# Move original .bashrc and .profile in there
-echo ""
-echo "# Moving original '$brc' and '$prof' files into the folder..."
-move_file_and_check "$brc" "$origname"
-move_file_and_check "$prof" "$origname"
+# Main Function
+function configure_system () {
+    # Go to home
+    echo "### Going to home directory..."
+    cd ~
 
+    # Notify
+    echo "### Backing up original configuration files ($brc and $prof) into a folder..."
+    origname="originals"
+    
+    echo "# Attempting to create backup folder"
+    if [ ! -d $origname ]; then 
+        echo "'$origname' hasn't been made, that's good"
+        echo "Making folder called '$origname'..."
+        mkdir $origname
+    else
+        echo "'$origname' has been made already!"
+        echo "Your system is probably already configured!"
+        echo "You may want to continue anyway... or not"
+        ask_continue
+    fi
 
+    echo "# Moving original '$brc' and '$prof' files into the folder..."
+    move_file_and_check "$brc" "$origname"
+    move_file_and_check "$prof" "$origname"
 
+    # Notify
+    echo "### Creating links to repo configuration files..."
+    reponame="LinuxFiles"
+    if [ ! -d $reponame ]; then
+        echo "'$reponame' repo doesn't exist in home directory!"
+        echo "Go to home and git clone it! Exiting..."
+        exit
+    else
+        echo "'$reponame' repo found! Continuing..."
+    fi
 
+    echo "# Making symlinks to repo config files!"
+    ln --symbolic "$repopath/$brc" "$brc"
+    ln --symbolic "$repopath/$prof" "$prof"
 
+    echo "### Configuration finished!"
+    ls -al --color=auto ~
+    echo "Close and reopen the terminal and it should look different"
+    echo "Use 'showbrc' to see what commands are available"
+}
 
-# Notify
-echo ""
-echo ""
-echo "### Creating links to repo configuration files.."
+function unconfigure_system () {
+    # Go to home
+    echo "### Going to home directory..."
+    cd ~
 
-# Check if repo exists
-reponame="LinuxFiles"
-echo ""
-echo "# Checking if '$reponame' repo exists... (it should as you should be running this from it!)"
-if [ ! -d $reponame ]; then 
+    # Remove symlinks
+    echo "### Removing symlinks to repo config files"
+    remove_if_symlink "$brc"
+    remove_if_symlink "$prof"
 
-	# If repo does not exist
-	echo "'$reponame' repo doesn't exist in home directory!"
-	echo "Go to home and git clone it!"
-	echo "Exiting..."
-	echo ""
-	exit
-else
+    # Move back originals
+    echo "### Moving original configuration files back"
+    origname="originals"
+    mv "$origname/$brc" "$brc"
+    mv "$origname/$prof" "$prof"
 
-	# If repo does exist
-	echo "'$reponame' repo found! Continuing.."
-fi
+    # Delete empty originals folder
+    echo "# Deleting empty originals folder"
+    rmdir "$origname"
 
+    echo "### UN-configuration finished!"
+    ls -al --color=auto ~
+}
 
-# Make symlinks to repo versions
-echo ""
-echo "# Making symlinks to repo config files!"
-ln --symbolic "$repopath/$brc" "$brc"
-ln --symbolic "$repopath/$prof" "$prof"
+# Main Script Flow
+echo "### Welcome to the Configuration/Unconfiguration Script"
+echo "Do you want to configure or unconfigure your system?"
+echo "1) Configure"
+echo "2) Unconfigure"
+read -p "Choose an option (1/2): " action
 
-# Finalize
-echo ""
-echo "### Configuration finished!"
-echo "You should see the symlinks and backup folder '$origname'"
-ls -al --color=auto ~
-echo ""
-
-# Notify
-echo "Close and reopen the terminal and it should look different"
-echo "Use “showbrc” to see what commands are available"
-
-
-
+case "$action" in
+    1) 
+        echo "You chose to configure your system."
+        configure_system
+        ;;
+    2)
+        echo "You chose to unconfigure your system."
+        unconfigure_system
+        ;;
+    *)
+        echo "Invalid choice. Exiting..."
+        exit 1
+        ;;
+esac
