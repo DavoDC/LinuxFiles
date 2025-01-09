@@ -1,14 +1,40 @@
 ### THINGS TO DO ###
 
-Centralise configure scripts , detect status . Give options to redo ? Undo , exit
-Make work on windows too , auto detect
 
-Improve Linux files scripts too 
+# CONFIGURE_DOTFILES.sh
+
+Factor checking for dorfilrs before config in general
+
+Put found dot file paths at top
+
+
+Also test windows case = what if already there?
+
+USE HELPER FUNCTIONS - for windows too
+
+
+
+If umconfiguring , check fit file first . Ask user whether they want to backup or delete . Use function for both?
+
+
+
+Comment all functions and integrate as needed
+
+On Windows = If bash profile already exists, rename to "old"  OR DELETE 
+When running , check for existence of "old" file - use to restore?
+‌
+
+Test on LINUX
+
+
+
+
+# GEN_SETUP.sh
 
 Improve general setup script output -> 
 make less verbose, centralize header printing to a function!
 - put helper functions in a separate file!
 
-USE CG to improve
 
-add more error cases to ssf2 script 
+# INSTALL_SSF2.sh
+add more error cases to ssf2 installer script 
