@@ -21,6 +21,8 @@ Once Windows perfected, do Linux + test on it
 - Fix colors!!!
 
 
+Try all commands on windows and fix them (e.g. showbrc)
+
 
 # GEN_SETUP.sh
 
