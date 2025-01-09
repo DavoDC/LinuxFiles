@@ -179,17 +179,25 @@ export PS1='\[\033[01;32m\]\u\[\033[00m\] ../\W: '
 
 ### Bashrc file
 
-# Print out this part of the file onwards
-# NOTE: The number below should match the line number of the first line of the heading above.
+# The number below should match the line number of the first line before the heading above.
 SHOWBRC_LINE=174
-alias showbrc="tail --lines=+\$SHOWBRC_LINE ~/.bashrc"
+
+# Helper function
+show_brc_content() {
+    tail -n+"$SHOWBRC_LINE" ~/.bashrc 2>/dev/null || tail -n+"$SHOWBRC_LINE" ~/.bash_profile 2>/dev/null
+}
+
+# Print out this part of the file onwards
+alias showbrc='show_brc_content; echo'
+
+# Search this file
+# Usage: searchbrc <substring>
+alias searchbrc='show_brc_content | grep'
 
 # Open up bashrc in a text editor for viewing/editing
 alias openbrc="xdg-open ~/.bashrc"
 
-# Search this file
-# Usage: searchbrc <substring>
-alias searchbrc="showbrc | grep"
+
 
 
 
