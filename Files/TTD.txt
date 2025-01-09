@@ -3,29 +3,22 @@
 
 # CONFIGURE_DOTFILES.sh
 
-Factor checking for dorfilrs before config in general
-
-Put found dot file paths at top
-
-
-Also test windows case = what if already there?
+WHENEVER CONFIG IS WANTED - check dotfiles exist - create helper function 
 
 USE HELPER FUNCTIONS - for windows too
 
-
-
+Also test windows case = what if already there?
+On Windows = If bash profile already exists, rename to "old"  OR DELETE 
+When running , check for existence of "old" file - use to restore?
 If umconfiguring , check fit file first . Ask user whether they want to backup or delete . Use function for both?
 
 
+Once Windows perfected, do Linux + test on it 
 
-Comment all functions and integrate as needed
 
-On Windows = If bash profile already exists, rename to "old"  OR DELETE 
-When running , check for existence of "old" file - use to restore?
-‌
 
-Test on LINUX
-
+# DOTFILES 
+- Fix colors!!!
 
 
 

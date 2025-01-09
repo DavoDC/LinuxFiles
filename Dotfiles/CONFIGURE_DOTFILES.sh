@@ -4,15 +4,23 @@
 
 ########## VARIABLES
 
-# Dotfiles
-bashrc=".bashrc"
-prof=".profile"
-
-# What Windows Git Bash mintty needs '.bashrc' to be renamed to
-bashprof=".bash_profile" 
-
 # The directory in which this script is running
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Dotfile names
+bashrc=".bashrc"
+prof=".profile" # Linux only
+
+# Dotfile paths
+bashrc_path="$script_dir/Actual/$bashrc"
+prof_path="$script_dir/Actual/$prof" # Linux only
+
+### Windows Git Bash mintty variables
+# What needs '.bashrc' to be renamed to
+bashprof=".bash_profile"
+
+# Where it expects the file to be
+win_bashrc_dest="/c/Users/$USERNAME/$bashprof"
 
 
 
@@ -28,112 +36,112 @@ function ask_continue () {
 }
 
 # Linux Helper Functions
-function move_file_and_check () {
-    sig="${FUNCNAME[0]}'('$1', '$2')"
-    filename=$1
-    destname=$2
-    finalpath=$destname/$filename
-    
-    if mv $filename $finalpath; then
-        if [ -f "$finalpath" ]; then
-            echo "$sig definitely successful!"
-        fi
-    else
-        echo "'$sig issue!!!"
-        ask_continue
-    fi
-}
+# function move_file_and_check () {
+#     sig="${FUNCNAME[0]}'('$1', '$2')"
+#     filename=$1
+#     destname=$2
+#     finalpath=$destname/$filename
 
-function remove_if_symlink () {
-    echo ""
-    if [ -L "$1" ]; then
-        if rm "$1"; then
-            echo "'$1' symlink successfully removed!"
-        fi
-    else
-        echo "'$1' is not a symlink!!!"
-        if [ -f "$1" ]; then
-            echo "'$1' is a regular file, likely the original"
-            echo "Danger!!! Exiting!!!"
-            exit
-        fi
-        if [ ! -e "$1" ]; then
-            echo "'$1' does not exist as any type of file"
-            echo "Strange..."
-            ask_continue
-        fi
-    fi
-}
+#     if mv $filename $finalpath; then
+#         if [ -f "$finalpath" ]; then
+#             echo "$sig definitely successful!"
+#         fi
+#     else
+#         echo "'$sig issue!!!"
+#         ask_continue
+#     fi
+# }
 
-function configure_linux () {
-    # Go to home
-    echo "### Going to home directory..."
-    cd ~
+# function remove_if_symlink () {
+#     echo ""
+#     if [ -L "$1" ]; then
+#         if rm "$1"; then
+#             echo "'$1' symlink successfully removed!"
+#         fi
+#     else
+#         echo "'$1' is not a symlink!!!"
+#         if [ -f "$1" ]; then
+#             echo "'$1' is a regular file, likely the original"
+#             echo "Danger!!! Exiting!!!"
+#             exit
+#         fi
+#         if [ ! -e "$1" ]; then
+#             echo "'$1' does not exist as any type of file"
+#             echo "Strange..."
+#             ask_continue
+#         fi
+#     fi
+# }
 
-    # Notify
-    echo "### Backing up original configuration files ($linux_brc and $linux_prof) into a folder..."
-    origname="originals"
-    
-    echo "# Attempting to create backup folder"
-    if [ ! -d $origname ]; then
-        echo "'$origname' hasn't been made, that's good"
-        echo "Making folder called '$origname'..."
-        mkdir $origname
-    else
-        echo "'$origname' has been made already!"
-        echo "Your system is probably already configured!"
-        echo "You may want to continue anyway... or not"
-        ask_continue
-    fi
+# function configure_linux () {
+#     # Go to home
+#     echo "### Going to home directory..."
+#     cd ~
 
-    echo "# Moving original '$linux_brc' and '$linux_prof' files into the folder..."
-    move_file_and_check "$linux_brc" "$origname"
-    move_file_and_check "$linux_prof" "$origname"
+#     # Notify
+#     echo "### Backing up original configuration files ($linux_brc and $linux_prof) into a folder..."
+#     origname="originals"
 
-    # Notify
-    echo "### Creating links to repo configuration files..."
-    reponame="LinuxFiles"
-    if [ ! -d $reponame ]; then
-        echo "'$reponame' repo doesn't exist in home directory!"
-        echo "Go to home and git clone it! Exiting..."
-        exit
-    else
-        echo "'$reponame' repo found! Continuing..."
-    fi
+#     echo "# Attempting to create backup folder"
+#     if [ ! -d $origname ]; then
+#         echo "'$origname' hasn't been made, that's good"
+#         echo "Making folder called '$origname'..."
+#         mkdir $origname
+#     else
+#         echo "'$origname' has been made already!"
+#         echo "Your system is probably already configured!"
+#         echo "You may want to continue anyway... or not"
+#         ask_continue
+#     fi
 
-    echo "# Making symlinks to repo config files!"
-    ln --symbolic "$linux_repopath/$linux_brc" "$linux_brc"
-    ln --symbolic "$linux_repopath/$linux_prof" "$linux_prof"
+#     echo "# Moving original '$linux_brc' and '$linux_prof' files into the folder..."
+#     move_file_and_check "$linux_brc" "$origname"
+#     move_file_and_check "$linux_prof" "$origname"
 
-    echo "### Configuration finished!"
-    ls -al --color=auto ~
-    echo "Close and reopen the terminal and it should look different"
-    echo "Use 'showbrc' to see what commands are available"
-}
+#     # Notify
+#     echo "### Creating links to repo configuration files..."
+#     reponame="LinuxFiles"
+#     if [ ! -d $reponame ]; then
+#         echo "'$reponame' repo doesn't exist in home directory!"
+#         echo "Go to home and git clone it! Exiting..."
+#         exit
+#     else
+#         echo "'$reponame' repo found! Continuing..."
+#     fi
 
-function unconfigure_linux () {
-    # Go to home
-    echo "### Going to home directory..."
-    cd ~
+#     echo "# Making symlinks to repo config files!"
+#     ln --symbolic "$linux_repopath/$linux_brc" "$linux_brc"
+#     ln --symbolic "$linux_repopath/$linux_prof" "$linux_prof"
 
-    # Remove symlinks
-    echo "### Removing symlinks to repo config files"
-    remove_if_symlink "$linux_brc"
-    remove_if_symlink "$linux_prof"
+#     echo "### Configuration finished!"
+#     ls -al --color=auto ~
+#     echo "Close and reopen the terminal and it should look different"
+#     echo "Use 'showbrc' to see what commands are available"
+# }
 
-    # Move back originals
-    echo "### Moving original configuration files back"
-    origname="originals"
-    mv "$origname/$linux_brc" "$linux_brc"
-    mv "$origname/$linux_prof" "$linux_prof"
+# function unconfigure_linux () {
+#     # Go to home
+#     echo "### Going to home directory..."
+#     cd ~
 
-    # Delete empty originals folder
-    echo "# Deleting empty originals folder"
-    rmdir "$origname"
+#     # Remove symlinks
+#     echo "### Removing symlinks to repo config files"
+#     remove_if_symlink "$linux_brc"
+#     remove_if_symlink "$linux_prof"
 
-    echo "### UN-configuration finished!"
-    ls -al --color=auto ~
-}
+#     # Move back originals
+#     echo "### Moving original configuration files back"
+#     origname="originals"
+#     mv "$origname/$linux_brc" "$linux_brc"
+#     mv "$origname/$linux_prof" "$linux_prof"
+
+#     # Delete empty originals folder
+#     echo "# Deleting empty originals folder"
+#     rmdir "$origname"
+
+#     echo "### UN-configuration finished!"
+#     ls -al --color=auto ~
+# }
 
 
 # Windows Configuration Functions
@@ -141,10 +149,9 @@ function configure_windows () {
 
     # Provide info
     echo "The Git Bash mintty terminal on Windows only needs the '$bashrc' file from here (renamed to '$bashprof')."
-    echo "(It doesn't need the '$prof' file that Linux needs.)"
+    # echo "(It doesn't need the '$prof' file that Linux needs.)"
 
-    # Check bashrc file
-    bashrc_path="$script_dir/Actual/.bashrc"
+    # Check bashrc file (FACTOR THIS OUT)
     echo ""
     echo "Looking for '$bashrc' file at '$bashrc_path'..."
     if [ ! -f "$bashrc_path" ]; then
@@ -154,36 +161,35 @@ function configure_windows () {
     echo "Successfully found it!"
 
     # Check destination
-    bashrc_dest="/c/Users/$USERNAME/$bashprof"
     echo ""
-    echo "The renamed file needs to be copied to the user folder: '$bashrc_dest'. Is this path correct?"
+    echo "The renamed file needs to be copied to the user folder: '$win_bashrc_dest'. Is this path correct?"
     ask_continue
 
     # Copy file over and rename at same time
     echo ""
-    echo "Copying '$bashrc' to '$bashrc_dest'..."
-    cp "$bashrc_path" "$bashrc_dest"
+    echo "Copying '$bashrc' to '$win_bashrc_dest'..."
+    cp "$bashrc_path" "$win_bashrc_dest"
 
     # Add note to copied file 
     echo "" 
     echo "Adding message to top of copied file..."
-    echo "### THIS IS A COPY OF .BASHRC FOR GIT MINTTY BASH, DO NOT EDIT ###" | cat - "$bashrc_dest" > temp_file && mv temp_file "$bashrc_dest"
+    echo "### THIS IS A COPY OF .BASHRC FOR GIT MINTTY BASH, DO NOT EDIT ###" | cat - "$win_bashrc_dest" > temp_file && mv temp_file "$win_bashrc_dest"
 }
 
-function unconfigure_windows () {
-    # Set source and destination folders
-    dest="$windows_dest"
-    bprof="${dest}.bash_profile"
+# function unconfigure_windows () {
+#     # Set source and destination folders
+#     dest="$windows_dest"
+#     bprof="${dest}.bash_profile"
 
-    # Check if .bash_profile exists
-    if [ -f "$bprof" ]; then
-        # Remove the .bash_profile
-        rm -f "$bprof"
-        echo "Removed .bash_profile"
-    fi
+#     # Check if .bash_profile exists
+#     if [ -f "$bprof" ]; then
+#         # Remove the .bash_profile
+#         rm -f "$bprof"
+#         echo "Removed .bash_profile"
+#     fi
 
-    echo "Unconfiguration for Windows complete!"
-}
+#     echo "Unconfiguration for Windows complete!"
+# }
 
 
 
@@ -201,7 +207,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "msys" ]]; then
     detected_os="Windows"
 else
-    echo -e "\nOperating System Detection Error!"
+    echo -e "Operating System Detection Error!"
     exit 1
 fi
 echo ""
