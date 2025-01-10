@@ -88,11 +88,6 @@ fi
 # Colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# Some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -214,10 +209,14 @@ alias goto="cd"
 alias here="pwd"
 alias whereami="pwd"
 
-# List all files with details
-# - Can put folders as arguments to show their contents
-# - Ensure colours are on
-alias ls="ls --color=auto -al"
+# List normal file names only, each on a new line
+alias ls="ls --color=auto -1"
+
+# List all file names, each on a new line
+alias la="ls --color=auto -Aa"
+
+# List detailed file information, each on a new line
+alias ll="ls --color=auto -lAh --time-style='+%Y-%m-%d %H:%M'"
 
 
 
@@ -283,7 +282,7 @@ alias move="mv"
 # Helper function to get confirmation
 # Takes one argument, a string describing some action
 # e.g. "remove this file"
-confirm () {
+function confirm () {
     # Note: Make sure there is some space after question string
 	read -p "Are you sure you want to $1 (This may be permanent) (y/n)?  " choice
 	case "$choice" in 
@@ -295,7 +294,7 @@ confirm () {
 
 # Remove files/folders (permanently!)
 # Usage: remove <name of file/folder in PWD>
-remove () {
+function remove () {
 	
     # If path is invalid
 	if ! [[ -e $1 ]]; then
@@ -332,7 +331,7 @@ remove () {
 # Copy files/folders 
 # Argument #1 = Source file/folder
 # Argument #2 = Destination location
-copy () {
+function copy () {
 	
     # If source path is invalid 
 	if ! [[ -e $1 ]]; then
@@ -421,8 +420,7 @@ alias update="sudo apt-get update"
 
 # Install a package
 # Usage example: install_pkg firefox
-function install_pkg()
-{
+function install_pkg() {
 	echo ""
     echo "Updating package list before install..."
 	sudo apt update 
@@ -462,8 +460,7 @@ alias amend="git commit --amend"
 
 ### Helper: Copy Template
 # Argument 1: Template name
-function copyTemplate()
-{
+function copyTemplate() {
 	copy "/home/david/LinuxFiles/Coding_Templates/$1" "."
 }
 
@@ -597,15 +594,13 @@ alias diskfree="df"
 alias open-sw="gnome-software"
 
 # Describe Linux commands and C99 functions
-function describe()
-{
+function describe() {
 	type $1
 	whatis $1
 }
 
 # Print IP address 
-function printIP()
-{
+function printIP() {
 	echo ""
 	echo "Method 1: (usually first one is correct)"
 	hostname -I 
@@ -621,8 +616,7 @@ function printIP()
 }
 
 # Print system information
-function sysInfo()
-{
+function sysInfo() {
 	echo ""
 	neofetch
 
