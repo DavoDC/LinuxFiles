@@ -172,20 +172,17 @@ function configure_windows () {
     echo "### THIS IS A COPY OF .BASHRC FOR GIT MINTTY BASH, DO NOT EDIT ###" | cat - "$win_bashrc_dest" > temp_file && mv temp_file "$win_bashrc_dest"
 }
 
-# function unconfigure_windows () {
-#     # Set source and destination folders
-#     dest="$windows_dest"
-#     bprof="${dest}.bash_profile"
+function unconfigure_windows () {
 
-#     # Check if .bash_profile exists
-#     if [ -f "$bprof" ]; then
-#         # Remove the .bash_profile
-#         rm -f "$bprof"
-#         echo "Removed .bash_profile"
-#     fi
-
-#     echo "Unconfiguration for Windows complete!"
-# }
+    # If the file exists
+    if [ -f "$win_bashrc_dest" ]; then
+        echo "Removing '$win_bashrc_dest'..."
+        rm $win_bashrc_dest
+    else
+        # Otherwise if doesn't
+        echo "The system is already unconfigured (No '$bashprof' file exists)."
+    fi
+}
 
 
 
@@ -244,8 +241,7 @@ case "$action" in
             # unconfigure_linux
             echo "Untested..."
         elif [ "$detected_os" == "Windows" ]; then
-            # unconfigure_windows
-            echo "Untested..."
+            unconfigure_windows
         fi
         ;;
     *)
