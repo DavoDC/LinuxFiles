@@ -1,27 +1,12 @@
 ### THINGS TO DO ###
 
-
 # CONFIGURE_DOTFILES.sh
 
-WHENEVER CONFIG IS WANTED - check dotfiles exist - create helper function 
-
-USE HELPER FUNCTIONS - for windows too
-
-Also test windows case = what if already there?
-On Windows = If bash profile already exists, rename to "old"  OR DELETE 
-When running , check for existence of "old" file - use to restore?
-If umconfiguring , check fit file first . Ask user whether they want to backup or delete . Use function for both?
+Refine + test on Linux
 
 
-Once Windows perfected, do Linux + test on it 
-
-
-
-# DOTFILES 
-- Fix colors!!!
-
-
-Try all commands on windows and fix them (e.g. showbrc)
+# DOTFILES
+- Make commands support Windows as well
 
 
 # GEN_SETUP.sh
