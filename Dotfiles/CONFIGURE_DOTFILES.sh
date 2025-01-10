@@ -11,9 +11,12 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 bashrc=".bashrc"
 prof=".profile" # Linux only
 
+# The folder in which the script will look for dotfiles
+dotfiles_path="$script_dir/Actual"
+
 # Dotfile paths
-bashrc_path="$script_dir/Actual/$bashrc"
-prof_path="$script_dir/Actual/$prof" # Linux only
+bashrc_path="$dotfiles_path/$bashrc"
+prof_path="$dotfiles_path/$prof" # Linux only
 
 ### Windows Git Bash mintty variables
 # What needs '.bashrc' to be renamed to
@@ -30,12 +33,12 @@ function ask_continue () {
     read -p "Would you like to continue (y/n)? " choice
     case "$choice" in
         y|Y ) echo "Continuing...";;
-        n|N ) echo "Exiting! " && exit;;
+        n|N ) echo "Exiting..." && echo "" && exit;;
         * ) exit;;
     esac
 }
 
-# Linux Helper Functions
+##### Linux Functions
 # function move_file_and_check () {
 #     sig="${FUNCNAME[0]}'('$1', '$2')"
 #     filename=$1
@@ -144,25 +147,18 @@ function ask_continue () {
 # }
 
 
-# Windows Configuration Functions
+##### Windows Functions
 function configure_windows () {
 
-    # Provide info
-    echo "The Git Bash mintty terminal on Windows only needs the '$bashrc' file from here (renamed to '$bashprof')."
-    # echo "(It doesn't need the '$prof' file that Linux needs.)"
-
-    # Check bashrc file (FACTOR THIS OUT)
+    # Notify user of plans and ask to continue
+    echo "The script will copy '$bashrc' to '$win_bashrc_dest'."
     echo ""
-    echo "Looking for '$bashrc' file at '$bashrc_path'..."
-    if [ ! -f "$bashrc_path" ]; then
-        echo "Could not find it! Exiting..."
-        exit 1
+    if [ -f "$win_bashrc_dest" ]; then
+        echo "A '$bashprof' file already exists there - it will be overwritten."
+    else
+        echo "No '$bashprof' file currently exists there, so this file will be created."
     fi
-    echo "Successfully found it!"
-
-    # Check destination
     echo ""
-    echo "The renamed file needs to be copied to the user folder: '$win_bashrc_dest'. Is this path correct?"
     ask_continue
 
     # Copy file over and rename at same time
@@ -200,7 +196,7 @@ clear
 echo ""
 echo "###### DOTFILES CONFIGURATION SCRIPT ######"
 
-# Detect the operating system and notify
+# Detect current operating system
 detected_os=""
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     detected_os="Linux"
@@ -210,12 +206,10 @@ else
     echo -e "Operating System Detection Error!"
     exit 1
 fi
-echo ""
-echo "Operating System detected: $detected_os"
 
 # Determine desired action
 echo ""
-echo "Do you want to configure or unconfigure your dotfiles?"
+echo "Do you want to configure or unconfigure your dotfiles on this $detected_os system?"
 echo "1) Configure"
 echo "2) Unconfigure"
 read -p "Choose an option (1/2): " action
@@ -227,6 +221,15 @@ case "$action" in
     1)
         echo "Configuring $action_msg"
         echo ""
+
+        # If configuring dotfiles, check they can be found
+        if [[ ! -f "$bashrc_path" || ! -f "$prof_path" ]]; then
+            echo "Could not find dotfiles ('$bashrc', '$prof') in '$dotfiles_path'!"
+            echo "Exiting..."
+            echo ""
+            exit 1
+        fi
+
         if [ "$detected_os" == "Linux" ]; then
             # configure_linux
             echo "Untested..."

@@ -438,7 +438,7 @@ function install_pkg()
 ### Git
 
 # Show git config
-alias showgitcfg="git config --list"
+alias showgitcfg="git config --list | cat"
 
 # Get repo status quickly
 alias status="git status"
