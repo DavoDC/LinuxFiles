@@ -110,11 +110,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	IS_LINUX=true
 	IS_WINDOWS=false
 
-	# Open with default program
-	DEFAULT_OPENER="xdg-open"
-
 	# Bashrc location
 	BASH_FILE="$HOME/.bashrc"
+
+	# Open with default program
+	DEFAULT_OPENER="xdg-open"
 
 elif [[ "$OSTYPE" == "msys" ]]; then
 
@@ -122,11 +122,12 @@ elif [[ "$OSTYPE" == "msys" ]]; then
 	IS_LINUX=false
 	IS_WINDOWS=true
 
+	# Bashrc location
+	BASH_FILE="$HOME/.bash_profile"
+
 	# Open with default program
 	DEFAULT_OPENER="start ''"
 
-	# Bashrc location
-	BASH_FILE="$HOME/.bash_profile"
 else
     echo -e "Operating System Detection Error!"
     exit 1
@@ -151,21 +152,23 @@ echo ""
 
 ### Bashrc file
 
-# The number below should match the line number of the first line before the heading above.
-SHOWBRC_LINE=117
+## Helper Variables
+# The number below should roughly match the line number of the heading above.
+SHOWBRC_LINE=$(($(grep -n 'MY ALIASES AND FUNCTIONS' "$BASH_FILE" | head -n 1 | cut -d: -f1)-1))
 
+# Get this part of the file
+TAIL_BRC="tail -n+$SHOWBRC_LINE $BASH_FILE"
+
+## Aliases
 # Print out this part of the file onwards
-alias showbrc='tail -n+"$SHOWBRC_LINE" "$BASH_FILE"; echo'
+alias showbrc="$TAIL_BRC; echo"
 
-# Search this file
+# Search this part of the file
 # Usage: searchbrc <substring>
-alias searchbrc='tail -n+"$SHOWBRC_LINE" "$BASH_FILE" | grep'
+alias searchbrc="$TAIL_BRC | grep"
 
-# Open up bashrc in a text editor for viewing/editing
-alias openbrc="xdg-open ~/.bashrc 2>/dev/null || code ~/.bash_profile"
-
-# Reload bashrc from repo on Windows
-alias reloadwinbrc="source /c/Users/David/GitHubRepos/LinuxFiles/Dotfiles/Actual/.bashrc"
+# Open up installed bashrc file with default program
+alias openbrc="$DEFAULT_OPENER $BASH_FILE"
 
 
 

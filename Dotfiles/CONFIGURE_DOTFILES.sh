@@ -150,7 +150,7 @@ function ask_continue () {
 ##### Windows Functions
 function configure_windows () {
 
-    # Notify user of plans and ask to continue
+    # Notify user of plans
     echo "The script will copy '$bashrc' to '$win_bashrc_dest'."
     echo ""
     if [ -f "$win_bashrc_dest" ]; then
@@ -158,8 +158,11 @@ function configure_windows () {
     else
         echo "No '$bashprof' file currently exists there, so this file will be created."
     fi
-    echo ""
-    ask_continue
+
+    # Ask for confirmation
+    # DISABLED TO MAKE REPEATEDLY RUNNING IT FASTER
+    # echo ""
+    # ask_continue
 
     # Copy file over and rename at same time
     echo ""
