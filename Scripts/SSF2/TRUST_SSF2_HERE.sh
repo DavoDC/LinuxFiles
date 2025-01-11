@@ -39,6 +39,12 @@
 ### - It sets the data folder next to where it is ran as "Trusted", letting SSF2 load
 ### - So this script is a workaround/alternative to using Adobe's Global Settings Manager
 
+# Check OS
+if [[ ! "$OSTYPE" == "linux-gnu"* ]]; then
+    echo -e "\nThis script is for Linux only!"
+    exit 1
+fi
+
 # Store the Adobe Flash Player setting file directory path
 SETTINGS_DIR=~/.macromedia/Flash_Player/'#Security'/FlashPlayerTrust
 

@@ -138,6 +138,12 @@ function installDeb() {
 
 ############### ACTUAL SCRIPT STARTS HERE
 
+############### OS CHECK
+if [[ ! "$OSTYPE" == "linux-gnu"* ]]; then
+    echo -e "\nThis script is for Linux only!"
+    exit 1
+fi
+
 
 ############### Configuration Changes
 

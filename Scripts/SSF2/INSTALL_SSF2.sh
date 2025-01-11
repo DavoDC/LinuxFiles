@@ -165,6 +165,11 @@ clear
 echo "#### INSTALL SSF2 ON LINUX #### - by davo#1776"
 echo ""
 
+### Check OS
+if [[ ! "$OSTYPE" == "linux-gnu"* ]]; then
+    echo -e "\nThis script is for Linux only!"
+    exit 1
+fi
 
 ### Get desired version
 echo "Which version would you like to install?"

@@ -3,6 +3,12 @@
 # Setup for Kali Linux
 # Will take a while!
 
+# OS CHECK
+if [[ ! "$OSTYPE" == "linux-gnu"* ]]; then
+    echo -e "\nThis script is for Linux only!"
+    exit 1
+fi
+
 # Show all commands
 set -x
 
