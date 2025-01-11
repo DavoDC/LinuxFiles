@@ -602,7 +602,22 @@ function printIP() {
 		echo "Method 3:"
 		ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
 	else
-		echo "TODO1"
+		echo ""
+		echo "Private IPs (local network):"
+		ipconfig | grep -A 10 "Wireless LAN adapter" | grep "IPv4 Address" | awk -F: '{print $2}' | sed 's/^[[:space:]]*//'
+
+		ipconfig | grep -A 10 "Ethernet adapter" | grep "IPv4 Address" | awk -F: '{print $2}' | sed 's/^[[:space:]]*//'
+
+		echo ""
+		echo "Public IP Address:"
+		if command -v curl > /dev/null 2>&1; then
+			curl -s https://ipinfo.io/ip
+		elif command -v wget > /dev/null 2>&1; then
+			wget -qO- https://ipinfo.io/ip
+		else
+			echo "Error: curl or wget is required to fetch public IP."
+		fi
+		echo ""
 	fi
 }
 
@@ -621,7 +636,23 @@ function sysInfo() {
 		echo ""
 		cat /etc/*-release | uniq -u
 	else
-		echo "TODO2"
+		echo ""
+		echo "### System Information ###"
+
+		echo "OS Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -Property Caption, Version, OSArchitecture, InstallDate | Format-Table -AutoSize"
+		
+		echo "CPU Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_Processor | Select-Object -Property Name, Manufacturer, MaxClockSpeed | Format-Table -AutoSize"
+
+		echo "RAM Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_PhysicalMemory | Select-Object -Property Manufacturer, Capacity, Speed | Format-Table -AutoSize"
+
+		echo "Storage Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_LogicalDisk | Select-Object -Property DeviceID, VolumeName, Size, FreeSpace | Format-Table -AutoSize"
+
+		echo "GPU Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_VideoController | Select-Object -Property Name, DriverVersion | Format-Table -AutoSize"
 	fi
 }
 
