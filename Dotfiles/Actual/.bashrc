@@ -104,6 +104,34 @@ fi
 # Change left part of shell commands
 export PS1='\[\033[01;32m\]\u@\h\[\033[00m\] ../\W: '
 
+# Detect current operating system and set variables accordingly
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+	# Linux settings
+	IS_LINUX=true
+	IS_WINDOWS=false
+
+	# Open with default program
+	DEFAULT_OPENER="xdg-open"
+
+	# Bashrc location
+	BASH_FILE="$HOME/.bashrc"
+
+elif [[ "$OSTYPE" == "msys" ]]; then
+
+	# Windows settings
+	IS_LINUX=false
+	IS_WINDOWS=true
+
+	# Open with default program
+	DEFAULT_OPENER="start ''"
+
+	# Bashrc location
+	BASH_FILE="$HOME/.bash_profile"
+else
+    echo -e "Operating System Detection Error!"
+    exit 1
+fi
+
 
 
 ######## WELCOME MESSAGE ########
@@ -126,17 +154,12 @@ echo ""
 # The number below should match the line number of the first line before the heading above.
 SHOWBRC_LINE=117
 
-# Helper function
-show_brc_content() {
-    tail -n+"$SHOWBRC_LINE" ~/.bashrc 2>/dev/null || tail -n+"$SHOWBRC_LINE" ~/.bash_profile 2>/dev/null
-}
-
 # Print out this part of the file onwards
-alias showbrc='show_brc_content; echo'
+alias showbrc='tail -n+"$SHOWBRC_LINE" "$BASH_FILE"; echo'
 
 # Search this file
 # Usage: searchbrc <substring>
-alias searchbrc='show_brc_content | grep'
+alias searchbrc='tail -n+"$SHOWBRC_LINE" "$BASH_FILE" | grep'
 
 # Open up bashrc in a text editor for viewing/editing
 alias openbrc="xdg-open ~/.bashrc 2>/dev/null || code ~/.bash_profile"
