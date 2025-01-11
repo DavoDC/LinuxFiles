@@ -645,15 +645,19 @@ function sysInfo() {
 		echo "CPU Information:"
 		powershell.exe -Command "Get-CimInstance -ClassName Win32_Processor | Select-Object -Property Name, Manufacturer, MaxClockSpeed | Format-Table -AutoSize"
 
+		echo "GPU Information:"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_VideoController | Select-Object -Property Name, DriverVersion | Format-Table -AutoSize"
+
 		echo "RAM Information:"
-		powershell.exe -Command "Get-CimInstance -ClassName Win32_PhysicalMemory | Select-Object -Property Manufacturer, Capacity, Speed | Format-Table -AutoSize"
+		powershell.exe -Command "Get-CimInstance -ClassName Win32_PhysicalMemory | Select-Object -Property Manufacturer, Capacity, Speed | Format-Table -AutoSize" | \
+awk 'NR == 1 || NR == 2 {print $0} NR > 2 { $2 = $2 / (1024*1024*1024) " GB"; if ($2 != "0 GB") print $1, $2, $3 }'
 
 		echo "Storage Information:"
 		powershell.exe -Command "Get-CimInstance -ClassName Win32_LogicalDisk | Select-Object -Property DeviceID, VolumeName, Size, FreeSpace | Format-Table -AutoSize"
-
-		echo "GPU Information:"
-		powershell.exe -Command "Get-CimInstance -ClassName Win32_VideoController | Select-Object -Property Name, DriverVersion | Format-Table -AutoSize"
 	fi
+
+	df -k | awk 'NR==2 {used=$3/1024/1024; available=$4/1024/1024; print used" GB used, " available" GB available"}'
+	echo ""
 }
 
 
