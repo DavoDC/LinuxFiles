@@ -124,7 +124,7 @@ echo ""
 ### Bashrc file
 
 # The number below should match the line number of the first line before the heading above.
-SHOWBRC_LINE=174
+SHOWBRC_LINE=117
 
 # Helper function
 show_brc_content() {
@@ -139,7 +139,10 @@ alias showbrc='show_brc_content; echo'
 alias searchbrc='show_brc_content | grep'
 
 # Open up bashrc in a text editor for viewing/editing
-alias openbrc="xdg-open ~/.bashrc"
+alias openbrc="xdg-open ~/.bashrc 2>/dev/null || code ~/.bash_profile"
+
+# Reload bashrc from repo on Windows
+alias reloadwinbrc="source /c/Users/David/GitHubRepos/LinuxFiles/Dotfiles/Actual/.bashrc"
 
 
 
@@ -191,7 +194,7 @@ alias edit="nano"
 
 # Open a given file with the default program
 # Usage: open <filepath>
-alias open="xdg-open"
+alias open="xdg-open \$1 2>/dev/null || start \$1"
 
 # Find a string in a text file
 # Usage: searchfile "bmw" cars.txt

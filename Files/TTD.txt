@@ -1,20 +1,11 @@
 ### THINGS TO DO ###
 
+# DOTFILES
+Make commands support Windows as well
+
+
 # CONFIGURE_DOTFILES.sh
 
+Enable Linux part on Windows and check
+
 Refine + test on Linux
-
-
-# DOTFILES
-- Make commands support Windows as well
-
-
-# GEN_SETUP.sh
-
-Improve general setup script output -> 
-make less verbose, centralize header printing to a function!
-- put helper functions in a separate file!
-
-
-# INSTALL_SSF2.sh
-add more error cases to ssf2 installer script 
