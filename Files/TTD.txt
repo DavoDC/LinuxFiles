@@ -1,11 +1,9 @@
 ### THINGS TO DO ###
 
-# DOTFILES
-Make commands support Windows as well
-
-
 # CONFIGURE_DOTFILES.sh
 
 Enable Linux part on Windows and check
 
-Refine + test on Linux
+Refine + test configuration on Linux
+
+Test bashrc commands on Linux
