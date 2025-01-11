@@ -220,7 +220,7 @@ alias edit="nano"
 
 # Open a given file with the default program
 # Usage: open <filepath>
-alias open="xdg-open \$1 2>/dev/null || start \$1"
+alias open="$DEFAULT_OPENER"
 
 # Find a string in a text file
 # Usage: searchfile "bmw" cars.txt
@@ -240,11 +240,26 @@ alias wc="wc"
 
 # Show directory structure as a tree
 # Note: Must be installed first on Ubuntu!
-alias tree="tree"
+function tree() {
+    if [[ "$IS_LINUX" == true ]]; then
+        command tree "$@"
+    else
+        cmd //c "tree /f /a $(cygpath -w $(pwd))" | sed 's/\\/\//g' \
+            | sed 's/\/$//' \
+            | sed 's/|/│/g' \
+            | sed 's/---/├───/g' \
+            | sed 's/\/\\/\//g' \
+            | sed 's/└───/└───/g' \
+            | sed 's/├───/├───/g' \
+            | sed 's/^\+//g' \
+            | sed 's/\\$//' \
+            | sed 's/\/├/├/g'
+    fi
+}
 
 # Download a file from a given URL
 # Usage example: download http://www.orimi.com/pdf-test.pdf
-alias download="wget"
+alias download='wget || curl -L -O'
 
 
 
@@ -367,14 +382,15 @@ alias printstr="echo"
 alias termname="tty"
 
 # Show PATH dirs line by line
-alias printPath="sed 's/:/\n/g' <<< "$PATH""
+alias printpath="sed 's/:/\n/g' <<< '"$PATH"'"
 
 # Get top ten commands used
 function topTen() {
-	echo ">>> Top ten commands used:"
-	history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem] elem}}' | sort -n -r | head -10
+    echo "# Top ten commands used #"
+    echo "-------------------------"
+    history | awk '{cmd[$2]++} END {for(elem in cmd) {print cmd[elem], elem}}' | sort -n -r | head -10 | \
+    awk '{printf "%-5s %s\n", $1, $2}'
 }
-
 
 
 ### Processes
@@ -478,7 +494,7 @@ alias compPy="python3"
 
 # Open Australian ruleset quietly
 function openRules {
-	bash -c "xdg-open https://docs.google.com/document/d/1_vNg5tm6mc7BI8ExLqHLIWvrt89tkr9BH4ooPQh2F1E" 2> /dev/null > /dev/null
+	bash -c "$DEFAULT_OPENER https://docs.google.com/document/d/1EfO_iNvyvvjdU8TOsufR_q4O38E_yJHNG-Zer8toLaw" 2> /dev/null > /dev/null
 }
 
 # Print a copy of the Australian tournament ruleset
@@ -562,7 +578,7 @@ alias whereis="whereis"
 alias diskfree="df"
 
 # Open Ubuntu Software very fast
-alias open-sw="gnome-software"
+alias opensw="gnome-software"
 
 # Describe Linux commands and C99 functions
 function describe() {
@@ -572,33 +588,41 @@ function describe() {
 
 # Print IP address 
 function printIP() {
-	echo ""
-	echo "Method 1: (usually first one is correct)"
-	hostname -I 
-	
-	echo ""
-    echo "Method 2:"
-	ifconfig -a | grep -w "inet" | sed 's/^[[:space:]]\+//' 
-	# Note: ifconfig needs to be installed, sed removes leading whitespace
-	
-	echo ""
-    echo "Method 3:"
-	ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
+	if [[ "$IS_LINUX" == true ]]; then
+		echo ""
+		echo "Method 1: (usually first one is correct)"
+		hostname -I 
+		
+		echo ""
+		echo "Method 2:"
+		ifconfig -a | grep -w "inet" | sed 's/^[[:space:]]\+//' 
+		# Note: ifconfig needs to be installed, sed removes leading whitespace
+		
+		echo ""
+		echo "Method 3:"
+		ip a | grep inet | sed 's/^[[:space:]]\+//' | sed -n 3p
+	else
+		echo "TODO1"
+	fi
 }
 
 # Print system information
 function sysInfo() {
-	echo ""
-	neofetch
+	if [[ "$IS_LINUX" == true ]]; then
+		echo ""
+		neofetch
 
-	echo ""
-	lsb_release -a
+		echo ""
+		lsb_release -a
 
-	echo ""
-	hostnamectl
+		echo ""
+		hostnamectl
 
-	echo ""
-	cat /etc/*-release | uniq -u
+		echo ""
+		cat /etc/*-release | uniq -u
+	else
+		echo "TODO2"
+	fi
 }
 
 
