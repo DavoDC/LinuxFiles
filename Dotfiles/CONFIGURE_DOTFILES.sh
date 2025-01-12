@@ -84,8 +84,8 @@ function backup_original_dotfiles() {
     # Create folder for backups
     echo -e "\nBacking up regular dotfiles ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
     if [ ! -d $backup_dir ]; then
-        echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
-        run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
+        echo "'$backup_dir' folder does not exist yet - creating it..."
+        run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir' folder"
     else
         echo "A '$backup_dir' already exists."
         if [ -f "$backup_dir/$bashrc" ] && [ -f "$backup_dir/$prof" ]; then
@@ -112,6 +112,7 @@ function configure_linux () {
     cd ~
 
     ### Handle already installed files 
+    echo ""
     if [ -L $bashrc ] || [ -L $prof ]; then
         echo "Symlink dotfiles found, removing them..."
         if [ -L $bashrc ]; then
@@ -265,7 +266,6 @@ case "$action" in
         echo ""
         if [ "$detected_os" == "Linux" ]; then
             unconfigure_linux
-            echo "Untested..."
         elif [ "$detected_os" == "Windows" ]; then
             unconfigure_windows
         fi
