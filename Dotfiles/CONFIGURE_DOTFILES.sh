@@ -56,9 +56,9 @@ function run_and_check() {
         fi
     else
         if [ -n "$action_desc" ]; then
-            echo "Error: '$command' failed (couldn't $action_desc)."
+            echo -e "\nError: '$command' failed (couldn't $action_desc).\n"
         else
-            echo "Error: '$command' failed."
+            echo -e "\nError: '$command' failed.\n"
         fi
         exit 1
     fi
@@ -67,14 +67,13 @@ function run_and_check() {
 # Remove the symbolic link at the given path
 # Arg 1: Path to symbolic link
 function remove_if_symlink () {
-    echo ""
     if [ -L "$1" ]; then
         run_and_check "rm \"$1\"" "remove symlink"
     elif [ -f "$1" ]; then
-        echo "Error: '$1' is a regular file. Exiting..."
+        echo -e "\nError in '${FUNCNAME[0]}()': '$1' is a regular file.\n"
         exit 1
     elif [ ! -e "$1" ]; then
-        echo "Error: '$1' does not exist. Exiting..."
+        echo -e "\nError in '${FUNCNAME[0]}()': '$1' does not exist.\n"
         exit 1
     fi
 }
@@ -90,7 +89,7 @@ function configure_linux () {
     ### Backup original files
 
     # Create folder for backups
-    echo "Backing up original configuration files ($bashrc and $prof) into a folder ('$backup_dir')..."
+    echo -e "\nBacking up original configuration files ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
     if [ ! -d $backup_dir ]; then
         echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
         run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
@@ -100,9 +99,9 @@ function configure_linux () {
     fi
 
     # Move dotfiles into backup folder
-    echo "Moving original '$bashrc' and '$prof' files into the folder..."
-    run_and_check "mv \"$bashrc\" \"$backup_dir/$bashrc\"" "move file '$bashrc' to '$backup_dir'."
-    run_and_check "mv \"$prof\" \"$backup_dir/$prof\"" "move file '$prof' to '$backup_dir'."
+    echo -e "\nMoving original '$bashrc' and '$prof' files into the '$backup_dir' folder..."
+    run_and_check "mv \"$bashrc\" \"$backup_dir/$bashrc\"" "move file '$bashrc' to '$backup_dir'"
+    run_and_check "mv \"$prof\" \"$backup_dir/$prof\"" "move file '$prof' to '$backup_dir'"
 
     ### Create symlinks to dotfiles in repo
     echo "Creating links to repo configuration files..."
@@ -119,7 +118,7 @@ function configure_linux () {
     # Make symlinks
     echo "Making symlinks to repo config files!"
     run_and_check "ln --symbolic \"$linux_repopath/$bashrc\" \"$bashrc\"" "create symlink"
-    run_and_check "ln --symbolic \"$linux_repopath/$prof\" \"$prof\"" "create symlink" "quiet_success"
+    run_and_check "ln --symbolic \"$linux_repopath/$prof\" \"$prof\"" "create symlink"
 }
 
 function unconfigure_linux () {
@@ -128,18 +127,18 @@ function unconfigure_linux () {
     cd ~
 
     # Remove symlinks
-    echo "Removing symlinks to repo config files"
+    echo -e "\nRemoving symlinks to repo config files..."
     remove_if_symlink "$bashrc"
     remove_if_symlink "$prof"
 
     # Move back originals
-    echo "Moving original dotfiles back"
+    echo -e "\nMoving original dotfiles back..."
     backup_dir="originals"
     run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "move '$backup_dir/$bashrc' to '$bashrc'"
     run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "move '$backup_dir/$prof' to '$prof'"
 
     # Delete empty originals folder
-    echo "Deleting empty originals folder"
+    echo -e "\nDeleting empty originals folder..."
     run_and_check "rmdir \"$backup_dir\"" "remove '$backup_dir' folder"
 }
 
