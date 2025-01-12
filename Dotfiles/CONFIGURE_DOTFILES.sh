@@ -78,6 +78,30 @@ function remove_if_symlink () {
     fi
 }
 
+# Back up installed dotfiles on Linux
+function backup_original_dotfiles() {
+
+    # Create folder for backups
+    echo -e "\nBacking up original configuration files ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
+    if [ ! -d $backup_dir ]; then
+        echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
+        run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
+    else
+        echo "A '$backup_dir' already exists."
+        if [ -f "$backup_dir/$bashrc" ] && [ -f "$backup_dir/$prof" ]; then
+            echo "It contains both dotfiles, which means your system is probably already configured!"
+            ask_continue
+        elif [ ! -f "$backup_dir/$bashrc" ] || [ ! -f "$backup_dir/$prof" ]; then
+            echo "Error: Misconfigured system. One or both dotfiles missing in backup folder. Resolve manually."
+            exit 1
+        fi
+    fi
+
+    # Move dotfiles into backup folder
+    echo -e "\nMoving original '$bashrc' and '$prof' files into the '$backup_dir' folder..."
+    run_and_check "mv \"$bashrc\" \"$backup_dir/$bashrc\"" "move file '$bashrc' to '$backup_dir'"
+    run_and_check "mv \"$prof\" \"$backup_dir/$prof\"" "move file '$prof' to '$backup_dir'"
+}
 
 
 ##### Linux Functions
@@ -86,22 +110,18 @@ function configure_linux () {
     echo "Going to home directory..."
     cd ~
 
-    ### Backup original files
-
-    # Create folder for backups
-    echo -e "\nBacking up original configuration files ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
-    if [ ! -d $backup_dir ]; then
-        echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
-        run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
+    ### Handle already installed files 
+    if [ -f $bashrc ] && [ -f $prof ]; then
+        # If both files exist, move them into a backup folder
+        backup_original_dotfiles
+    elif [ -f $bashrc ] || [ -f $prof ]; then
+        # If only one file exists, notify user
+        echo "Error: Misconfigured system. Only one dotfile present. Resolve manually."
+        exit 1
     else
-        echo "'$backup_dir' already exists, which means your system is probably already configured!"
-        ask_continue
+        # If neither file exists, notify user
+        echo "No dotfiles currently installed!"
     fi
-
-    # Move dotfiles into backup folder
-    echo -e "\nMoving original '$bashrc' and '$prof' files into the '$backup_dir' folder..."
-    run_and_check "mv \"$bashrc\" \"$backup_dir/$bashrc\"" "move file '$bashrc' to '$backup_dir'"
-    run_and_check "mv \"$prof\" \"$backup_dir/$prof\"" "move file '$prof' to '$backup_dir'"
 
     ### Create symlinks to dotfiles in repo
     echo "Creating links to repo configuration files..."
