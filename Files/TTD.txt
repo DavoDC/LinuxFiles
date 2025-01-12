@@ -1,7 +1,3 @@
 ### THINGS TO DO ###
 
-# CONFIGURE_DOTFILES.sh
-
-Refine + test configuration on Linux
-
-Test bashrc commands on Linux
+None

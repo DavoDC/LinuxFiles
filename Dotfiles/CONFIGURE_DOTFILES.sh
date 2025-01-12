@@ -82,7 +82,7 @@ function remove_if_symlink () {
 function backup_original_dotfiles() {
 
     # Create folder for backups
-    echo -e "\nBacking up original configuration files ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
+    echo -e "\nBacking up regular dotfiles ('$bashrc' and '$prof') into a folder ('$backup_dir')..."
     if [ ! -d $backup_dir ]; then
         echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
         run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
@@ -104,6 +104,7 @@ function backup_original_dotfiles() {
 }
 
 
+
 ##### Linux Functions
 function configure_linux () {
     # Go to home
@@ -111,8 +112,16 @@ function configure_linux () {
     cd ~
 
     ### Handle already installed files 
-    if [ -f $bashrc ] && [ -f $prof ]; then
-        # If both files exist, move them into a backup folder
+    if [ -L $bashrc ] || [ -L $prof ]; then
+        echo "Symlink dotfiles found, removing them..."
+        if [ -L $bashrc ]; then
+            remove_if_symlink "$bashrc"
+        fi
+        if [ -L $prof ]; then
+            remove_if_symlink "$prof"
+        fi
+    elif [ -f $bashrc ] && [ -f $prof ]; then
+        echo "Regular dotfiles found, moving them to a backup folder..."
         backup_original_dotfiles
     elif [ -f $bashrc ] || [ -f $prof ]; then
         # If only one file exists, notify user
@@ -147,15 +156,27 @@ function unconfigure_linux () {
     remove_if_symlink "$bashrc"
     remove_if_symlink "$prof"
 
-    # Move back originals
-    echo -e "\nMoving original dotfiles back..."
-    backup_dir="originals"
-    run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "move '$backup_dir/$bashrc' to '$bashrc'"
-    run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "move '$backup_dir/$prof' to '$prof'"
+    # Handle backup folder
+    echo -e "\nHandling backup folder..."
+    if [ ! -d $backup_dir ]; then
+        echo "No backup folder ('$backup_dir') was present."
+    else
+        echo "A backup folder ('$backup_dir') exists."
+        if [ -f "$backup_dir/$bashrc" ] && [ -f "$backup_dir/$prof" ]; then
+            ### If it has both dotfiles
+            # Move back originals
+            echo -e "\nMoving original dotfiles back..."
+            run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "restore file from backup"
+            run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "restore file from backup"
 
-    # Delete empty originals folder
-    echo -e "\nDeleting empty originals folder..."
-    run_and_check "rmdir \"$backup_dir\"" "remove '$backup_dir' folder"
+            # Delete now-empty backup folder
+            echo -e "\nDeleting empty backup folder..."
+            run_and_check "rmdir \"$backup_dir\"" "remove '$backup_dir' folder"
+        elif [ ! -f "$backup_dir/$bashrc" ] || [ ! -f "$backup_dir/$prof" ]; then
+            echo "Error: Misconfigured system. One or both dotfiles missing in backup folder. Resolve manually."
+            exit 1
+        fi
+    fi
 }
 
 
