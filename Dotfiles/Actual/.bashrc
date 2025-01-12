@@ -110,8 +110,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	IS_LINUX=true
 	IS_WINDOWS=false
 
+	# Dotfile names
+	BASHRC=".bashrc"
+	PROF=".profile"
+
 	# Bashrc location
-	BASH_FILE="$HOME/.bashrc"
+	BASH_FILE="$HOME/$BASHRC"
 
 	# Open with default program
 	DEFAULT_OPENER="xdg-open"
@@ -122,8 +126,11 @@ elif [[ "$OSTYPE" == "msys" ]]; then
 	IS_LINUX=false
 	IS_WINDOWS=true
 
+	# Dotfile names
+	BASHRC=".bash_profile"
+
 	# Bashrc location
-	BASH_FILE="$HOME/.bash_profile"
+	BASH_FILE="$HOME/$BASHRC"
 
 	# Open with default program
 	DEFAULT_OPENER="start ''"
@@ -170,16 +177,6 @@ alias searchbrc="$TAIL_BRC | grep"
 # Open up installed bashrc file with default program
 alias openbrc="$DEFAULT_OPENER $BASH_FILE"
 
-# Check dotfiles
-function checkDotfiles {
-	if [[ "$IS_LINUX" == true ]]; then
-		ls ~ -al | grep ".bashrc"
-        ls ~ -al | grep ".profile"
-    else
-		ls ~ -al | grep ".bash_profile"
-	fi
-}
-
 
 
 ### Directories
@@ -207,6 +204,17 @@ alias ll="ls --color=auto -lAh --time-style='+%Y-%m-%d %H:%M'"
 
 
 ### Files
+
+# Look for file in home directory
+function findFileInHome {
+    ls ~ -al | grep "$1" || echo -e "'$1' not found\n"
+}
+
+# Look for dotfiles in home directory
+function checkDotfiles {
+    findFileInHome "$BASHRC"
+    [[ "$IS_LINUX" == true ]] && findFileInHome "$PROF"
+}
 
 # Make new text file in PWD
 alias newfile="touch newfile.txt"
