@@ -1,9 +1,3 @@
 ### THINGS TO DO ###
 
-Fix case where sys unconfigured but you try to unconfig again - just say already unconfigured
-
-Tries to remove non-existent files
-
-Tries to remove regular file
-
-Error in 'remove_if_symlink()': '.bashrc' is a regular file.
+None

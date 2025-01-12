@@ -152,12 +152,29 @@ function unconfigure_linux () {
     echo "Going to home directory..."
     cd ~
 
-    # Remove symlinks
-    echo -e "\nRemoving symlinks to repo config files..."
-    remove_if_symlink "$bashrc"
-    remove_if_symlink "$prof"
+    ### Handle already installed files 
+    echo ""
+    if [ -L $bashrc ] || [ -L $prof ]; then
+        echo "Symlink dotfiles found, removing them..."
+        if [ -L $bashrc ]; then
+            remove_if_symlink "$bashrc"
+        fi
+        if [ -L $prof ]; then
+            remove_if_symlink "$prof"
+        fi
+    elif [ -f $bashrc ] && [ -f $prof ]; then
+        echo "Regular dotfiles found. This script creates symlinks, so this is from elsewhere. Will leave as is. Exiting successfully..."
+        exit 0
+    elif [ -f $bashrc ] || [ -f $prof ]; then
+        # If only one file exists, notify user
+        echo "Error: Misconfigured system. Only one dotfile present. Resolve manually."
+        exit 1
+    else
+        # If neither file exists, notify user
+        echo "The system is already unconfigured! (No dotfiles exist)."
+    fi
 
-    # Handle backup folder
+    ### Handle backup folder
     echo -e "\nHandling backup folder..."
     if [ ! -d $backup_dir ]; then
         echo "No backup folder ('$backup_dir') was present."
@@ -167,8 +184,8 @@ function unconfigure_linux () {
             ### If it has both dotfiles
             # Move back originals
             echo -e "\nMoving original dotfiles back..."
-            run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "restore file from backup"
-            run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "restore file from backup"
+            run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "restore '$bashrc' file from backup"
+            run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "restore '$prof' file from backup"
 
             # Delete now-empty backup folder
             echo -e "\nDeleting empty backup folder..."
@@ -213,7 +230,7 @@ function unconfigure_windows () {
         run_and_check "rm $win_bashrc_dest" "remove file"
     else
         # Otherwise if doesn't
-        echo "The system is already unconfigured (No '$bashprof' file exists)."
+        echo "The system is already unconfigured! (No '$bashprof' file exists)."
     fi
 }
 
