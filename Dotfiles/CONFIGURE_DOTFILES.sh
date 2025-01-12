@@ -4,6 +4,9 @@
 
 ########## VARIABLES
 
+# Name of the repo (folder) in which this script and the dotfiles are held
+linux_repo="LinuxFiles"
+
 # The directory in which this script is running
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
@@ -18,17 +21,20 @@ dotfiles_path="$script_dir/Actual"
 bashrc_path="$dotfiles_path/$bashrc"
 prof_path="$dotfiles_path/$prof" # Linux only
 
+# Name of the dotfiles backup folder on Linux
+backup_dir="originalDotFiles"
+
 ### Windows Git Bash mintty variables
 # What needs '.bashrc' to be renamed to
 bashprof=".bash_profile"
 
-# Where it expects the file to be
+# Where Git Bash expects the file to be
 win_bashrc_dest="/c/Users/$USERNAME/$bashprof"
 
 
 
 ########## HELPER FUNCTIONS
-# Helper Function for Continue Prompt
+# Ask user whether they want to continue
 function ask_continue () {
     read -p "Would you like to continue (y/n)? " choice
     case "$choice" in
@@ -38,113 +44,105 @@ function ask_continue () {
     esac
 }
 
+# Run command and check exit code
+function run_and_check() {
+    local command="$1" # The comamnd
+    local action_desc="$2" # A description of action in present tense (e.g. 'move file')
+    local quiet_success="$3" # Set to "quiet_success" for no output upon success
+
+    if eval "$command"; then
+        if [ "$quiet_success" != "quiet_success" ]; then
+            echo "Action successful! ($action_desc)"
+        fi
+    else
+        if [ -n "$action_desc" ]; then
+            echo "Error: '$command' failed (couldn't $action_desc)."
+        else
+            echo "Error: '$command' failed."
+        fi
+        exit 1
+    fi
+}
+
+# Remove the symbolic link at the given path
+# Arg 1: Path to symbolic link
+function remove_if_symlink () {
+    echo ""
+    if [ -L "$1" ]; then
+        run_and_check "rm \"$1\"" "remove symlink"
+    elif [ -f "$1" ]; then
+        echo "Error: '$1' is a regular file. Exiting..."
+        exit 1
+    elif [ ! -e "$1" ]; then
+        echo "Error: '$1' does not exist. Exiting..."
+        exit 1
+    fi
+}
+
+
+
 ##### Linux Functions
-# function move_file_and_check () {
-#     sig="${FUNCNAME[0]}'('$1', '$2')"
-#     filename=$1
-#     destname=$2
-#     finalpath=$destname/$filename
+function configure_linux () {
+    # Go to home
+    echo "Going to home directory..."
+    cd ~
 
-#     if mv $filename $finalpath; then
-#         if [ -f "$finalpath" ]; then
-#             echo "$sig definitely successful!"
-#         fi
-#     else
-#         echo "'$sig issue!!!"
-#         ask_continue
-#     fi
-# }
+    ### Backup original files
 
-# function remove_if_symlink () {
-#     echo ""
-#     if [ -L "$1" ]; then
-#         if rm "$1"; then
-#             echo "'$1' symlink successfully removed!"
-#         fi
-#     else
-#         echo "'$1' is not a symlink!!!"
-#         if [ -f "$1" ]; then
-#             echo "'$1' is a regular file, likely the original"
-#             echo "Danger!!! Exiting!!!"
-#             exit
-#         fi
-#         if [ ! -e "$1" ]; then
-#             echo "'$1' does not exist as any type of file"
-#             echo "Strange..."
-#             ask_continue
-#         fi
-#     fi
-# }
+    # Create folder for backups
+    echo "Backing up original configuration files ($bashrc and $prof) into a folder ('$backup_dir')..."
+    if [ ! -d $backup_dir ]; then
+        echo "'$backup_dir' does not exist yet. Making folder called '$backup_dir'..."
+        run_and_check "mkdir \"$backup_dir\"" "create '$backup_dir'"
+    else
+        echo "'$backup_dir' already exists, which means your system is probably already configured!"
+        ask_continue
+    fi
 
-# function configure_linux () {
-#     # Go to home
-#     echo "### Going to home directory..."
-#     cd ~
+    # Move dotfiles into backup folder
+    echo "Moving original '$bashrc' and '$prof' files into the folder..."
+    run_and_check "mv \"$bashrc\" \"$backup_dir/$bashrc\"" "move file '$bashrc' to '$backup_dir'."
+    run_and_check "mv \"$prof\" \"$backup_dir/$prof\"" "move file '$prof' to '$backup_dir'."
 
-#     # Notify
-#     echo "### Backing up original configuration files ($linux_brc and $linux_prof) into a folder..."
-#     origname="originals"
+    ### Create symlinks to dotfiles in repo
+    echo "Creating links to repo configuration files..."
 
-#     echo "# Attempting to create backup folder"
-#     if [ ! -d $origname ]; then
-#         echo "'$origname' hasn't been made, that's good"
-#         echo "Making folder called '$origname'..."
-#         mkdir $origname
-#     else
-#         echo "'$origname' has been made already!"
-#         echo "Your system is probably already configured!"
-#         echo "You may want to continue anyway... or not"
-#         ask_continue
-#     fi
+    # Check repo
+    if [ ! -d $linux_repo ]; then
+        echo "'$linux_repo' repo doesn't exist in home directory!"
+        echo "Go to home and git clone it! Exiting..."
+        exit
+    else
+        echo "'$linux_repo' repo found in home directory! Continuing..."
+    fi
 
-#     echo "# Moving original '$linux_brc' and '$linux_prof' files into the folder..."
-#     move_file_and_check "$linux_brc" "$origname"
-#     move_file_and_check "$linux_prof" "$origname"
+    # Make symlinks
+    echo "Making symlinks to repo config files!"
+    run_and_check "ln --symbolic \"$linux_repopath/$bashrc\" \"$bashrc\"" "create symlink"
+    run_and_check "ln --symbolic \"$linux_repopath/$prof\" \"$prof\"" "create symlink" "quiet_success"
+}
 
-#     # Notify
-#     echo "### Creating links to repo configuration files..."
-#     reponame="LinuxFiles"
-#     if [ ! -d $reponame ]; then
-#         echo "'$reponame' repo doesn't exist in home directory!"
-#         echo "Go to home and git clone it! Exiting..."
-#         exit
-#     else
-#         echo "'$reponame' repo found! Continuing..."
-#     fi
+function unconfigure_linux () {
+    # Go to home
+    echo "Going to home directory..."
+    cd ~
 
-#     echo "# Making symlinks to repo config files!"
-#     ln --symbolic "$linux_repopath/$linux_brc" "$linux_brc"
-#     ln --symbolic "$linux_repopath/$linux_prof" "$linux_prof"
+    # Remove symlinks
+    echo "Removing symlinks to repo config files"
+    remove_if_symlink "$bashrc"
+    remove_if_symlink "$prof"
 
-#     echo "### Configuration finished!"
-#     ls -al --color=auto ~
-#     echo "Close and reopen the terminal and it should look different"
-#     echo "Use 'showbrc' to see what commands are available"
-# }
+    # Move back originals
+    echo "Moving original dotfiles back"
+    backup_dir="originals"
+    run_and_check "mv \"$backup_dir/$bashrc\" \"$bashrc\"" "move '$backup_dir/$bashrc' to '$bashrc'"
+    run_and_check "mv \"$backup_dir/$prof\" \"$prof\"" "move '$backup_dir/$prof' to '$prof'"
 
-# function unconfigure_linux () {
-#     # Go to home
-#     echo "### Going to home directory..."
-#     cd ~
+    # Delete empty originals folder
+    echo "Deleting empty originals folder"
+    run_and_check "rmdir \"$backup_dir\"" "remove '$backup_dir' folder"
+}
 
-#     # Remove symlinks
-#     echo "### Removing symlinks to repo config files"
-#     remove_if_symlink "$linux_brc"
-#     remove_if_symlink "$linux_prof"
-
-#     # Move back originals
-#     echo "### Moving original configuration files back"
-#     origname="originals"
-#     mv "$origname/$linux_brc" "$linux_brc"
-#     mv "$origname/$linux_prof" "$linux_prof"
-
-#     # Delete empty originals folder
-#     echo "# Deleting empty originals folder"
-#     rmdir "$origname"
-
-#     echo "### UN-configuration finished!"
-#     ls -al --color=auto ~
-# }
 
 
 ##### Windows Functions
@@ -159,17 +157,12 @@ function configure_windows () {
         echo "No '$bashprof' file currently exists there, so this file will be created."
     fi
 
-    # Ask for confirmation
-    # DISABLED TO MAKE REPEATEDLY RUNNING IT FASTER
-    # echo ""
-    # ask_continue
-
     # Copy file over and rename at same time
     echo ""
     echo "Copying '$bashrc' to '$win_bashrc_dest'..."
-    cp "$bashrc_path" "$win_bashrc_dest"
+    run_and_check "cp \"$bashrc_path\" \"$win_bashrc_dest\"" "copy file"
 
-    # Add note to copied file 
+    # Add note to copied file
     echo "" 
     echo "Adding message to top of copied file..."
     echo "### THIS IS A COPY OF .BASHRC FOR GIT MINTTY BASH, DO NOT EDIT ###" | cat - "$win_bashrc_dest" > temp_file && mv temp_file "$win_bashrc_dest"
@@ -180,7 +173,7 @@ function unconfigure_windows () {
     # If the file exists
     if [ -f "$win_bashrc_dest" ]; then
         echo "Removing '$win_bashrc_dest'..."
-        rm $win_bashrc_dest
+        run_and_check "rm $win_bashrc_dest" "remove file"
     else
         # Otherwise if doesn't
         echo "The system is already unconfigured (No '$bashprof' file exists)."
@@ -222,17 +215,11 @@ case "$action" in
         echo "Configuring $action_msg"
         echo ""
 
-        # If configuring dotfiles, check they can be found
-        if [[ ! -f "$bashrc_path" || ! -f "$prof_path" ]]; then
-            echo "Could not find dotfiles ('$bashrc', '$prof') in '$dotfiles_path'!"
-            echo "Exiting..."
-            echo ""
-            exit 1
-        fi
+        # Check dotfiles are present
+        run_and_check "test -f \"$bashrc_path\" && test -f \"$prof_path\"" "find dotfiles ('$bashrc_path', '$prof_path') in '$dotfiles_path" "quiet_success"
 
         if [ "$detected_os" == "Linux" ]; then
-            # configure_linux
-            echo "Untested..."
+            configure_linux
         elif [ "$detected_os" == "Windows" ]; then
             configure_windows
         fi
@@ -241,7 +228,7 @@ case "$action" in
         echo "Unconfiguring $action_msg"
         echo ""
         if [ "$detected_os" == "Linux" ]; then
-            # unconfigure_linux
+            unconfigure_linux
             echo "Untested..."
         elif [ "$detected_os" == "Windows" ]; then
             unconfigure_windows
