@@ -68,7 +68,7 @@ function run_and_check() {
 # Arg 1: Path to symbolic link
 function remove_if_symlink () {
     if [ -L "$1" ]; then
-        run_and_check "rm \"$1\"" "remove symlink"
+        run_and_check "rm \"$1\"" "remove symlink to '$1'"
     elif [ -f "$1" ]; then
         echo -e "\nError in '${FUNCNAME[0]}()': '$1' is a regular file.\n"
         exit 1
@@ -124,21 +124,17 @@ function configure_linux () {
     fi
 
     ### Create symlinks to dotfiles in repo
-    echo "Creating links to repo configuration files..."
+    echo -e "\nCreating symlinks to dotfiles in '$linux_repo'..."
 
-    # Check repo
+    # Check if repo was cloned in correct location
     if [ ! -d $linux_repo ]; then
-        echo "'$linux_repo' repo doesn't exist in home directory!"
-        echo "Go to home and git clone it! Exiting..."
+        echo -e "\n'$linux_repo' repo doesn't exist in home directory! Go to home and git clone it!\n"
         exit
-    else
-        echo "'$linux_repo' repo found in home directory! Continuing..."
     fi
 
     # Make symlinks
-    echo "Making symlinks to repo config files!"
-    run_and_check "ln --symbolic \"$linux_repopath/$bashrc\" \"$bashrc\"" "create symlink"
-    run_and_check "ln --symbolic \"$linux_repopath/$prof\" \"$prof\"" "create symlink"
+    run_and_check "ln --symbolic \"$dotfiles_path/$bashrc\" \"$bashrc\"" "create symlink to '$bashrc'"
+    run_and_check "ln --symbolic \"$dotfiles_path/$prof\" \"$prof\"" "create symlink to '$prof'"
 }
 
 function unconfigure_linux () {

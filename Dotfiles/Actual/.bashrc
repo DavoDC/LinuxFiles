@@ -170,6 +170,16 @@ alias searchbrc="$TAIL_BRC | grep"
 # Open up installed bashrc file with default program
 alias openbrc="$DEFAULT_OPENER $BASH_FILE"
 
+# Check dotfiles
+function checkDotfiles {
+	if [[ "$IS_LINUX" == true ]]; then
+		ls ~ -al | grep ".bashrc"
+        ls ~ -al | grep ".profile"
+    else
+		ls ~ -al | grep ".bash_profile"
+	fi
+}
+
 
 
 ### Directories
