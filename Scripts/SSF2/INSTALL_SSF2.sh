@@ -165,8 +165,8 @@ clear
 echo "#### INSTALL SSF2 ON LINUX #### - by davo#1776"
 echo ""
 
-### Check OS
-if [[ ! "$OSTYPE" == "linux-gnu"* ]]; then
+### Prevent this script from running on Windows via Git Bash
+if [[ "$OSTYPE" == "msys" ]]; then
     echo -e "\nThis script is for Linux only!"
     exit 1
 fi
