@@ -460,6 +460,29 @@ alias branchv="git branch -vv"
 # Amend last commit 
 alias amend="git commit --amend"
 
+# Set upstream branch
+# Argument 1: Remote branch
+# Argument 2: Local branch
+function setUpstream() {
+    local remote_branch=$1
+    local local_branch=$2
+    local cmd="git branch --set-upstream-to=origin/$remote_branch $local_branch"
+    
+    # Print and execute the command
+    echo ""
+    echo "Running '$cmd'..."
+    echo ""
+    eval $cmd
+}
+
+# Set the upstream branch using the current local branch name
+function fixUpstream() {
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo ""
+    echo "Detected current branch: '$current_branch'"
+    setUpstream $current_branch $current_branch
+}
+
 
 
 ### Programming
