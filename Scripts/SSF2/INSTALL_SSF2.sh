@@ -150,7 +150,7 @@ function giveRemoveAdvice() {
 	printYellow "rm $1 && echo 'Removed $version_desc archive'"
 }
 
-	
+
 
 
 
@@ -325,7 +325,7 @@ if [ "$native" = true ]; then
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command
 	# Argument 2: Function Name
- 	giveBashrcAdvice "./SSF2" "native_ssf2"
+	giveBashrcAdvice "./SSF2" "native_ssf2"
 
 	# Give replay folder tip
 	echo "For the Native Linux version,"
@@ -348,7 +348,7 @@ if [ "$wine_inst" = true  ] || [ "$wine_port" = true  ]; then
 	sudo apt update > /dev/null 2>&1
 
 	# Install wine libraries
-    install "wine"
+	install "wine"
 	install "wine32"
 	install "winbind"
 
@@ -402,8 +402,7 @@ if [ "$wine_port" = true ]; then
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command
 	# Argument 2: Function Name
- 	giveBashrcAdvice "wine SSF2.exe" "wine_ssf2"
-
+	giveBashrcAdvice "wine SSF2.exe" "wine_ssf2"
 fi
 
 
