@@ -595,6 +595,29 @@ function std_build_notify {
 }
 
 
+# Helper function to handle common npm commands
+function _npm_common {
+	# Build command
+    local cmd="npm run $1" 
+
+    # Print and execute the command
+    echo ""
+    echo "Running '$cmd'..."
+    eval $cmd
+}
+
+# Start node app
+function node_start {
+    _npm_common "start"
+}
+
+# Build node app
+function node_build {
+    _npm_common "build"
+}
+
+
+
 
 ### Miscellaneous
 
