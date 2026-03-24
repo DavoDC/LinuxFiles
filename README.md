@@ -1,6 +1,18 @@
 # Linux Files
 
-My Linux files, including my dotfiles and scripts.
+My Linux dotfiles, configuration files, and utility scripts - version-controlled for easy setup on new machines.
 
-Linux Setup Google Doc Link:
-https://docs.google.com/document/d/16o_fxA-lM5FYAqA20ym5KmyV0fGX9lETsls0OP7RGFU.
+## Contents
+
+- **Dotfiles** - shell config (`.bashrc`, `.bash_aliases`, etc.)
+- **Scripts** - utility shell scripts for automation and setup
+- **Config files** - application settings and preferences
+
+## Setup
+
+A full Linux setup guide (including how to use this repo) is available here:
+[Linux Setup Guide](https://docs.google.com/document/d/16o_fxA-lM5FYAqA20ym5KmyV0fGX9lETsls0OP7RGFU)
+
+## Development
+
+**Started:** July 2021 · **Last updated:** June 2025 · Actively maintained as my Linux environment evolves.
