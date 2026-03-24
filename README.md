@@ -19,4 +19,4 @@ A full Linux setup guide (including how to use this repo) is available here:
 
 ## Development
 
-**Started:** July 2021 · **Last updated:** June 2025 · Actively maintained as my Linux environment evolves.
+**Developed:** July 2021 · Actively maintained as my Linux environment evolves.
