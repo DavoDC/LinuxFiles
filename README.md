@@ -1,5 +1,9 @@
 # Linux Files
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G31WKOCN)
+
+
+
 My Linux dotfiles, configuration files, and utility scripts - version-controlled for easy setup on new machines.
 
 ## Contents
