@@ -10,6 +10,20 @@
 ###
 ### Tested On: Ubuntu 22.04 LTS (Jammy Jellyfish)
 ###
+### Distro Support:
+###   Fully supported (Debian/Ubuntu family - uses apt):
+###     Ubuntu, Debian, Linux Mint, Pop!_OS, Elementary OS, Zorin OS, KDE Neon,
+###     and any distro whose /etc/os-release ID_LIKE contains 'ubuntu' or 'debian'.
+###
+###   Basic support (not tested - package names may differ):
+###     Fedora, RHEL, CentOS Stream (uses dnf)
+###     Arch Linux, Manjaro, EndeavourOS (uses pacman)
+###     Note: libcanberra-gtk-module and libnss3 use Debian names - install
+###     the equivalent manually if the game fails to start on these distros.
+###     Note: Wine is installed as a single package on Fedora/Arch (32-bit included).
+###
+###   Unsupported: script prints a message and exits cleanly.
+###
 ### Usage:
 ### 1. Open the folder where you want SSF2 to be installed with your File Manager GUI.
 ####  - Note: A folder named 'SSF2' will be created here
@@ -65,20 +79,23 @@ nc='\033[0m'
 # Argument 1: Package Name
 function isNotInstalled() {
 
-	# Check if installed
-	check=$(dpkg-query -W --showformat='${Status}\n' $1|grep "install ok installed")
-
-	## Convert check to numerical value
-	# If check came back as not installed
-	if [ "" = "$check" ]; then
-
-		# Return true (not installed)
-		return 0;
-	else
-
-		# Return false (installed)
-		return 1;
-	fi
+	case "$PKG_MANAGER" in
+		apt)
+			# Original Debian/Ubuntu check - unchanged
+			check=$(dpkg-query -W --showformat='${Status}\n' $1|grep "install ok installed")
+			if [ "" = "$check" ]; then
+				return 0;
+			else
+				return 1;
+			fi
+			;;
+		dnf)
+			rpm -q "$1" &>/dev/null && return 1 || return 0
+			;;
+		pacman)
+			pacman -Q "$1" &>/dev/null && return 1 || return 0
+			;;
+	esac
 }
 
 
@@ -91,7 +108,11 @@ function install() {
 	if isNotInstalled $1; then
 
 		# Install it unattended
-		sudo apt install $1 -y
+		case "$PKG_MANAGER" in
+			apt)    sudo apt install $1 -y ;;
+			dnf)    sudo dnf install $1 -y ;;
+			pacman) sudo pacman -S --noconfirm $1 ;;
+		esac
 	fi
 }
 
@@ -170,6 +191,30 @@ if [[ "$OSTYPE" == "msys" ]]; then
     echo -e "\nThis script is for Linux only!"
     exit 1
 fi
+
+
+### Detect distro and set package manager
+if [ ! -f /etc/os-release ]; then
+    echo "Cannot detect Linux distro (/etc/os-release not found). Exiting."
+    exit 1
+fi
+
+. /etc/os-release
+case "$ID $ID_LIKE" in
+    *debian*|*ubuntu*) PKG_MANAGER="apt"    ;;
+    *fedora*|*rhel*|*centos*) PKG_MANAGER="dnf" ;;
+    *arch*)            PKG_MANAGER="pacman"  ;;
+    *)
+        echo "Unsupported distro: ${PRETTY_NAME:-unknown}"
+        echo "Supported distros: Debian, Ubuntu, Linux Mint, Pop!_OS (and other Ubuntu/Debian derivatives), Fedora, Arch Linux."
+        echo "To request support for your distro, open an issue at:"
+        echo "https://github.com/DavoDC/LinuxFiles/issues"
+        exit 1
+        ;;
+esac
+
+echo "Detected distro: $PRETTY_NAME (package manager: $PKG_MANAGER)"
+echo ""
 
 ### Get desired version
 echo "Which version would you like to install?"
@@ -341,16 +386,21 @@ if [ "$wine_inst" = true  ] || [ "$wine_port" = true  ]; then
     echo "Installing Wine..."
 	echo ""
 
-	# Enable 32-bit packages
-	sudo dpkg --add-architecture i386
+	if [ "$PKG_MANAGER" = "apt" ]; then
+		# Enable 32-bit packages (Debian/Ubuntu only)
+		sudo dpkg --add-architecture i386
 
-	# Update package lists with new 32 bit packages (quietly)
-	sudo apt update > /dev/null 2>&1
+		# Update package lists with new 32 bit packages (quietly)
+		sudo apt update > /dev/null 2>&1
 
-	# Install wine libraries
-	install "wine"
-	install "wine32"
-	install "winbind"
+		# Install wine libraries (apt package names)
+		install "wine"
+		install "wine32"
+		install "winbind"
+	else
+		# On Fedora/Arch, wine includes 32-bit support in the main package
+		install "wine"
+	fi
 
 fi
 
