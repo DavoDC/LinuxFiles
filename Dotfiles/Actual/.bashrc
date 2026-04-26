@@ -120,7 +120,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	# Open with default program
 	DEFAULT_OPENER="xdg-open"
 
-elif [[ "$OSTYPE" == "msys" ]]; then
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+	# This covers the new Git 2.54+ (cygwin) and the older versions (msys)
 
 	# Windows settings
 	IS_LINUX=false
