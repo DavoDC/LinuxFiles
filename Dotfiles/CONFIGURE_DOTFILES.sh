@@ -247,7 +247,7 @@ echo "###### DOTFILES CONFIGURATION SCRIPT ######"
 detected_os=""
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     detected_os="Linux"
-elif [[ "$OSTYPE" == "msys" ]]; then
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
     detected_os="Windows"
 else
     echo -e "Operating System Detection Error!"

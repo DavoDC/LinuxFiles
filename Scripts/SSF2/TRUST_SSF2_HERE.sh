@@ -40,7 +40,7 @@
 ### - So this script is a workaround/alternative to using Adobe's Global Settings Manager
 
 # Prevent this script from running on Windows via Git Bash
-if [[ "$OSTYPE" == "msys" ]]; then
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
     echo -e "\nThis script is for Linux only!"
     exit 1
 fi
