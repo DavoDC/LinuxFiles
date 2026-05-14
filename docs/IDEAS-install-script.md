@@ -1,58 +1,58 @@
-# Install Script Ideas
+# SSF2 Install Script Ideas
 
-Ideas and known issues for `Scripts/GEN_SETUP.sh` and `Dotfiles/CONFIGURE_DOTFILES.sh`.
+Ideas and known issues for `Scripts/SSF2/INSTALL_SSF2.sh`.
 
 Directive: `Claude_Workspace/ClaudeOnly/roadmap/directives/linux-files-yt.md`
+
+Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 ---
 
 ## Priority Fixes (before YouTube video)
 
-### Link issue - dotfile configuration not wired into GEN_SETUP.sh
-- `CONFIGURE_DOTFILES.sh` handles symlinks but GEN_SETUP.sh never calls it
-- Users have to discover and run the dotfile script manually
-- Fix: add a prompt at the end of GEN_SETUP.sh offering to configure dotfiles
-
-### Remove Wine section
-- Wine/wine32/winbind + `--add-architecture i386` block is heavy and uncommon
-- Most users don't need it
-- Remove the entire SSF2 Wine block
-
 ### Add run logging
-- Every run should tee output to a timestamped log file at `$HOME/gen-setup-YYYYMMDD-HHMMSS.log`
+- Every run should tee output to a timestamped log file at `./ssf2-install-YYYYMMDD-HHMMSS.log`
 - Keeps terminal interface identical, but user can share the log for debugging
 - Implementation: `exec > >(tee -a "$LOG_FILE") 2>&1` near top of script
 
-### Fix duplicate installSnap definition
-- `installSnap` is defined twice in the helper functions section
-- The comment above the second definition incorrectly says "installDeb" - copy-paste error
-- The second definition is identical to the first so no behavioural difference, but it's confusing
-- Fix: delete the duplicate `installSnap` block (lines with the incorrect "installDeb" comment)
+### Scan for link / URL issues (first step)
+- The script fetches the SSF2 download page (`offURL`) and parses download links
+- Check: does the official download URL (`www.supersmashflash.com/play/ssf2/downloads/`) still work?
+- Check: are the regex patterns (`patt_native`, `patt_wine_inst`, `patt_wine_port`) still matching current filenames?
+- Check: CDN URL `cdn.supersmashflash.com/ssf2/downloads` - still live?
+- These are the most likely breakage points for new users
+
+### Scan for other major user-facing issues
+- Run through each of the 3 install types manually on Linux Mint
+- Document any failures, missing dependencies, or unclear prompts
 
 ---
 
-## Known Dead URL Risks (major - will break for new users)
+## 3 Install Types (for video demo)
 
-- **libpangox**: downloaded from `http://ftp.us.debian.org/debian/pool/main/p/pangox-compat/` - old Debian package, may 404
-- **Consolas font**: downloaded from `storage.googleapis.com/google-code-archive-downloads` - Google Code Archive, may go offline
-- **Fallout GRUB theme**: downloaded from shiftkey's GitHub - likely stable but worth noting
+| Type | Variable | Download | Description |
+|------|----------|----------|-------------|
+| Native | `native` | `SSF2BetaLinux.*.tar` | Linux native build |
+| Wine Install | `wine_inst` | `SSF2BetaSetup.32bit.*.exe` | Windows installer via Wine |
+| Wine Port | `wine_port` | `SSF2BetaWindows.32bit.*.portable.zip` | Windows portable via Wine |
 
-Action: check URLs are live before recording video. Find fallbacks if needed.
-
----
-
-## Minor Issues (post-video, if at all)
-
-- `gnome-text-editor` set as git editor, but Dracula theme installed for `gedit` - inconsistency (Ubuntu 22+ uses gnome-text-editor, not gedit)
-- `rfkill block bluetooth` in `/etc/rc.local` is legacy startup method - may not work on newer Ubuntu/Mint
-- `isNotInstalled` uses `dpkg-query` - Debian/Ubuntu only, contradicts the comment "for all distros"
-- GRUB customizer is commented out "DISABLED AS NO LONGER AVAILABLE FOR UBUNTU 22" - should be removed entirely to avoid confusion
+Video should demonstrate all 3 types installing successfully.
 
 ---
 
-## Future Ideas (low priority, post-video)
+## Test Plan
 
-- Add `--dry-run` flag to print what would be installed without installing
-- Add per-section timing (how long did package installs take?)
-- Interactive mode vs. silent mode (currently always interactive via sudo prompts)
-- Test on Debian, Pop!_OS, Zorin to verify compatibility
+1. Linux Mint rig - uninstall any existing SSF2
+2. Run INSTALL_SSF2.sh, choose Native - verify installs and launches
+3. Uninstall, run again, choose Wine Install - verify
+4. Uninstall, run again, choose Wine Portable - verify
+5. Record video during a clean run of all 3
+
+---
+
+## Future Ideas (post-video)
+
+- Auto-detect if Wine is installed and skip Wine menu options if not
+- Better error messages if download fails (currently silent?)
+- `--uninstall` flag to remove installed SSF2
+- Support checking for script updates (compare version header against GitHub raw)
