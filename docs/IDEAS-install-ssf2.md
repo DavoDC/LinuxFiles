@@ -15,14 +15,7 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 - Keeps terminal interface identical, but user can share the log for debugging
 - Implementation: `exec > >(tee -a "$LOG_FILE") 2>&1` near top of script
 
-### Scan for link / URL issues (first step)
-- The script fetches the SSF2 download page (`offURL`) and parses download links
-- Check: does the official download URL (`www.supersmashflash.com/play/ssf2/downloads/`) still work?
-- Check: are the regex patterns (`patt_native`, `patt_wine_inst`, `patt_wine_port`) still matching current filenames?
-- Check: CDN URL `cdn.supersmashflash.com/ssf2/downloads` - still live?
-- These are the most likely breakage points for new users
-
-### Add "missing dot" fallback for download URLs (CONFIRMED ISSUE)
+### Add "missing dot" fallback for download URLs (CONFIRMED ISSUE - first step)
 **Known SSF2 site bug:** Mirror links on the download page are written as `v1.4.0.1` (no dot between v and number) but the actual file lives at `v.1.4.0.1` (with dot). Confirmed by multiple users (CraftGMC 2025-05-24, Adriana 2025-06-14):
 > "the mirror links have a typo, they're linking you to v1.4.0.1 but the actual link should be written as v.1.4.0.1"
 
