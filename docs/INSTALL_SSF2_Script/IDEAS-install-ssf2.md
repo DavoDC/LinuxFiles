@@ -10,13 +10,14 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 ## Priority Fixes (before YouTube video)
 
-### Log file ANSI escape sequence issue
-- Script outputs color codes to log file (lines with URLs show `[0;33m` and `[0m` literally)
-- **Fix:** Detect if stdout is redirected to file, disable color codes when logging or strip them on output
+**Note:** Combine ANSI fix and user-facing scan in one Linux Mint session (both require testing all install types anyway).
 
-### Scan for other major user-facing issues
+### Log file ANSI escape sequence issue + major user-facing scan
 - Run through each of the 3 install types manually on Linux Mint
 - Document any failures, missing dependencies, or unclear prompts
+- While testing, check logs for ANSI escape sequence issue and fix if found
+- ANSI issue: Script outputs color codes to log file (lines with URLs show `[0;33m` and `[0m` literally)
+- Fix: Detect if stdout is redirected to file, disable color codes when logging or strip them on output
 
 ---
 
