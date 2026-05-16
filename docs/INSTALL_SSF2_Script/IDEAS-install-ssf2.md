@@ -20,7 +20,9 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 ---
 
-## 3 Install Types (for video demo)
+## Test Plan
+
+### 3 Install Types (for video demo)
 
 | Type | Variable | Download | Description |
 |------|----------|----------|-------------|
@@ -30,9 +32,7 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 Video should demonstrate all 3 types installing successfully.
 
----
-
-## Test Plan
+### Test Steps
 
 1. Linux Mint rig - uninstall any existing SSF2
 2. Run INSTALL_SSF2.sh, choose Native - verify installs and launches
