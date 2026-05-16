@@ -40,6 +40,8 @@ Video should demonstrate all 3 types installing successfully.
 
 ## Future Ideas (post-video)
 
+- **Windows dry-run mode** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates the full script flow: shows menus, extracts and prints download URLs, logs output - but skips any actual installs/downloads. Useful for testing script output on Windows without a Linux rig, and lets Claude safely run the script to verify behaviour. `DRY_RUN=true` flag could also trigger it explicitly on any platform.
+
 - Auto-detect if Wine is installed and skip Wine menu options if not
 - Better error messages if download fails (currently silent?)
 - `--uninstall` flag to remove installed SSF2
