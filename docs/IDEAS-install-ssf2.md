@@ -40,7 +40,15 @@ Video should demonstrate all 3 types installing successfully.
 
 ## Future Ideas (post-video)
 
-- **Windows dry-run mode** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates the full script flow: shows menus, extracts and prints download URLs, logs output - but skips any actual installs/downloads. **Must display a prominent banner at the top and before every skipped step so the user cannot mistake it for a real run.** `DRY_RUN=true` flag could also trigger it explicitly on any platform for dev testing. Note: considered supporting actual Windows installs via Git Bash (Portable + Installer versions would work natively - no Wine needed on Windows), but decided against it - this repo is Linux-only and Windows scripts belong in WindowsFiles.
+- **Windows dry-run mode** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates Linux as closely as possible on Windows:
+  - Show menus and capture version choice as normal
+  - Fetch the real download page and extract URLs (curl is available in Git Bash - same logic as wget)
+  - HEAD-check each extracted URL with `curl -sI` to verify it would succeed without downloading the file
+  - Print what each install step would do, but skip execution (no apt/wine/tar/unzip)
+  - Full log output as normal (tee still works on Windows)
+  - **Must display a prominent banner at the top and before every skipped step so the user cannot mistake it for a real run**
+  - `DRY_RUN=true` flag could also trigger it explicitly on any platform for dev/CI testing
+  - Note: considered supporting actual Windows installs via Git Bash (Portable + Installer versions would work natively - no Wine needed on Windows), but decided against it - this repo is Linux-only and Windows scripts belong in WindowsFiles.
 
 - Auto-detect if Wine is installed and skip Wine menu options if not
 - Better error messages if download fails (currently silent?)
