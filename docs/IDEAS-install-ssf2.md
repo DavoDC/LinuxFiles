@@ -10,11 +10,6 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 ## Priority Fixes (before YouTube video)
 
-### Add run logging
-- Every run should tee output to a timestamped log file at `./ssf2-install-YYYYMMDD-HHMMSS.log`
-- Keeps terminal interface identical, but user can share the log for debugging
-- Implementation: `exec > >(tee -a "$LOG_FILE") 2>&1` near top of script
-
 ### Scan for other major user-facing issues
 - Run through each of the 3 install types manually on Linux Mint
 - Document any failures, missing dependencies, or unclear prompts

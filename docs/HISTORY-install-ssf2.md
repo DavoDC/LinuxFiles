@@ -4,6 +4,14 @@ History of improvements to `Scripts/SSF2/INSTALL_SSF2.sh`.
 
 ---
 
+## 2026-05-16 - Timestamped run logging
+
+**What:** Added `exec > >(tee -a "$LOG_FILE") 2>&1` redirect after the starting message. Every run creates `./ssf2-install-YYYYMMDD-HHMMSS.log` in the current directory.
+
+**Why it mattered:** Users hitting install failures had no way to share diagnostic output. Now they can attach the log file when reporting issues. Terminal display is unchanged - tee duplicates output to file transparently.
+
+---
+
 ## 2026-05-16 - Bidirectional download URL fallback (v1.x vs v.1.x mismatch)
 
 **What:** Added `downloadWithFallback()` helper function. Replaces the bare `wget $dwlURL` call.
