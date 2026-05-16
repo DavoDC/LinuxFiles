@@ -216,6 +216,12 @@ clear
 echo "#### INSTALL SSF2 ON LINUX #### - by davo#1776"
 echo ""
 
+### Start logging to file
+LOG_FILE="./ssf2-install-$(date +%Y%m%d-%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+echo "Log file: $LOG_FILE"
+echo ""
+
 ### Prevent this script from running on Windows via Git Bash
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
     echo -e "\nThis script is for Linux only!"
