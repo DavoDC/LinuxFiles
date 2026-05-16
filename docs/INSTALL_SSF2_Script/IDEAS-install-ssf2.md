@@ -55,5 +55,5 @@ Video should demonstrate all 3 types installing successfully.
 
 - Auto-detect if Wine is installed and skip Wine menu options if not
 - Better error messages if download fails (currently silent?)
-- **Auto-detect existing SSF2 install and prompt for action:** If SSF2 already installed, ask "SSF2 detected. Reinstall? (y/n)" with double confirmation (yes/no, not just single char). Let user choose reinstall or exit. Better UX than separate uninstall command.
+- **Auto-detect existing SSF2 install and prompt for action:** If SSF2 already installed, show menu: (R)einstall, (Remove) only, (E)xit. Each choice requires y/n confirmation. Better UX than separate uninstall command.
 - Support checking for script updates (compare version header against GitHub raw)
