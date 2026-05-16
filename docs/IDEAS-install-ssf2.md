@@ -15,20 +15,6 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 - Keeps terminal interface identical, but user can share the log for debugging
 - Implementation: `exec > >(tee -a "$LOG_FILE") 2>&1` near top of script
 
-### Add "missing dot" fallback for download URLs (CONFIRMED ISSUE - first step)
-**Known SSF2 site bug:** Mirror links on the download page are written as `v1.4.0.1` (no dot between v and number) but the actual file lives at `v.1.4.0.1` (with dot). Confirmed by multiple users (CraftGMC 2025-05-24, Adriana 2025-06-14):
-> "the mirror links have a typo, they're linking you to v1.4.0.1 but the actual link should be written as v.1.4.0.1"
-
-Working URL example: `https://cdn.supersmashflash.com/ssf2/downloads/fc7d249c/SSF2BetaWindows.v.1.4.0.1.portable.zip`
-
-**Fix in script:** When the parsed download URL returns a 404 / fails, retry with a dot inserted between `v` and the version number. Concretely:
-- Pattern to detect: `v[0-9]` in URL
-- Fallback transform: `v[0-9]` -> `v.[0-9]` (insert dot)
-- Try original first, fall back to dotted form if HTTP fails
-- Log both attempts so users can see which one worked
-
-This is the "link issue" referenced as the FIRST step in the directive.
-
 ### Scan for other major user-facing issues
 - Run through each of the 3 install types manually on Linux Mint
 - Document any failures, missing dependencies, or unclear prompts
