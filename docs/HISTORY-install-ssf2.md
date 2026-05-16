@@ -4,6 +4,23 @@ History of improvements to `Scripts/SSF2/INSTALL_SSF2.sh`.
 
 ---
 
+## 2026-05-16 - Windows dry-run mode
+
+**What:** Instead of exiting when `OSTYPE` is `msys` or `cygwin`, the script now enters a dry-run mode. Also activatable on any platform via `DRY_RUN=true bash ./INSTALL_SSF2.sh`. In dry-run mode:
+- Shows a prominent `*** DRY RUN MODE ***` banner at startup and before every skipped step
+- Shows the version selection menu and captures the user's choice as normal
+- Uses curl (not wget) to fetch the real SSF2 download page and extract the exact download URL
+- HEAD-checks the URL with `curl -sI` and reports the HTTP status
+- Prints what every install step would do (install packages, extract archives, run wine) but skips execution
+- Full log output still works (tee works on Windows)
+- All Linux behavior unchanged - all guards use `if/else` so Linux paths are identical to before
+
+**Why it mattered:** Developers and contributors on Windows had no way to test the script logic or verify that URL extraction was working. The script would just exit immediately. Now anyone on Windows can simulate a full install run, check the menu flow, and verify URLs are reachable before testing on a real Linux machine.
+
+**Tests added:** `test_dry_run.sh` with 10 tests covering banner output, install() skip behavior, env var propagation, and full-script integration (T5/T6 make real network calls to supersmashflash.com). Key implementation note: bash process substitution `exec > >(tee ...)` is non-deterministic on cygwin - tests poll for the final log line rather than assuming the file is complete.
+
+---
+
 ## 2026-05-16 - Timestamped run logging
 
 **What:** Added `exec > >(tee -a "$LOG_FILE") 2>&1` redirect after the starting message. Every run creates `./ssf2-install-YYYYMMDD-HHMMSS.log` in the current directory.

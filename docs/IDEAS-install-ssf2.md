@@ -40,21 +40,10 @@ Video should demonstrate all 3 types installing successfully.
 
 ## Future Ideas (post-video)
 
-- **Windows dry-run mode** - DONE (v45d4c44). Issues found during dry-run testing on Windows:
-  - Bashrc advice shows repo path, not a meaningful "simulated install path" - could show `/home/user/SSF2` as placeholder instead of the real script location
-  - `clear` at script start clears terminal during dev/testing - consider skipping `clear` in dry-run mode
-  - `install "wget"` shows a skip banner even though wget is not used in dry-run (curl is used instead) - minor confusion but technically correct
-  - tee process substitution (`exec > >(tee ...)`) is non-deterministic on cygwin - tests need polling to work reliably
-
-- **Windows dry-run mode (pre-DONE notes, kept for reference)** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates Linux as closely as possible on Windows:
-  - Show menus and capture version choice as normal
-  - Fetch the real download page and extract URLs (curl is available in Git Bash - same logic as wget)
-  - HEAD-check each extracted URL with `curl -sI` to verify it would succeed without downloading the file
-  - Print what each install step would do, but skip execution (no apt/wine/tar/unzip)
-  - Full log output as normal (tee still works on Windows)
-  - **Must display a prominent banner at the top and before every skipped step so the user cannot mistake it for a real run**
-  - `DRY_RUN=true` flag could also trigger it explicitly on any platform for dev/CI testing
-  - Note: considered supporting actual Windows installs via Git Bash (Portable + Installer versions would work natively - no Wine needed on Windows), but decided against it - this repo is Linux-only and Windows scripts belong in WindowsFiles.
+- **Windows dry-run improvements** (follow-on from DONE feature in HISTORY-install-ssf2.md):
+  - Bashrc advice shows repo path, not a meaningful simulated path - show `/home/user/SSF2` placeholder in dry-run
+  - `clear` at script start clears terminal during dev/testing - skip `clear` when DRY_RUN=true
+  - `install "wget"` shows a skip banner even though wget is unused in dry-run mode (curl is used) - minor wording fix
 
 - Auto-detect if Wine is installed and skip Wine menu options if not
 - Better error messages if download fails (currently silent?)
