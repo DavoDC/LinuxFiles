@@ -462,6 +462,7 @@ if [ "$native" = true ]; then
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command
 	# Argument 2: Function Name
+	[[ "$DRY_RUN" == "true" ]] && echo "(Dry run: paths below would reflect your Linux install directory)"
 	giveBashrcAdvice "./SSF2" "native_ssf2"
 
 	# Give replay folder tip
@@ -556,6 +557,7 @@ if [ "$wine_port" = true ]; then
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command
 	# Argument 2: Function Name
+	[[ "$DRY_RUN" == "true" ]] && echo "(Dry run: paths below would reflect your Linux install directory)"
 	giveBashrcAdvice "wine SSF2.exe" "wine_ssf2"
 fi
 
@@ -572,7 +574,11 @@ if [ "$wine_inst" = true  ] || [ "$wine_port" = true  ]; then
 	echo "Note about Autosaved Replay Path:"
 	echo "For both wine versions (Installer and Portable),"
 	echo "the autosaved replay folder path will be something like:"
-	echo "/home/$USER/.wine/drive_c/users/$USER/SSF2Replays"
+	if [[ "$DRY_RUN" == "true" ]]; then
+		echo "/home/YOUR_USER/.wine/drive_c/users/YOUR_USER/SSF2Replays"
+	else
+		echo "/home/$USER/.wine/drive_c/users/$USER/SSF2Replays"
+	fi
 fi
 
 

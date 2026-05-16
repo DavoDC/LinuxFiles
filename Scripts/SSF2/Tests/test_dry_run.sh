@@ -5,7 +5,7 @@
 
 PASS=0
 FAIL=0
-INSTALL_SCRIPT="$(dirname "$0")/../INSTALL_SSF2.sh"
+INSTALL_SCRIPT="$(cd "$(dirname "$0")" && pwd)/../INSTALL_SSF2.sh"
 
 # --- mock curl for URL checks ---
 MOCK_CURL_HTTP_CODE="200"
@@ -115,16 +115,33 @@ result=$(DRY_RUN=true bash -c '
 ' 2>&1)
 assert_contains "T4 DRY_RUN=true preserved" "DRY_RUN=true" "$result"
 
-# Integration tests use a temp file to capture output - avoids tee subshell capture issues
+# Integration tests read the log file (more reliable than stdout capture with tee)
+# The script writes a log file to the working dir; we read that after the run.
+# Mocks (curl, dpkg-query) are unset before each integration run to avoid interference.
+
+run_and_read_log() {
+    local temp_dir="$1" input="$2" env_prefix="${3:-}"
+    (
+        unset -f curl dpkg-query 2>/dev/null
+        cd "$temp_dir" && eval "$env_prefix bash \"$INSTALL_SCRIPT\" <<< \"$input\"" > /dev/null 2>&1
+    )
+    # bash does not guarantee tee (from exec > >(tee...)) finishes before script exit.
+    # Wait until the log shows the script's final line, confirming tee is done (max 10s).
+    local tries=50 log_file
+    while (( tries-- > 0 )); do
+        log_file=$(ls "$temp_dir"/ssf2-install-*.log 2>/dev/null | head -1)
+        grep -q "Enjoy playing SSF2 on Linux" "$log_file" 2>/dev/null && break
+        sleep 0.2
+    done
+    cat "$log_file" 2>/dev/null
+}
 
 # --- T5: OSTYPE=msys triggers DRY_RUN (integration) ---
 echo ""
 echo "T5: OSTYPE=msys -> script enters dry-run (contains DRY RUN MODE banner)"
 TEMP_DIR="$(mktemp -d)"
-OUT_FILE="$(mktemp)"
-(cd "$TEMP_DIR" && OSTYPE=msys bash "$INSTALL_SCRIPT" <<< "C") > "$OUT_FILE" 2>&1
-out=$(cat "$OUT_FILE")
-rm -rf "$TEMP_DIR" "$OUT_FILE"
+out=$(run_and_read_log "$TEMP_DIR" "C" "OSTYPE=msys")
+rm -rf "$TEMP_DIR"
 assert_contains "T5 DRY RUN MODE banner shown" "DRY RUN MODE" "$out"
 assert_not_contains "T5 script did not exit with Linux-only message" "This script is for Linux only" "$out"
 
@@ -132,10 +149,8 @@ assert_not_contains "T5 script did not exit with Linux-only message" "This scrip
 echo ""
 echo "T6: DRY_RUN=true -> output contains HEAD check"
 TEMP_DIR="$(mktemp -d)"
-OUT_FILE="$(mktemp)"
-(cd "$TEMP_DIR" && DRY_RUN=true bash "$INSTALL_SCRIPT" <<< "C") > "$OUT_FILE" 2>&1
-out=$(cat "$OUT_FILE")
-rm -rf "$TEMP_DIR" "$OUT_FILE"
+out=$(run_and_read_log "$TEMP_DIR" "C" "DRY_RUN=true")
+rm -rf "$TEMP_DIR"
 assert_contains "T6 HEAD check performed" "HEAD check" "$out"
 assert_contains "T6 HTTP code shown" "HTTP" "$out"
 
