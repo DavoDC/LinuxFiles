@@ -115,13 +115,16 @@ result=$(DRY_RUN=true bash -c '
 ' 2>&1)
 assert_contains "T4 DRY_RUN=true preserved" "DRY_RUN=true" "$result"
 
+# Integration tests use a temp file to capture output - avoids tee subshell capture issues
+
 # --- T5: OSTYPE=msys triggers DRY_RUN (integration) ---
 echo ""
 echo "T5: OSTYPE=msys -> script enters dry-run (contains DRY RUN MODE banner)"
 TEMP_DIR="$(mktemp -d)"
-out=$(cd "$TEMP_DIR" && OSTYPE=msys bash "$INSTALL_SCRIPT" <<< "C" 2>&1)
-rc=$?
-rm -rf "$TEMP_DIR"
+OUT_FILE="$(mktemp)"
+(cd "$TEMP_DIR" && OSTYPE=msys bash "$INSTALL_SCRIPT" <<< "C") > "$OUT_FILE" 2>&1
+out=$(cat "$OUT_FILE")
+rm -rf "$TEMP_DIR" "$OUT_FILE"
 assert_contains "T5 DRY RUN MODE banner shown" "DRY RUN MODE" "$out"
 assert_not_contains "T5 script did not exit with Linux-only message" "This script is for Linux only" "$out"
 
@@ -129,8 +132,10 @@ assert_not_contains "T5 script did not exit with Linux-only message" "This scrip
 echo ""
 echo "T6: DRY_RUN=true -> output contains HEAD check"
 TEMP_DIR="$(mktemp -d)"
-out=$(cd "$TEMP_DIR" && DRY_RUN=true bash "$INSTALL_SCRIPT" <<< "C" 2>&1)
-rm -rf "$TEMP_DIR"
+OUT_FILE="$(mktemp)"
+(cd "$TEMP_DIR" && DRY_RUN=true bash "$INSTALL_SCRIPT" <<< "C") > "$OUT_FILE" 2>&1
+out=$(cat "$OUT_FILE")
+rm -rf "$TEMP_DIR" "$OUT_FILE"
 assert_contains "T6 HEAD check performed" "HEAD check" "$out"
 assert_contains "T6 HTTP code shown" "HTTP" "$out"
 

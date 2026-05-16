@@ -68,6 +68,9 @@ patt_wine_port="SSF2BetaWindows.32bit.*.portable.zip"
 yellow='\033[0;33m'
 nc='\033[0m'
 
+# Dry run mode - show steps but skip execution (set via env var or auto on Windows)
+DRY_RUN="${DRY_RUN:-false}"
+
 
 
 
@@ -103,6 +106,11 @@ function isNotInstalled() {
 # Given a package name, install if it isn't installed
 # Argument 1: Package Name
 function install() {
+
+	if [[ "$DRY_RUN" == "true" ]]; then
+		printDryBanner "sudo install $1"
+		return 0
+	fi
 
 	# If not installed
 	if isNotInstalled $1; then
@@ -202,6 +210,18 @@ function giveRemoveAdvice() {
 }
 
 
+### Helper Function: printDryBanner()
+# Print a prominent DRY RUN notice before a skipped step
+# Argument 1: Action description
+function printDryBanner() {
+	echo ""
+	echo "=========================================="
+	echo "  *** DRY RUN *** Skipping: $1"
+	echo "=========================================="
+	echo ""
+}
+
+
 
 
 
@@ -222,35 +242,51 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 echo "Log file: $LOG_FILE"
 echo ""
 
-### Prevent this script from running on Windows via Git Bash
+### Detect Windows and enable dry-run instead of exiting
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-    echo -e "\nThis script is for Linux only!"
-    exit 1
+    DRY_RUN=true
+fi
+
+if [[ "$DRY_RUN" == "true" ]]; then
+    echo ""
+    echo "=========================================="
+    echo "  *** DRY RUN MODE ***"
+    echo "  This script is Linux-only."
+    echo "  Running in dry-run: steps are shown"
+    echo "  but NOT executed on your system."
+    echo "=========================================="
+    echo ""
 fi
 
 
 ### Detect distro and set package manager
-if [ ! -f /etc/os-release ]; then
-    echo "Cannot detect Linux distro (/etc/os-release not found). Exiting."
-    exit 1
-fi
-
-. /etc/os-release
-case "$ID $ID_LIKE" in
-    *debian*|*ubuntu*) PKG_MANAGER="apt"    ;;
-    *fedora*|*rhel*|*centos*) PKG_MANAGER="dnf" ;;
-    *arch*)            PKG_MANAGER="pacman"  ;;
-    *)
-        echo "Unsupported distro: ${PRETTY_NAME:-unknown}"
-        echo "Supported distros: Debian, Ubuntu, Linux Mint, Pop!_OS (and other Ubuntu/Debian derivatives), Fedora, Arch Linux."
-        echo "To request support for your distro, open an issue at:"
-        echo "https://github.com/DavoDC/LinuxFiles/issues"
+if [[ "$DRY_RUN" == "true" ]]; then
+    PKG_MANAGER="apt"
+    echo "(Dry run: simulating Debian/Ubuntu with apt)"
+    echo ""
+else
+    if [ ! -f /etc/os-release ]; then
+        echo "Cannot detect Linux distro (/etc/os-release not found). Exiting."
         exit 1
-        ;;
-esac
+    fi
 
-echo "Detected distro: $PRETTY_NAME (package manager: $PKG_MANAGER)"
-echo ""
+    . /etc/os-release
+    case "$ID $ID_LIKE" in
+        *debian*|*ubuntu*) PKG_MANAGER="apt"    ;;
+        *fedora*|*rhel*|*centos*) PKG_MANAGER="dnf" ;;
+        *arch*)            PKG_MANAGER="pacman"  ;;
+        *)
+            echo "Unsupported distro: ${PRETTY_NAME:-unknown}"
+            echo "Supported distros: Debian, Ubuntu, Linux Mint, Pop!_OS (and other Ubuntu/Debian derivatives), Fedora, Arch Linux."
+            echo "To request support for your distro, open an issue at:"
+            echo "https://github.com/DavoDC/LinuxFiles/issues"
+            exit 1
+            ;;
+    esac
+
+    echo "Detected distro: $PRETTY_NAME (package manager: $PKG_MANAGER)"
+    echo ""
+fi
 
 ### Get desired version
 echo "Which version would you like to install?"
@@ -351,7 +387,11 @@ echo "Extracting download URLs from official site.."
 echo ""
 
 # Download official download page as HTML
-wget -q $offURL -O $offURLfile
+if [[ "$DRY_RUN" == "true" ]]; then
+    curl -s "$offURL" -o "$offURLfile"
+else
+    wget -q $offURL -O $offURLfile
+fi
 
 # Holder
 dwlURL=""
@@ -371,9 +411,20 @@ rm $offURLfile
 
 
 # Download chosen SSF2 version file
-downloadWithFallback "$dwlURL"
-# Testing Mode (Never commit this!)
-#wget --spider -S $dwlURL
+if [[ "$DRY_RUN" == "true" ]]; then
+    printDryBanner "wget $dwlURL"
+    echo "HEAD-checking URL accessibility..."
+    http_code=$(curl -sI -o /dev/null -w "%{http_code}" "$dwlURL")
+    echo "HEAD check: HTTP $http_code"
+    if [[ "$http_code" == "200" ]]; then
+        echo "URL is valid and reachable."
+    else
+        echo "WARNING: URL returned HTTP $http_code - real download may fail on Linux."
+    fi
+    echo ""
+else
+    downloadWithFallback "$dwlURL"
+fi
 
 # Space
 echo ""
@@ -391,16 +442,22 @@ if [ "$native" = true ]; then
 	echo "Extracting downloaded archive..."
 	echo ""
 	install "tar"
-	tar -xf $patt_native --one-top-level
+	if [[ "$DRY_RUN" == "true" ]]; then
+		printDryBanner "tar -xf $patt_native --one-top-level"
+		printDryBanner "cd SSF2BetaLinux.*/"
+		printDryBanner "chmod u+x trust-ssf2.sh && ./trust-ssf2.sh (fix script)"
+	else
+		tar -xf $patt_native --one-top-level
 
-	# Go into created folder
-	cd SSF2BetaLinux.*/
+		# Go into created folder
+		cd SSF2BetaLinux.*/
 
-	# Run fix script
-	echo "Running fix script..."
-	echo ""
-	chmod u+x trust-ssf2.sh && ./trust-ssf2.sh
-	echo ""
+		# Run fix script
+		echo "Running fix script..."
+		echo ""
+		chmod u+x trust-ssf2.sh && ./trust-ssf2.sh
+		echo ""
+	fi
 
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command
@@ -422,13 +479,16 @@ if [ "$wine_inst" = true  ] || [ "$wine_port" = true  ]; then
 	echo ""
 
 	if [ "$PKG_MANAGER" = "apt" ]; then
-		# Enable 32-bit packages (Debian/Ubuntu only)
-		sudo dpkg --add-architecture i386
+		if [[ "$DRY_RUN" == "true" ]]; then
+			printDryBanner "sudo dpkg --add-architecture i386"
+			printDryBanner "sudo apt update"
+		else
+			# Enable 32-bit packages (Debian/Ubuntu only)
+			sudo dpkg --add-architecture i386
 
-		# Update package lists with new 32 bit packages (quietly)
-		sudo apt update > /dev/null 2>&1
-
-		# Install wine libraries (apt package names)
+			# Update package lists with new 32 bit packages (quietly)
+			sudo apt update > /dev/null 2>&1
+		fi
 		install "wine"
 		install "wine32"
 		install "winbind"
@@ -451,7 +511,11 @@ if [ "$wine_inst" = true ]; then
 	read -p "Press any key when you're ready....."
 
 	# Open Windows installer with Wine
-	wine $patt_wine_inst
+	if [[ "$DRY_RUN" == "true" ]]; then
+		printDryBanner "wine $patt_wine_inst"
+	else
+		wine $patt_wine_inst
+	fi
 
 	# Give advice
 	echo ""
@@ -479,10 +543,15 @@ if [ "$wine_port" = true ]; then
 	echo "Extracting downloaded archive..."
 	echo ""
 	install "unzip"
-	unzip -qq $patt_wine_port
+	if [[ "$DRY_RUN" == "true" ]]; then
+		printDryBanner "unzip -qq $patt_wine_port"
+		printDryBanner "cd SSF2BetaWindows.32bit.*.portable"
+	else
+		unzip -qq $patt_wine_port
 
-	# Go into created folder
-	cd SSF2BetaWindows.32bit.*.portable
+		# Go into created folder
+		cd SSF2BetaWindows.32bit.*.portable
+	fi
 
 	# Print advice regarding bashrc functions
 	# Argument 1: Run Command

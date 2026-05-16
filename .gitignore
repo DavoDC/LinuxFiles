@@ -1,3 +1,7 @@
 
 # Ignore SSF2 installations
 Scripts/SSF2/SSF2/
+
+# Ignore log files from script runs
+ssf2-install-*.log
+Scripts/SSF2/ssf2-install-*.log
