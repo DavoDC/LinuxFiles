@@ -130,6 +130,36 @@ function extractDwlUrl() {
 
 
 
+### Helper Function: downloadWithFallback()
+# Download a file, with a dot-form fallback for SSF2 CDN version URL mismatches
+# The CDN sometimes links v1.x.x when the file lives at v.1.x.x or vice versa
+# Tries the original URL first; if wget fails, retries with the alternate dot form
+# Argument 1: Download URL
+function downloadWithFallback() {
+	local url="$1"
+	local alt_url
+
+	echo "Downloading: $url"
+	if wget "$url"; then
+		return 0
+	fi
+
+	# Toggle dot after 'v' in version segment and retry
+	if [[ "$url" =~ v\.[0-9] ]]; then
+		alt_url=$(sed 's/v\.\([0-9]\)/v\1/' <<< "$url")
+	elif [[ "$url" =~ v[0-9] ]]; then
+		alt_url=$(sed 's/v\([0-9]\)/v.\1/' <<< "$url")
+	else
+		return 1
+	fi
+
+	echo ""
+	echo "Download failed. SSF2 CDN has a known dot mismatch in version URLs."
+	echo "Retrying with alternate URL: $alt_url"
+	wget "$alt_url"
+}
+
+
 ### Helper Function: printYellow()
 # Prints a string in yellow
 # Argument 1: String
@@ -335,8 +365,7 @@ rm $offURLfile
 
 
 # Download chosen SSF2 version file
-# Normal
-wget $dwlURL
+downloadWithFallback "$dwlURL"
 # Testing Mode (Never commit this!)
 #wget --spider -S $dwlURL
 

@@ -25,7 +25,7 @@ export -f wget
 INSTALL_SCRIPT="$(dirname "$0")/INSTALL_SSF2.sh"
 # Extract only downloadWithFallback (source the whole file is too invasive)
 # Instead, define the function inline - kept in sync with INSTALL_SSF2.sh manually
-source <(grep -A 50 "function downloadWithFallback" "$INSTALL_SCRIPT" | head -50)
+source <(awk '/^function downloadWithFallback/,/^\}/' "$INSTALL_SCRIPT")
 
 # --- helpers ---
 assert() {
