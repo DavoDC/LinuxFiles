@@ -23,16 +23,6 @@ Reference video (previous): https://www.youtube.com/watch?v=vHMe8zDKM9A
 
 ## Test Plan
 
-### 3 Install Types (for video demo)
-
-| Type | Variable | Download | Description |
-|------|----------|----------|-------------|
-| Native | `native` | `SSF2BetaLinux.*.tar` | Linux native build |
-| Wine Install | `wine_inst` | `SSF2BetaSetup.32bit.*.exe` | Windows installer via Wine |
-| Wine Port | `wine_port` | `SSF2BetaWindows.32bit.*.portable.zip` | Windows portable via Wine |
-
-Video should demonstrate all 3 types installing successfully.
-
 ### Test Steps
 
 1. Linux Mint rig - uninstall any existing SSF2
@@ -40,6 +30,19 @@ Video should demonstrate all 3 types installing successfully.
 3. Uninstall, run again, choose Wine Install - verify
 4. Uninstall, run again, choose Wine Portable - verify
 5. Record video during a clean run of all 3
+
+### 3 Install Types (for video demo)
+
+NOTE THIS ORDER:
+
+| Type | Variable | Download | Description |
+|------|----------|----------|-------------|
+| Wine Port | `wine_port` | `SSF2BetaWindows.32bit.*.portable.zip` | Windows portable via Wine |
+| Wine Install | `wine_inst` | `SSF2BetaSetup.32bit.*.exe` | Windows installer via Wine |
+| Native | `native` | `SSF2BetaLinux.*.tar` | Linux native build |
+
+Video should demonstrate all 3 types installing successfully.
+
 
 ---
 
@@ -52,5 +55,5 @@ Video should demonstrate all 3 types installing successfully.
 
 - Auto-detect if Wine is installed and skip Wine menu options if not
 - Better error messages if download fails (currently silent?)
-- `--uninstall` flag to remove installed SSF2
+- **Auto-detect existing SSF2 install and prompt for action:** If SSF2 already installed, ask "SSF2 detected. Reinstall? (y/n)" with double confirmation (yes/no, not just single char). Let user choose reinstall or exit. Better UX than separate uninstall command.
 - Support checking for script updates (compare version header against GitHub raw)
