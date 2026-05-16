@@ -40,7 +40,13 @@ Video should demonstrate all 3 types installing successfully.
 
 ## Future Ideas (post-video)
 
-- **Windows dry-run mode** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates Linux as closely as possible on Windows:
+- **Windows dry-run mode** - DONE (v45d4c44). Issues found during dry-run testing on Windows:
+  - Bashrc advice shows repo path, not a meaningful "simulated install path" - could show `/home/user/SSF2` as placeholder instead of the real script location
+  - `clear` at script start clears terminal during dev/testing - consider skipping `clear` in dry-run mode
+  - `install "wget"` shows a skip banner even though wget is not used in dry-run (curl is used instead) - minor confusion but technically correct
+  - tee process substitution (`exec > >(tee ...)`) is non-deterministic on cygwin - tests need polling to work reliably
+
+- **Windows dry-run mode (pre-DONE notes, kept for reference)** - if MSYS/Cygwin detected (currently exits immediately), enter a dry-run mode instead of aborting. Simulates Linux as closely as possible on Windows:
   - Show menus and capture version choice as normal
   - Fetch the real download page and extract URLs (curl is available in Git Bash - same logic as wget)
   - HEAD-check each extracted URL with `curl -sI` to verify it would succeed without downloading the file
