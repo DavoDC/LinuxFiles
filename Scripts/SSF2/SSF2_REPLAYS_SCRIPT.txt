@@ -1,3 +1,0 @@
-
-I have more SSF2 bash scripts stored in this repo:
-https://github.com/DavoDC/SSF2Replays
