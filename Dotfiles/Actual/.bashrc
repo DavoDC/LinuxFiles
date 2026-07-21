@@ -537,7 +537,7 @@ alias compPy="python3"
 # Launch Claude Code (same launcher as the Desktop shortcut) from any Git Bash terminal.
 # Real path is machine-specific and lives in ~/.bashrc_local (untracked, not in this repo -
 # this repo is public, so no workspace paths get hardcoded here).
-alias claude_launch='if [ -n "$CLAUDE_LAUNCH_SCRIPT" ] && [ -f "$CLAUDE_LAUNCH_SCRIPT" ]; then bash "$CLAUDE_LAUNCH_SCRIPT"; else echo "CLAUDE_LAUNCH_SCRIPT not set/found - export it in ~/.bashrc_local"; fi'
+alias claude_container='if [ -n "$CLAUDE_CONTAINER_SCRIPT" ] && [ -f "$CLAUDE_CONTAINER_SCRIPT" ]; then bash "$CLAUDE_CONTAINER_SCRIPT"; else echo "CLAUDE_CONTAINER_SCRIPT not set/found - export it in ~/.bashrc_local"; fi'
 
 
 

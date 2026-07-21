@@ -33,9 +33,40 @@ win_bashrc_dest="/c/Users/$USERNAME/$bashprof"
 
 
 
+########## CLI FLAGS (non-interactive mode)
+# --configure / --unconfigure : skip the 1/2 menu, run that action directly
+# --yes / -y                  : auto-answer any (y/n) confirmation prompts
+# Interactive menu remains the default when no flags are given.
+cli_action=""
+auto_yes=0
+for arg in "$@"; do
+    case "$arg" in
+        --configure ) cli_action="1" ;;
+        --unconfigure ) cli_action="2" ;;
+        --yes|-y ) auto_yes=1 ;;
+        --help|-h )
+            echo "Usage: $0 [--configure|--unconfigure] [--yes|-y]"
+            echo "  --configure    Configure dotfiles (same as menu option 1), no prompt"
+            echo "  --unconfigure  Unconfigure dotfiles (same as menu option 2), no prompt"
+            echo "  --yes, -y      Auto-answer 'y' to any (y/n) confirmation prompts"
+            echo "  (no flags)     Interactive menu (default, unchanged behaviour)"
+            exit 0
+            ;;
+        * )
+            echo "Unknown argument: '$arg' (use --help for usage)"
+            exit 1
+            ;;
+    esac
+done
+
 ########## HELPER FUNCTIONS
 # Ask user whether they want to continue
 function ask_continue () {
+    if [ "$auto_yes" -eq 1 ]; then
+        echo "Would you like to continue (y/n)? y (--yes)"
+        echo "Continuing..."
+        return
+    fi
     read -p "Would you like to continue (y/n)? " choice
     case "$choice" in
         y|Y ) echo "Continuing...";;
@@ -256,10 +287,15 @@ fi
 
 # Determine desired action
 echo ""
-echo "Do you want to configure or unconfigure your dotfiles on this $detected_os system?"
-echo "1) Configure"
-echo "2) Unconfigure"
-read -p "Choose an option (1/2): " action
+if [ -n "$cli_action" ]; then
+    action="$cli_action"
+    echo "Action (from CLI flag): $([ "$action" == "1" ] && echo Configure || echo Unconfigure)"
+else
+    echo "Do you want to configure or unconfigure your dotfiles on this $detected_os system?"
+    echo "1) Configure"
+    echo "2) Unconfigure"
+    read -p "Choose an option (1/2): " action
+fi
 
 # Execute desired action
 echo ""
