@@ -532,7 +532,16 @@ alias compPy="python3"
 
 
 
-### SSF2 
+### Claude Code
+
+# Launch Claude Code (same launcher as the Desktop shortcut) from any Git Bash terminal.
+# Real path is machine-specific and lives in ~/.bashrc_local (untracked, not in this repo -
+# this repo is public, so no workspace paths get hardcoded here).
+alias claude_launch='if [ -n "$CLAUDE_LAUNCH_SCRIPT" ] && [ -f "$CLAUDE_LAUNCH_SCRIPT" ]; then bash "$CLAUDE_LAUNCH_SCRIPT"; else echo "CLAUDE_LAUNCH_SCRIPT not set/found - export it in ~/.bashrc_local"; fi'
+
+
+
+### SSF2
 
 # Open Australian ruleset quietly
 function openRules {
@@ -724,6 +733,11 @@ awk 'NR == 1 || NR == 2 {print $0} NR > 2 { $2 = $2 / (1024*1024*1024) " GB"; if
 	df -k | awk 'NR==2 {used=$3/1024/1024; available=$4/1024/1024; print used" GB used, " available" GB available"}'
 	echo ""
 }
+
+
+
+### Local overrides (machine-specific, never tracked in this repo)
+[ -f "$HOME/.bashrc_local" ] && source "$HOME/.bashrc_local"
 
 
 
